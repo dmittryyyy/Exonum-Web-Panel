@@ -1,37 +1,30 @@
-import {Component, React, useContext} from 'react';
-import {ThemeContext} from "../../index";
-import {Client} from "../../services/Client";
+import { React, useContext, useState } from 'react';
+import { ThemeContext } from '../..';
 
-export class Header extends Component {
-    state = {
-        actualNode: "",
-        height: ""
-    }
+import './Header.scss';
 
-    async componentDidMount() {
-        try {
-            const client = new Client();
-            const res = await client.GetCurentHight();
+export const Header = ({ isActualNode, isheight }) => {
 
-            this.setState({
-                actualNode: client.GetActiveNode(),
-                height: res,
-            })
-        } catch (e) {
-            console.log(e);
-        }
-    }
+    const { client } = useContext(ThemeContext);
+    const [isNode, setIsNode] = useState('');
 
-    render() {
-      return (
+    return (
         <header>
             <div className="activeNode">
-                {this.state.actualNode}
+                <h3>Active Node</h3>
+                <select onChange={(e) => setIsNode(e.target.value)}>
+                    <option value="">{isNode || 'select is node'}</option>
+                    {client.nodesServers.map(node =>
+                        <option>
+                            value={node}
+                        </option>
+                        )}
+                </select>
             </div>
-            <div className="hight">
-                {this.state.height}
+            <div className="height">
+                <h3>Height</h3>
+                <p>{isheight}</p>
             </div>
         </header>
-      )
-    }
+    )
 }
