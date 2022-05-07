@@ -1,11 +1,17 @@
+import { Header } from '../header/Header';
 import './App.css';
 
-function App() {
+
+const App = () => {
+
+  
+
   return (
     <div className="App">
-      dsgfdg
+      <Header/>
     </div>
-  );
+  )
+
 }
 
 export default App;
