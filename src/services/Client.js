@@ -17,11 +17,12 @@ export class Client {
         activeNode: 'https://node1.unotex.ru/auditor1/api'
     }
 
-
-    async GetCurentHight() {
-    let response =  await expolorerBlocks(this.activeNode, 1).then((data) => data.range.start);
-       console.log(response);
+    GetActiveNode() {
+        return this.state.activeNode
     }
-    
+
+    GetCurentHight() {
+        return expolorerBlocks(this.state.activeNode, "1").then((data) => {return data.range.start})
+    }
 }
 

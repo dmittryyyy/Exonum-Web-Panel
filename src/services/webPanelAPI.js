@@ -1,10 +1,11 @@
 import { React } from 'react';
-import { axios } from 'axios';
 
-export const expolorerBlocks = (root, count) => {
+const axios = require('axios');
 
-    return axios.get(root + 'explorer/v1/blocks' + { params: { count: Number(count) } })
-        .then((resp) => resp.data).catch((err) => {
+export const expolorerBlocks = async (root, count) => {
+    const url = root + '/explorer/v1/blocks';
+    return axios.get(url, { params: { count: count } })
+        .then((resp) => {return resp.data}).catch((err) => {
             if (err.response) {
                 console.log(err.response.data);
                 console.log(err.response.status);
