@@ -1,5 +1,3 @@
-import { expolorerBlocks } from './webPanelAPI';
-
 export class Client {
     constructor() {
         this._nodeServers = [
@@ -12,27 +10,23 @@ export class Client {
             'https://node1.unotex.ru/validator3/api',
             'https://node1.unotex.ru/validator4/api',
         ];
-        this.activeNode = 'https://node1.unotex.ru/auditor1/api';
+        this._activeNode = '';
     }  
-
-    GetActiveNode() {
-        return this.activeNode;
-    }
-
-    async GetCurentHight() {
-        return expolorerBlocks(this.activeNode, "1").then((data) => { return data.range.start })
-    }
-
-    setNodes(nodes) {
+    
+    setNodesServers(nodes) {
         this._nodeServers = nodes;
     }
 
-    GetNodes() {
-        return this._nodeServers;
+    setActiveNode(node) {
+        this._activeNode = node;
     }
 
     get nodesServers() {
         return this._nodeServers;
+    }
+
+    get activeNode() {
+        return this._activeNode;
     }
 }
 

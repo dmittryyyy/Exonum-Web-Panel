@@ -2,7 +2,7 @@ header {
     display: flex;
     justify-content: space-around;
     background-color: #FFF;
-    padding: 10px 0;
+    padding: 20px 0;
 
     .activeNode {
         border: 2px solid black;
@@ -12,7 +12,7 @@ header {
 
     .height {
         border: 2px solid black;
-        padding: 10px;
+        padding: 20px;
         border-radius: 10px;
     }
     
@@ -21,8 +21,35 @@ header {
         font-weight: 700;
     }
 
+    .nodeTitle {
+        display: flex;
+        justify-content: space-between;
+
+        .activeNode {
+            border-radius: 60px;
+            width: 20px;
+            height: 20px;
+            background-color: green;
+            border: none;
+        }
+    
+        .notActiveNode {
+            border-radius: 60px;
+            width: 20px;
+            height: 20px;
+            background-color: red;
+            border: none;
+        }
+    }
+
+    
+
     p {
         font-size: 20px;
         font-weight: 500;
+    }
+
+    select {
+        font-size: 20px;
     }
 }

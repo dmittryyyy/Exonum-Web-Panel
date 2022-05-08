@@ -1,6 +1,7 @@
-import { useContext, useState } from 'react';
+import { useContext,  useState } from 'react';
 import { ThemeContext } from '../..';
 import { Header } from '../header/Header';
+import { expolorerBlocks } from '../../services/webPanelAPI';
 import './App.scss';
 
 
@@ -8,28 +9,29 @@ export const App = () => {
 
   const { client } = useContext(ThemeContext);
 
-  const [isActualNode, isSetActualNode] = useState('');
   const [isheight, isSetheight] = useState('');
+  const [isActive, isSetActive] = useState(false);
 
   const GetResult = async () => {
     try {
-      const res = await client.GetCurentHight();
-      const activeNode = await client.GetActiveNode();
-
-      isSetActualNode(activeNode);
+      if(client.activeNode === 'Select is node') {
+        isSetActive(false);
+        isSetheight('');
+      }
+      const res = await expolorerBlocks(client.activeNode, '1').then((data) => {return data.range.start});
       isSetheight(res);
-
+      isSetActive(true);
     } catch (e) {
       console.log(e);
     }
   }
-  GetResult();
 
   return (
     <div className="App">
       <Header
-        isActualNode={isActualNode}
         isheight={isheight}
+        isActive={isActive}
+        GetResult={GetResult}
       />
     </div>
   )
