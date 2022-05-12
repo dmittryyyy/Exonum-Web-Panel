@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom/client';
 import { App } from './components/app/App';
 import { Client } from '../src/services/Client';
 
-import './index.css';
+import './index.scss';
 
 export const ThemeContext = createContext(null);
 

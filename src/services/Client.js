@@ -10,7 +10,7 @@ export class Client {
             'https://node1.unotex.ru/validator3/api',
             'https://node1.unotex.ru/validator4/api',
         ];
-        this._activeNode = '';
+        this._activeNode = 'https://node1.unotex.ru/auditor1/api';
     }  
     
     setNodesServers(nodes) {
