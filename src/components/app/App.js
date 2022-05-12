@@ -6,6 +6,7 @@ import { Search } from '../Search/Search';
 import { expolorerBlocks } from '../../services/webPanelAPI';
 
 import './App.scss';
+import { Content } from '../content/Content';
 
 export const App = () => {
 
@@ -42,11 +43,17 @@ export const App = () => {
 
   return (
     <div className="App">
+
       <Header
         isheight={isheight}
         isActive={isActive}
       />
-      <Search />
+
+      <main className='wrapper'>
+      <Search/>
+      <Content/>
+      </main>
+
     </div>
   )
 }

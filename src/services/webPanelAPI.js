@@ -30,3 +30,37 @@ export const searchTransaction = async (root, hash) => {
             }
         })
 }
+
+export const searchOrder = async (root, key) => {
+    const url = root + '/services/order/v1/order';
+    return axios.get(url, { params: { public_key: key } })
+    .then((resp) => { return resp.data })
+    .catch((err) => {
+        if (err) {
+            console.log(err.response.data);
+            console.log(err.response.status);
+        } else if (err.request) {
+            console.log(err.request);
+        } else {
+            console.log('Error', err.message);
+        }
+    })
+}
+
+export const searchService = async (root, key) => {
+    const url = root + '/services/user/v1/application_service/info';
+    return axios.get(url, { params: { public_key: key } })
+    .then((resp) => { return resp.data })
+    .catch((err) => {
+        if (err) {
+            console.log(err.response.data);
+            console.log(err.response.status);
+        } else if (err.request) {
+            console.log(err.request);
+        } else {
+            console.log('Error', err.message);
+        }
+    })
+}
+
+
