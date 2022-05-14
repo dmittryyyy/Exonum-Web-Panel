@@ -4,7 +4,7 @@ import { ThemeContext } from '../..';
 
 import './Header.scss';
 
-export const Header = ({ isheight, isActive, GetResult }) => {
+export const Header = ({ isheight, isActive }) => {
 
     const { client } = useContext(ThemeContext);
 

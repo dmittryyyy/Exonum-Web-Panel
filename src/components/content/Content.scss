@@ -4,6 +4,30 @@
     text-align: left;
 
     pre {
+        overflow-y: hidden;
+    }
+
+    .error {
         overflow: hidden;
+        font-size: 20px;
+        color: rgb(228, 8, 8);
+        text-align: center;
+    }
+
+    button {
+        margin-bottom: 20px;
+    }
+
+    table {
+        border: 2px solid #000;
+        word-break: break-word;
+
+        thead {
+            border-bottom: 2px solid #000;
+        }
+
+        th {
+            border-right: 2px solid #000;
+        }
     }
 }

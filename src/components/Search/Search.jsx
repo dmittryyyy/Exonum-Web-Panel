@@ -1,9 +1,7 @@
 import { React, useContext, useState } from 'react';
 
 import { ThemeContext } from '../..';
-import { searchTransaction } from '../../services/webPanelAPI';
-import { searchOrder } from '../../services/webPanelAPI';
-import { searchService } from '../../services/webPanelAPI';
+import { searchTransaction, searchOrder, searchService, searchUserWallet, searchDeviceKey, searchOrders } from '../../services/webPanelAPI';
 import { Content } from '../content/Content';
 
 import './Search.scss';
@@ -13,43 +11,126 @@ export const Search = () => {
     const { client } = useContext(ThemeContext);
 
     const [isTransaction, setIsTransaction] = useState();
-    const [isOrders, setIsOrders] = useState();
+    const [isOrder, setIsOrder] = useState();
     const [isService, setIsService] = useState();
+    const [isUserWallet, setIsUserWallet] = useState();
+    const [isOrders, setIsOrders] = useState();
 
-    const [isSearchResult, isSetSearchResult] = useState();
+    const [isDeviceKey, setIsDeviceKey] = useState();
+    const [isHistory, seIsHistory] = useState();
 
     const [isResult, setIsResult] = useState();
+    const [isError, setIsError] = useState();
 
     const GetTransaction = async () => {
-        if (testHash(isTransaction)) {
-            isSetSearchResult(await searchTransaction(client.activeNode, isTransaction));
-            if (!isSearchResult) {
-                setIsResult('type: unknown')
-            } else if (isSearchResult.type === 'committed') {
-                delete isSearchResult.location_proof
-                const message = isSearchResult.content.message.substring(0, 70) + '...';
-                isSearchResult.content.message = message;
-                setIsResult(JSON.stringify(isSearchResult, null, 1));
-            } else if (isSearchResult.type === 'in-poll') {
-                delete isSearchResult.status
-                delete isSearchResult.content.debug
-                delete isSearchResult.location
-                delete isSearchResult.location_proof
-                setIsResult(JSON.stringify(isSearchResult, null, 1));
+        try {
+            if (testHash(isTransaction)) {
+                const resp = await searchTransaction(client.activeNode, isTransaction);
+                resp.onclick = function() {
+                    alert('dsfsd')
+                }
+                if (!resp) {
+                    setIsResult('type: unknown')
+                } else if (resp.type === 'committed') {
+                    delete resp.location_proof
+                    setIsResult(JSON.stringify(resp, null, 2));
+                } else if (resp.type === 'in-poll') {
+                    delete resp.status
+                    delete resp.content.debug
+                    delete resp.location
+                    delete resp.location_proof
+                    setIsResult(JSON.stringify(resp, null, 2));
+                }
+                setIsError('');
+            } else {
+                setIsResult('The entered string does not match hex');
+                setIsError('error');
             }
-        } else {
-            alert('Hash не соответствует hex ')
+        } catch (error) {
+            console.log(error);
         }
     }
 
     const GetOrder = async () => {
-        isSetSearchResult(await searchOrder(client.activeNode, isOrders));
-        setIsResult(hexadecimal(isSearchResult.data.order_seller_part.items[0].application_data));
+        try {
+            await searchOrder(client.activeNode, isOrder)
+                .then((orders) => {
+                    setIsResult(hexadecimal((orders.data.order_seller_part.items[0].application_data)));
+                });
+            setIsError('');
+        } catch (error) {
+            console.log(error);
+            setIsResult('Order number uncorrect or empty input field!');
+            setIsError('error');
+        }
     }
 
     const GetService = async () => {
-        isSetSearchResult(await searchService(client.activeNode, isService));
-        setIsResult(JSON.stringify(isSearchResult.application_service_proof.to_application_service.entries[0].value, null, 2));
+        try {
+            await searchService(client.activeNode, isService)
+                .then((service) => {
+                    setIsResult(JSON.stringify(service.application_service_proof.to_application_service.entries[0].value, null, 2));
+                });
+            setIsError('');
+        } catch (error) {
+            console.log(error);
+            setIsResult('Key uncorrect or empty input field!');
+            setIsError('error');
+        }
+    }
+
+    const GetUserWallet = async () => {
+        try {
+            if (testHash(isUserWallet)) {
+                await searchUserWallet(client.activeNode, isUserWallet)
+                    .then((wallet) => {
+                        setIsResult(JSON.stringify(wallet, null, 2));
+                    });
+                setIsError('');
+            } else {
+                setIsResult('Key wallet uncorrect or empty input field!');
+                setIsError('error');
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const GetDeviceKey = async () => {
+        try {
+            if (isDeviceKey) {
+                await searchDeviceKey(client.activeNode, isDeviceKey, isHistory)
+                    .then((wallet) => {
+                        setIsResult(JSON.stringify(wallet, null, 2));
+                    })
+                setIsError('');
+            } else {
+                setIsResult('Device key undefined or empty input field!');
+                setIsError('error');
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const GetOrders = async () => {
+        try {
+            if (testHash(isOrders)) {
+                await searchOrders(client.activeNode, isOrders)
+                    .then((orders) => {
+                        orders.data.map(element => {
+                          element.status.splice(0, element.status.length - 1);
+                        })
+                        setIsResult(JSON.stringify(orders, null, 2));
+                    });
+                setIsError('');
+            } else {
+                setIsResult('Order number uncorrect or empty input field!');
+                setIsError('error');
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     const testHash = (str) => {
@@ -57,48 +138,95 @@ export const Search = () => {
     };
 
     const hexadecimal = (byteArray) => {
-        return Array.from(byteArray, function(byte) {
+        return Array.from(byteArray, function (byte) {
             return ('0' + (byte & 0xFF).toString(16)).slice(-2);
         }).join('')
     };
 
     return (
-            <>
+        <>
             <div className="searchBlock">
                 <div className="searchTransactions">
-                <div className={`search ${!GetTransaction ? 'searchError' : ''}`}>
-                    {isTransaction && <span className='clearInput' onClick={() => setIsTransaction('')}>X</span>}
-                    <input placeholder='Search transaction'
-                        value={isTransaction}
-                        onChange={(e) => setIsTransaction(e.target.value)} />
-                </div>
-                <button type='submit' onClick={GetTransaction}>Найти</button>
+                    <div className='search'>
+                        {isTransaction && <span className='clearInput' onClick={() => setIsTransaction('')}>X</span>}
+                        <input placeholder='Search transaction'
+                            value={isTransaction}
+                            onChange={(e) => setIsTransaction(e.target.value)} />
+                    </div>
+                    <button type='submit' onClick={GetTransaction}>Найти</button>
                 </div>
 
-                <div className="searchOrders">
-                <div className={'search'}>
-                    {isOrders && <span className='clearInput' onClick={() => setIsOrders('')}>X</span>}
-                    <input placeholder='Search order'
-                        value={isOrders}
-                        onChange={(e) => setIsOrders(e.target.value)} />
-                </div>
-                <button type='submit' onClick={GetOrder}>Найти</button>
+                <div className="searchOrder">
+                    <div className='search'>
+                        {isOrder && <span className='clearInput' onClick={() => setIsOrder('')}>X</span>}
+                        <input placeholder='Search order'
+                            value={isOrder}
+                            onChange={(e) => setIsOrder(e.target.value)} />
+                    </div>
+                    <button type='submit' onClick={GetOrder}>Найти</button>
                 </div>
 
                 <div className="searchServiceApplication">
-                <div className={'search'}>
-                    {isService && <span className='clearInput' onClick={() => setIsService('')}>X</span>}
-                    <input placeholder='ServiceApplication'
-                        value={isService}
-                        onChange={(e) => setIsService(e.target.value)} />
+                    <div className='search'>
+                        {isService && <span className='clearInput' onClick={() => setIsService('')}>X</span>}
+                        <input placeholder='ServiceApplication'
+                            value={isService}
+                            onChange={(e) => setIsService(e.target.value)} />
+                    </div>
+                    <button type='submit' onClick={GetService}>Найти</button>
                 </div>
-                <button type='submit' onClick={GetService}>Найти</button>
+
+            </div>
+
+
+            <div className="searchBlock2">
+                <div className="searchUserWallet">
+                    <div className='search'>
+                        {isUserWallet && <span className='clearInput' onClick={() => setIsUserWallet('')}>X</span>}
+                        <input placeholder='Search user wallet'
+                            value={isUserWallet}
+                            onChange={(e) => setIsUserWallet(e.target.value)} />
+                    </div>
+                    <button type='submit' onClick={GetUserWallet}>Найти</button>
                 </div>
+
+                <div className="searchDeviceKey">
+                    <div className='search'>
+                        {isDeviceKey && <span className='clearInput' onClick={() => setIsDeviceKey('')}>X</span>}
+                        <input placeholder='Search device key'
+                            value={isDeviceKey}
+                            onChange={(e) => setIsDeviceKey(e.target.value)}
+                        />
+                    </div>
+                    <button type='submit' onClick={GetDeviceKey}>Найти</button>
+
+                    <div className="checkbox">
+                        <input type="checkbox"
+                            className='checkboxHistory'
+                            onChange={(e) => seIsHistory(e.target.checked)}
+                        />
+                        <label>Show History</label>
+                    </div>
+                </div>
+
+                <div className="searchOrders">
+                    <div className='search'>
+                        {isOrders && <span className='clearInput' onClick={() => setIsOrders('')}>X</span>}
+                        <input placeholder='Search orders users'
+                            value={isOrders}
+                            onChange={(e) => setIsOrders(e.target.value)} />
+                    </div>
+                    <button type='submit' onClick={GetOrders}>Найти</button>
+                </div>
+
             </div>
 
             <Content
-            isResultTransaction={isResult}
+                isResult={isResult}
+                isError={isError}
+                setIsResult={setIsResult}
+                setIsError={setIsError}
             />
-            </>
+        </>
     )
 }

@@ -4,9 +4,9 @@ import { ThemeContext } from '../..';
 import { Header } from '../header/Header';
 import { Search } from '../Search/Search';
 import { expolorerBlocks } from '../../services/webPanelAPI';
+import { Content } from '../content/Content';
 
 import './App.scss';
-import { Content } from '../content/Content';
 
 export const App = () => {
 
@@ -15,16 +15,15 @@ export const App = () => {
   const [isheight, isSetheight] = useState('');
   const [isActive, isSetActive] = useState(false);
 
-
   useEffect(() => {
     async function fetchData() {
       try {
-        if (client.activeNode === '') {
+        const res = await expolorerBlocks(client.activeNode, '1').then((data) => { return data.range.start });
+        if(!res) {
           isSetActive(false);
           isSetheight('');
           clearInterval(intervalId);
         }
-        const res = await expolorerBlocks(client.activeNode, '1').then((data) => { return data.range.start });
         isSetheight(res);
         isSetActive(true);
       } catch (e) {
@@ -37,9 +36,8 @@ export const App = () => {
 
     const intervalId = setInterval(function () {
       fetchData();
-    }, 3000);
+    }, 2000);
   }, []);
-
 
   return (
     <div className="App">
@@ -50,8 +48,7 @@ export const App = () => {
       />
 
       <main className='wrapper'>
-      <Search/>
-      <Content/>
+        <Search />
       </main>
 
     </div>
