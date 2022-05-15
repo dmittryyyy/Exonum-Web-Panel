@@ -175,7 +175,6 @@ export const Search = () => {
                     </div>
                     <button type='submit' onClick={GetService}>Найти</button>
                 </div>
-
             </div>
 
 
@@ -218,7 +217,6 @@ export const Search = () => {
                     </div>
                     <button type='submit' onClick={GetOrders}>Найти</button>
                 </div>
-
             </div>
 
             <Content
@@ -226,6 +224,8 @@ export const Search = () => {
                 isError={isError}
                 setIsResult={setIsResult}
                 setIsError={setIsError}
+                testHash={testHash}
+                GetOrders={GetOrders}
             />
         </>
     )
