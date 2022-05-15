@@ -19,6 +19,9 @@ export const Search = () => {
     const [isDeviceKey, setIsDeviceKey] = useState();
     const [isHistory, seIsHistory] = useState();
 
+    const [isOrdersKeys, setIsOrdersKeys] = useState();
+    const [isOrdersValue] = useState([]);
+
     const [isResult, setIsResult] = useState();
     const [isError, setIsError] = useState();
 
@@ -26,9 +29,6 @@ export const Search = () => {
         try {
             if (testHash(isTransaction)) {
                 const resp = await searchTransaction(client.activeNode, isTransaction);
-                resp.onclick = function() {
-                    alert('dsfsd')
-                }
                 if (!resp) {
                     setIsResult('type: unknown')
                 } else if (resp.type === 'committed') {
@@ -119,9 +119,10 @@ export const Search = () => {
                 await searchOrders(client.activeNode, isOrders)
                     .then((orders) => {
                         orders.data.map(element => {
-                          element.status.splice(0, element.status.length - 1);
+                            element.status.splice(0, element.status.length - 1);
+                            setIsOrdersKeys(Object.keys(element));
+                            isOrdersValue.push(element);
                         })
-                        setIsResult(JSON.stringify(orders, null, 2));
                     });
                 setIsError('');
             } else {
@@ -221,11 +222,11 @@ export const Search = () => {
 
             <Content
                 isResult={isResult}
-                isError={isError}
                 setIsResult={setIsResult}
+                isError={isError}
                 setIsError={setIsError}
-                testHash={testHash}
-                GetOrders={GetOrders}
+                isOrdersValue={isOrdersValue}
+                isOrdersKeys={isOrdersKeys}
             />
         </>
     )
