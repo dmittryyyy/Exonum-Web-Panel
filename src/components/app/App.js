@@ -4,7 +4,6 @@ import { ThemeContext } from '../..';
 import { Header } from '../header/Header';
 import { Search } from '../Search/Search';
 import { expolorerBlocks } from '../../services/webPanelAPI';
-import { Content } from '../content/Content';
 
 import './App.scss';
 

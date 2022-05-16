@@ -18,16 +18,22 @@
         margin-bottom: 20px;
     }
 
-    table {
-        border: 2px solid #000;
-        word-break: break-word;
+    .tableHidden {
+        display: none;
+    }
 
-        thead {
-            border-bottom: 2px solid #000;
-        }
+    .cEMZEX {
+        text-align: center;
+        font-size: 30px;
+        font-weight: 700;
+        border-radius: 15px 15px 0 0;
+    }
 
-        th {
-            border-right: 2px solid #000;
-        }
+    .jxflYm {
+        border-radius: 0 0 15px 15px;
+        margin-bottom: 100px;
+        justify-content: center;
+        font-size: 16px;
+        color: #000;
     }
 }

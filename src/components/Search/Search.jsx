@@ -19,8 +19,7 @@ export const Search = () => {
     const [isDeviceKey, setIsDeviceKey] = useState();
     const [isHistory, seIsHistory] = useState();
 
-    const [isOrdersKeys, setIsOrdersKeys] = useState();
-    const [isOrdersValue] = useState([]);
+    const [isOrdersItems, setIsOrdersItems] = useState();
 
     const [isResult, setIsResult] = useState();
     const [isError, setIsError] = useState();
@@ -118,11 +117,10 @@ export const Search = () => {
             if (testHash(isOrders)) {
                 await searchOrders(client.activeNode, isOrders)
                     .then((orders) => {
-                        orders.data.map(element => {
-                            element.status.splice(0, element.status.length - 1);
-                            setIsOrdersKeys(Object.keys(element));
-                            isOrdersValue.push(element);
+                        orders.data.map(elements => {
+                            elements.status.splice([0, elements.status.length - 1]);
                         })
+                        setIsOrdersItems(orders.data);
                     });
                 setIsError('');
             } else {
@@ -132,6 +130,7 @@ export const Search = () => {
         } catch (error) {
             console.log(error);
         }
+        console.log(isOrdersItems)
     }
 
     const testHash = (str) => {
@@ -218,6 +217,7 @@ export const Search = () => {
                     </div>
                     <button type='submit' onClick={GetOrders}>Найти</button>
                 </div>
+
             </div>
 
             <Content
@@ -225,9 +225,9 @@ export const Search = () => {
                 setIsResult={setIsResult}
                 isError={isError}
                 setIsError={setIsError}
-                isOrdersValue={isOrdersValue}
-                isOrdersKeys={isOrdersKeys}
+                isOrdersItems={isOrdersItems}
             />
+
         </>
     )
 }
