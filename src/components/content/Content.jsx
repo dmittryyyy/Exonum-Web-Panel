@@ -1,16 +1,19 @@
 import { React, useContext, useState } from 'react';
 import DataTable from 'react-data-table-component';
+import CustomLoader from 'react-data-table-component';
 
 import { ThemeContext } from '../..';
 import { getCatalog } from '../../services/webPanelAPI';
 
 import './Content.scss';
 
-export const Content = ({ isError, setIsResult, isResult, setIsError, isOrdersItems }) => {
+export const Content = ({ isError, isResult, isItemsCatalog, isOrdersItems, pending,
+  setIsResult, setIsError, isSetItemsCatalog, setIsOrdersItems, setPending }) => {
 
   const { client } = useContext(ThemeContext);
 
-  const [isItemsCatalog, isSetItemsCatalog] = useState();
+  const [hideColumn, setHideColumn] = useState();
+  
 
   const showCatalog = async () => {
     try {
@@ -18,11 +21,20 @@ export const Content = ({ isError, setIsResult, isResult, setIsError, isOrdersIt
         .then(items => {
           isSetItemsCatalog(items.data);
         })
+      setIsOrdersItems('');
+      setIsResult('');
     } catch (error) {
       console.log(error);
       setIsResult('Catalog undefined or server error');
       setIsError('error');
+    } finally {
+      setPending(false);
     }
+  }
+
+  const hideTable = () => {
+    isSetItemsCatalog();
+    setIsOrdersItems();
   }
 
   const columnsCatalog = [
@@ -30,38 +42,39 @@ export const Content = ({ isError, setIsResult, isResult, setIsError, isOrdersIt
       name: 'id',
       selector: (row) => row.application_service_id,
       sortable: true,
-      wrap: true
+      wrap: true,
     },
     {
-      name: 'case',
+      name: 'Case',
       selector: (row) => row.case,
       sortable: true,
-      wrap: true
+      wrap: true,
     },
     {
-      name: 'name',
+      name: 'Name',
       selector: (row) => row.name,
       sortable: true,
-      wrap: true
+      wrap: true,
+      omit: hideColumn,
     },
     {
-      name: 'tags',
+      name: 'Tags',
       selector: row => row.tags,
       sortable: true,
       wrap: true,
-      maxWidth: '50px'
+      maxWidth: '50px',
     },
     {
-      name: 'url',
+      name: 'URL',
       selector: (row) => row.url,
       sortable: true,
-      wrap: true
+      wrap: true,
     },
     {
-      name: 'hash',
+      name: 'Hash',
       selector: (row) => row.window_hash,
       sortable: true,
-      wrap: true
+      wrap: true,
     },
   ]
 
@@ -158,31 +171,23 @@ export const Content = ({ isError, setIsResult, isResult, setIsError, isOrdersIt
   return (
     <div className='resultSearch'>
 
-      <button type='submit' onClick={showCatalog}>Show Catalog</button>
+      <button className='btnShowCatalog' type='submit' onClick={showCatalog}>Show Catalog</button>
+      <button className='btnShowCatalog' type='submit' onClick={hideTable}>Hide Table</button>
 
       <pre className={isError}>{isResult}</pre>
 
-      <div className={isItemsCatalog ? '' : 'tableHidden'}>
-        <DataTable
-        className='dataTable'
-          title='Catalog'
-          columns={columnsCatalog}
-          data={isItemsCatalog}
-          pagination
-          fixedHeader
-          highlightOnHover
-        />
-      </div>
+      <div className={isItemsCatalog || isOrdersItems ? '' : 'tableHidden'}>
 
-      <div className={isOrdersItems ? '' : 'tableHidden'}>
-        <DataTable
-        title='Orders'
-          columns={columnsOrders}
-          data={isOrdersItems}
+        < DataTable
+          title='Orders'
+          columns={isItemsCatalog ? columnsCatalog : columnsOrders}
+          data={isItemsCatalog ? isItemsCatalog : isOrdersItems}
           pagination
           fixedHeader
-          highlightOnHover
-        />
+          progressPending={pending}
+          progressComponent={<CustomLoader />}
+          highlightOnHover />
+
       </div>
 
     </div>

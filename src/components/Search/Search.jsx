@@ -3,6 +3,7 @@ import { React, useContext, useState } from 'react';
 import { ThemeContext } from '../..';
 import { searchTransaction, searchOrder, searchService, searchUserWallet, searchDeviceKey, searchOrders } from '../../services/webPanelAPI';
 import { Content } from '../content/Content';
+import { NavBar } from '../navBar/NavBar';
 
 import './Search.scss';
 
@@ -10,24 +11,23 @@ export const Search = () => {
 
     const { client } = useContext(ThemeContext);
 
-    const [isTransaction, setIsTransaction] = useState();
-    const [isOrder, setIsOrder] = useState();
-    const [isService, setIsService] = useState();
-    const [isUserWallet, setIsUserWallet] = useState();
-    const [isOrders, setIsOrders] = useState();
-
-    const [isDeviceKey, setIsDeviceKey] = useState();
+    const [isValueSearch, setIsValueSearch] = useState();
     const [isHistory, seIsHistory] = useState();
-
-    const [isOrdersItems, setIsOrdersItems] = useState();
 
     const [isResult, setIsResult] = useState();
     const [isError, setIsError] = useState();
 
+    const [isOrdersItems, setIsOrdersItems] = useState('');
+    const [isItemsCatalog, isSetItemsCatalog] = useState();
+
+    const [navBarItem, setNavBarItem] = useState([]);
+
+    const [pending, setPending] = useState(true);
+
     const GetTransaction = async () => {
         try {
-            if (testHash(isTransaction)) {
-                const resp = await searchTransaction(client.activeNode, isTransaction);
+            if (testHash(isValueSearch)) {
+                const resp = await searchTransaction(client.activeNode, isValueSearch);
                 if (!resp) {
                     setIsResult('type: unknown')
                 } else if (resp.type === 'committed') {
@@ -52,7 +52,7 @@ export const Search = () => {
 
     const GetOrder = async () => {
         try {
-            await searchOrder(client.activeNode, isOrder)
+            await searchOrder(client.activeNode, isValueSearch)
                 .then((orders) => {
                     setIsResult(hexadecimal((orders.data.order_seller_part.items[0].application_data)));
                 });
@@ -66,7 +66,7 @@ export const Search = () => {
 
     const GetService = async () => {
         try {
-            await searchService(client.activeNode, isService)
+            await searchService(client.activeNode, isValueSearch)
                 .then((service) => {
                     setIsResult(JSON.stringify(service.application_service_proof.to_application_service.entries[0].value, null, 2));
                 });
@@ -80,8 +80,8 @@ export const Search = () => {
 
     const GetUserWallet = async () => {
         try {
-            if (testHash(isUserWallet)) {
-                await searchUserWallet(client.activeNode, isUserWallet)
+            if (testHash(isValueSearch)) {
+                await searchUserWallet(client.activeNode, isValueSearch)
                     .then((wallet) => {
                         setIsResult(JSON.stringify(wallet, null, 2));
                     });
@@ -97,8 +97,8 @@ export const Search = () => {
 
     const GetDeviceKey = async () => {
         try {
-            if (isDeviceKey) {
-                await searchDeviceKey(client.activeNode, isDeviceKey, isHistory)
+            if (isValueSearch) {
+                await searchDeviceKey(client.activeNode, isValueSearch, isHistory)
                     .then((wallet) => {
                         setIsResult(JSON.stringify(wallet, null, 2));
                     })
@@ -114,23 +114,28 @@ export const Search = () => {
 
     const GetOrders = async () => {
         try {
-            if (testHash(isOrders)) {
-                await searchOrders(client.activeNode, isOrders)
+            if (testHash(isValueSearch)) {
+                await searchOrders(client.activeNode, isValueSearch)
                     .then((orders) => {
                         orders.data.map(elements => {
                             elements.status.splice([0, elements.status.length - 1]);
-                        })
-                        setIsOrdersItems(orders.data);
+                            setIsOrdersItems(orders.data);
+                        });
                     });
+                isSetItemsCatalog('');
                 setIsError('');
+                setIsResult('');
+                setPending()
             } else {
                 setIsResult('Order number uncorrect or empty input field!');
                 setIsError('error');
             }
         } catch (error) {
             console.log(error);
+        } finally {
+            setPending(false);
         }
-        console.log(isOrdersItems)
+        console.log(isOrdersItems);
     }
 
     const testHash = (str) => {
@@ -143,62 +148,62 @@ export const Search = () => {
         }).join('')
     };
 
+    const renderPlaceholderInput = () => {
+        if(navBarItem.id === 1) {
+            return 'Enter transaction number'
+        } else if(navBarItem.id === 2) {
+            return 'Enter order number'
+        } else if(navBarItem.id === 3) {
+            return 'ServiceApplication'
+        } else if(navBarItem.id === 4) {
+            return 'Enter user wallet number'
+        } else if(navBarItem.id === 5) {
+            return 'Enter device key'
+        } else if(navBarItem.id === 6) {
+            return 'Orders users'
+        } else {
+            return 'Search...'
+        }
+    }
+
+    const GiveCorrectFunction = () => {
+        if(navBarItem.id === 1) {
+           GetTransaction();
+        } else if(navBarItem.id === 2) {
+            GetOrder();
+        } else if(navBarItem.id === 3) {
+            GetService();
+        } else if(navBarItem.id === 4) {
+            GetUserWallet();
+        } else if(navBarItem.id === 5) {
+            GetDeviceKey();
+        } else if(navBarItem.id === 6) {
+            GetOrders();   
+        } else if (navBarItem.id === undefined) {
+            setIsResult('Choose search type!');
+            setIsError('error');
+        }
+    }
+
     return (
         <>
+
             <div className="searchBlock">
-                <div className="searchTransactions">
+                <NavBar
+                    setNavBarItem={setNavBarItem}
+                    navBarItem={navBarItem}
+                />
+
+                <div className="searchWrapper">
                     <div className='search'>
-                        {isTransaction && <span className='clearInput' onClick={() => setIsTransaction('')}>X</span>}
-                        <input placeholder='Search transaction'
-                            value={isTransaction}
-                            onChange={(e) => setIsTransaction(e.target.value)} />
+                        {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
+                        <input placeholder={renderPlaceholderInput()}
+                            value={isValueSearch}
+                            onChange={(e) => setIsValueSearch(e.target.value)} />
                     </div>
-                    <button type='submit' onClick={GetTransaction}>Найти</button>
-                </div>
+                    <button type='submit' onClick={GiveCorrectFunction}>Найти</button>
 
-                <div className="searchOrder">
-                    <div className='search'>
-                        {isOrder && <span className='clearInput' onClick={() => setIsOrder('')}>X</span>}
-                        <input placeholder='Search order'
-                            value={isOrder}
-                            onChange={(e) => setIsOrder(e.target.value)} />
-                    </div>
-                    <button type='submit' onClick={GetOrder}>Найти</button>
-                </div>
-
-                <div className="searchServiceApplication">
-                    <div className='search'>
-                        {isService && <span className='clearInput' onClick={() => setIsService('')}>X</span>}
-                        <input placeholder='ServiceApplication'
-                            value={isService}
-                            onChange={(e) => setIsService(e.target.value)} />
-                    </div>
-                    <button type='submit' onClick={GetService}>Найти</button>
-                </div>
-            </div>
-
-
-            <div className="searchBlock2">
-                <div className="searchUserWallet">
-                    <div className='search'>
-                        {isUserWallet && <span className='clearInput' onClick={() => setIsUserWallet('')}>X</span>}
-                        <input placeholder='Search user wallet'
-                            value={isUserWallet}
-                            onChange={(e) => setIsUserWallet(e.target.value)} />
-                    </div>
-                    <button type='submit' onClick={GetUserWallet}>Найти</button>
-                </div>
-
-                <div className="searchDeviceKey">
-                    <div className='search'>
-                        {isDeviceKey && <span className='clearInput' onClick={() => setIsDeviceKey('')}>X</span>}
-                        <input placeholder='Search device key'
-                            value={isDeviceKey}
-                            onChange={(e) => setIsDeviceKey(e.target.value)}
-                        />
-                    </div>
-                    <button type='submit' onClick={GetDeviceKey}>Найти</button>
-
+                    {navBarItem.name === 'Search device key' ?
                     <div className="checkbox">
                         <input type="checkbox"
                             className='checkboxHistory'
@@ -206,17 +211,9 @@ export const Search = () => {
                         />
                         <label>Show History</label>
                     </div>
+                    : ''}
                 </div>
 
-                <div className="searchOrders">
-                    <div className='search'>
-                        {isOrders && <span className='clearInput' onClick={() => setIsOrders('')}>X</span>}
-                        <input placeholder='Search orders users'
-                            value={isOrders}
-                            onChange={(e) => setIsOrders(e.target.value)} />
-                    </div>
-                    <button type='submit' onClick={GetOrders}>Найти</button>
-                </div>
 
             </div>
 
@@ -225,7 +222,14 @@ export const Search = () => {
                 setIsResult={setIsResult}
                 isError={isError}
                 setIsError={setIsError}
+
                 isOrdersItems={isOrdersItems}
+                setIsOrdersItems={setIsOrdersItems}
+                isSetItemsCatalog={isSetItemsCatalog}
+                isItemsCatalog={isItemsCatalog}
+
+                pending={pending}
+                setPending={setPending}
             />
 
         </>

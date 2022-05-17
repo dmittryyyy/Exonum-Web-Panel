@@ -2,7 +2,7 @@ import { useContext, useState, useEffect } from 'react';
 
 import { ThemeContext } from '../..';
 import { Header } from '../header/Header';
-import { Search } from '../Search/Search';
+import { Search } from '../search/Search';
 import { expolorerBlocks } from '../../services/webPanelAPI';
 
 import './App.scss';
@@ -10,6 +10,7 @@ import './App.scss';
 export const App = () => {
 
   const { client } = useContext(ThemeContext);
+  
 
   const [isheight, isSetheight] = useState('');
   const [isActive, isSetActive] = useState(false);
