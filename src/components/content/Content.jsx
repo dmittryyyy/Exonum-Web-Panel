@@ -141,18 +141,21 @@ export const Content = ({ isError, isResult, isItemsCatalog, isOrdersItems, pend
       selector: (row) => row.application_service_id,
       sortable: true,
       wrap: true,
+      omit: hideService,
     },
     {
       name: 'client id',
       selector: (row) => row.client_id,
       sortable: true,
       wrap: true,
+      omit: hideClientId,
     },
     {
       name: 'time',
       selector: (row) => row.creation_time,
       sortable: true,
       wrap: true,
+      omit: hideTime,
     },
     {
       name: 'currency',
@@ -160,18 +163,21 @@ export const Content = ({ isError, isResult, isItemsCatalog, isOrdersItems, pend
       sortable: true,
       wrap: true,
       maxWidth: '50px',
+      omit: hideCurrency,
     },
     {
       name: 'number',
       selector: (row) => row.external_number,
       sortable: true,
       wrap: true,
+      omit: hideNumber,
     },
     {
       name: 'forward agent',
       selector: (row) => row.forward_agent,
       sortable: true,
       wrap: true,
+      omit: hideForward,
     },
     {
       name: 'order amount',
@@ -179,49 +185,57 @@ export const Content = ({ isError, isResult, isItemsCatalog, isOrdersItems, pend
       sortable: true,
       wrap: true,
       maxWidth: '50px',
+      omit: hideOrder,
     },
     {
       name: 'description',
       selector: (row) => row.order_description,
       sortable: true,
       wrap: true,
+      omit: hideDescr,
     },
     {
       name: 'order id',
       selector: (row) => row.order_id,
       sortable: true,
       wrap: true,
+      omit: hideOrderId,
     },
     {
       name: 'seller id',
       selector: (row) => row.seller_id,
       sortable: true,
       wrap: true,
+      omit: hideSeller,
     },
     {
       name: 'status',
       selector: (row) => row.status,
       sortable: true,
       wrap: true,
+      omit: hideStatus,
     },
     {
       name: 'time update',
       selector: (row) => row.time_for_update,
       sortable: true,
       wrap: true,
-      maxWidth: '50px'
+      maxWidth: '50px',
+      omit: hideUpdate,
     },
     {
       name: 'user id',
       selector: (row) => row.user_id,
       sortable: true,
       wrap: true,
+      omit: hideUser,
     },
     {
       name: 'hash',
       selector: (row) => row.window_hash,
       sortable: true,
       wrap: true,
+      omit: isHideHash,
     },
   ]
 
@@ -233,9 +247,7 @@ export const Content = ({ isError, isResult, isItemsCatalog, isOrdersItems, pend
 
       <pre className={isError}>{isResult}</pre>
 
-      <div className={isItemsCatalog || isOrdersItems ? 'tableWrapper' : 'tableHidden'}>
-        
-      
+      <div className={isItemsCatalog || isOrdersItems ? 'tableWrapper' : 'tableHidden'}>  
 
         <DataTable
           title='Orders'
