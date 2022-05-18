@@ -3,6 +3,28 @@
     font-weight: 600;
     text-align: left;
 
+    .headerWrapper {
+        width: 100%;
+
+        .buttonWrapperCatalog {
+            display: flex;
+            justify-content: space-around;
+            button {
+                margin-right: 10px;
+            }
+        }
+
+        .buttonWrapperOrders {
+            display: flex;
+           
+            button {
+                margin-right: 10px;
+                font-size: 14px;
+            }
+        }
+
+    }
+
     pre {
         overflow-y: hidden;
     }
@@ -24,12 +46,17 @@
         font-weight: 600;
         margin-right: 20px;
     }
+
     .btnShowCatalog:hover {
-        background-color: rgb(233, 232, 232); 
+        background-color: rgb(233, 232, 232);
     }
 
     .tableHidden {
         display: none;
+    }
+
+    .tableWrapper {
+        background-color: #FFF;
     }
 
     .cEMZEX {
@@ -46,8 +73,29 @@
         font-size: 16px;
         color: #000;
     }
-    
+
     .bnAwAJ {
         font-size: 16px;
+    }
+
+    .search {
+        display: flex;
+        position: relative;
+        align-items: center;
+        padding: 5px;
+        margin-bottom: 10px;
+
+        .form-control:focus {
+            padding-right: 20px;
+        }
+
+        span {
+            position: absolute;
+            right: 0;
+            padding-right: 10px;
+            font-weight: 700;
+            font-size: 20px;
+            cursor: pointer;
+        }
     }
 }

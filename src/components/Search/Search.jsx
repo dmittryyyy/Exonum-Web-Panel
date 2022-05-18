@@ -3,7 +3,7 @@ import { React, useContext, useState } from 'react';
 import { ThemeContext } from '../..';
 import { searchTransaction, searchOrder, searchService, searchUserWallet, searchDeviceKey, searchOrders } from '../../services/webPanelAPI';
 import { Content } from '../content/Content';
-import { NavBar } from '../navBar/NavBar';
+import { SearchingBar } from '../navBar/SearchingBar';
 
 import './Search.scss';
 
@@ -11,7 +11,7 @@ export const Search = () => {
 
     const { client } = useContext(ThemeContext);
 
-    const [isValueSearch, setIsValueSearch] = useState();
+    const [isValueSearch, setIsValueSearch] = useState('');
     const [isHistory, seIsHistory] = useState();
 
     const [isResult, setIsResult] = useState();
@@ -23,6 +23,8 @@ export const Search = () => {
     const [navBarItem, setNavBarItem] = useState([]);
 
     const [pending, setPending] = useState(true);
+
+    const [filteredOrders, setFilteredOrders] = useState();
 
     const GetTransaction = async () => {
         try {
@@ -120,12 +122,12 @@ export const Search = () => {
                         orders.data.map(elements => {
                             elements.status.splice([0, elements.status.length - 1]);
                             setIsOrdersItems(orders.data);
+                            setFilteredOrders(orders.data);
                         });
                     });
-                isSetItemsCatalog('');
+                isSetItemsCatalog();
                 setIsError('');
                 setIsResult('');
-                setPending()
             } else {
                 setIsResult('Order number uncorrect or empty input field!');
                 setIsError('error');
@@ -135,7 +137,6 @@ export const Search = () => {
         } finally {
             setPending(false);
         }
-        console.log(isOrdersItems);
     }
 
     const testHash = (str) => {
@@ -149,17 +150,17 @@ export const Search = () => {
     };
 
     const renderPlaceholderInput = () => {
-        if(navBarItem.id === 1) {
+        if (navBarItem.id === 1) {
             return 'Enter transaction number'
-        } else if(navBarItem.id === 2) {
+        } else if (navBarItem.id === 2) {
             return 'Enter order number'
-        } else if(navBarItem.id === 3) {
+        } else if (navBarItem.id === 3) {
             return 'ServiceApplication'
-        } else if(navBarItem.id === 4) {
+        } else if (navBarItem.id === 4) {
             return 'Enter user wallet number'
-        } else if(navBarItem.id === 5) {
+        } else if (navBarItem.id === 5) {
             return 'Enter device key'
-        } else if(navBarItem.id === 6) {
+        } else if (navBarItem.id === 6) {
             return 'Orders users'
         } else {
             return 'Search...'
@@ -167,18 +168,18 @@ export const Search = () => {
     }
 
     const GiveCorrectFunction = () => {
-        if(navBarItem.id === 1) {
-           GetTransaction();
-        } else if(navBarItem.id === 2) {
+        if (navBarItem.id === 1) {
+            GetTransaction();
+        } else if (navBarItem.id === 2) {
             GetOrder();
-        } else if(navBarItem.id === 3) {
+        } else if (navBarItem.id === 3) {
             GetService();
-        } else if(navBarItem.id === 4) {
+        } else if (navBarItem.id === 4) {
             GetUserWallet();
-        } else if(navBarItem.id === 5) {
+        } else if (navBarItem.id === 5) {
             GetDeviceKey();
-        } else if(navBarItem.id === 6) {
-            GetOrders();   
+        } else if (navBarItem.id === 6) {
+            GetOrders();
         } else if (navBarItem.id === undefined) {
             setIsResult('Choose search type!');
             setIsError('error');
@@ -187,9 +188,8 @@ export const Search = () => {
 
     return (
         <>
-
             <div className="searchBlock">
-                <NavBar
+                <SearchingBar
                     setNavBarItem={setNavBarItem}
                     navBarItem={navBarItem}
                 />
@@ -204,14 +204,14 @@ export const Search = () => {
                     <button type='submit' onClick={GiveCorrectFunction}>Найти</button>
 
                     {navBarItem.name === 'Search device key' ?
-                    <div className="checkbox">
-                        <input type="checkbox"
-                            className='checkboxHistory'
-                            onChange={(e) => seIsHistory(e.target.checked)}
-                        />
-                        <label>Show History</label>
-                    </div>
-                    : ''}
+                        <div className="checkbox">
+                            <input type="checkbox"
+                                className='checkboxHistory'
+                                onChange={(e) => seIsHistory(e.target.checked)}
+                            />
+                            <label>Show History</label>
+                        </div>
+                        : ''}
                 </div>
 
 
@@ -230,6 +230,9 @@ export const Search = () => {
 
                 pending={pending}
                 setPending={setPending}
+
+                setFilteredOrders={setFilteredOrders}
+                filteredOrders={filteredOrders}
             />
 
         </>

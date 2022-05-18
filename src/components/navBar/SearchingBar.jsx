@@ -1,9 +1,9 @@
 import { React } from 'react';
 import { ListGroup, ListGroupItem } from 'react-bootstrap';
 
-import './NavBar.scss';
+import './SearchingBar.scss';
 
-export const NavBar = ({ setNavBarItem, navBarItem }) => {
+export const SearchingBar = ({ setNavBarItem, navBarItem }) => {
 
     const navBarItems = [
         { name: 'Search transaction', id: 1 },
