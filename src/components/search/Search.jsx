@@ -163,7 +163,7 @@ export const Search = () => {
         } else if (navBarItem.id === 6) {
             return 'Orders users'
         } else {
-            return 'Search...'
+            return 'search...'
         }
     }
 
@@ -203,7 +203,7 @@ export const Search = () => {
                     </div>
                     <button type='submit' onClick={GiveCorrectFunction}>Найти</button>
 
-                    {navBarItem.name === 'Search device key' ?
+                    {navBarItem.name === 'search device key' ?
                         <div className="checkbox">
                             <input type="checkbox"
                                 className='checkboxHistory'
