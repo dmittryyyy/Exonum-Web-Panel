@@ -2,7 +2,7 @@ import { createContext, React } from 'react';
 import ReactDOM from 'react-dom/client';
 
 import { App } from './components/app/App';
-import { Client } from '../src/services/Client';
+import { Client } from './services/cient';
 
 import './index.scss';
 
