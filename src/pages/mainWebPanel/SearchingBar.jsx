@@ -1,8 +1,6 @@
 import { React } from 'react';
 import { ListGroup, ListGroupItem } from 'react-bootstrap';
 
-import './SearchingBar.scss';
-
 export const SearchingBar = ({ setNavBarItem, navBarItem }) => {
 
     const navBarItems = [

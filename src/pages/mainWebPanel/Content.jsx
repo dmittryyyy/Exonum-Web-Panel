@@ -6,8 +6,6 @@ import CustomLoader from 'react-data-table-component';
 import { ThemeContext } from '../..';
 import { getCatalog } from '../../services/webPanelAPI';
 
-import './Content.scss';
-
 export const Content = ({ isError, isResult, isItemsCatalog, isOrdersItems, pending, filteredOrders,
   setIsResult, setIsError, isSetItemsCatalog, setIsOrdersItems, setPending, setFilteredOrders }) => {
 

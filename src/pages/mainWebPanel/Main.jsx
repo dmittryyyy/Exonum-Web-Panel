@@ -1,13 +1,15 @@
 import { React, useContext, useState } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { ThemeContext } from '../..';
 import { searchTransaction, searchOrder, searchService, searchUserWallet, searchDeviceKey, searchOrders } from '../../services/webPanelAPI';
-import { Content } from '../content/Content';
-import { SearchingBar } from '../navBar/SearchingBar';
+import { Node } from './Node';
+import { Content } from './Content';
+import { SearchingBar } from './SearchingBar';
 
-import './Search.scss';
+import './Main.scss';
 
-export const Search = () => {
+export const Main = ({ isheight, isActive }) => {
 
     const { client } = useContext(ThemeContext);
 
@@ -188,6 +190,12 @@ export const Search = () => {
 
     return (
         <>
+
+        <Node
+        isActive={isActive}
+        isheight={isheight}
+        />
+
             <div className="searchBlock">
                 <SearchingBar
                     setNavBarItem={setNavBarItem}
@@ -213,7 +221,6 @@ export const Search = () => {
                         </div>
                         : ''}
                 </div>
-
 
             </div>
 

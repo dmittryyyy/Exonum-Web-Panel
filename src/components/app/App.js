@@ -2,7 +2,7 @@ import { useContext, useState, useEffect } from 'react';
 
 import { ThemeContext } from '../..';
 import { Header } from '../header/Header';
-import { Search } from '../Search/Search';
+import { Main } from '../../pages/mainWebPanel/Main';
 import { expolorerBlocks } from '../../services/webPanelAPI';
 
 import './App.scss';
@@ -11,7 +11,6 @@ export const App = () => {
 
   const { client } = useContext(ThemeContext);
   
-
   const [isheight, isSetheight] = useState('');
   const [isActive, isSetActive] = useState(false);
 
@@ -42,13 +41,13 @@ export const App = () => {
   return (
     <div className="App">
 
-      <Header
-        isheight={isheight}
-        isActive={isActive}
-      />
+      <Header/>
 
       <main className='wrapper'>
-        <Search />
+        <Main 
+         isheight={isheight}
+         isActive={isActive}
+        />
       </main>
 
     </div>
