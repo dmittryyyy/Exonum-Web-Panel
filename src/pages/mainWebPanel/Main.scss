@@ -10,6 +10,7 @@
         border: 2px solid black;
         padding: 10px;
         border-radius: 10px;
+        max-width: 400px;
     }
 
     .height {
@@ -54,10 +55,10 @@
 }
 
 .list-group {
-    min-width: 300px;
+    min-width: 400px;
     border-radius: 10px;
     text-align: left;
-    background-color: #FFF;
+    margin-right: 20px;
 
     .list-group-item {
         cursor: pointer;

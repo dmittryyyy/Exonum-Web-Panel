@@ -14,15 +14,15 @@ export const SearchingBar = ({ setNavBarItem, navBarItem }) => {
 
     return (
         <ListGroup>
-            {navBarItems.map((item, index) =>
-                <ListGroupItem
-                    onClick={() => setNavBarItem(item)}
-                    active={item.id === navBarItem.id}
-                    key={index}
-                >
-                    {item.name}
-                </ListGroupItem>
-            )}
+        {navBarItems.map((item, index) =>
+        <ListGroupItem
+            onClick={() => setNavBarItem(item)}
+            active={item.id === navBarItem.id}
+            key={index}
+        >
+            {item.name}
+        </ListGroupItem>
+    )}
         </ListGroup>
     )
 }

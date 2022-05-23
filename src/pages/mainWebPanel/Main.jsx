@@ -2,14 +2,14 @@ import { React, useContext, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { ThemeContext } from '../..';
-import { searchTransaction, searchOrder, searchService, searchUserWallet, searchDeviceKey, searchOrders } from '../../services/webPanelAPI';
+import { searchTransaction, searchOrder, searchService, searchUserWallet, searchDeviceKey, searchOrders } from '../../services/NodeAPI';
 import { Node } from './Node';
-import { Content } from './Content';
+import { ContentMain } from './ContentMain';
 import { SearchingBar } from './SearchingBar';
 
 import './Main.scss';
 
-export const Main = ({ isheight, isActive }) => {
+export const Main = ({ isheight, isActive, isSap }) => {
 
     const { client } = useContext(ThemeContext);
 
@@ -121,7 +121,7 @@ export const Main = ({ isheight, isActive }) => {
             if (testHash(isValueSearch)) {
                 await searchOrders(client.activeNode, isValueSearch)
                     .then((orders) => {
-                        orders.data.map(elements => {
+                        orders.data.map((elements) => {
                             elements.status.splice([0, elements.status.length - 1]);
                             setIsOrdersItems(orders.data);
                             setFilteredOrders(orders.data);
@@ -200,6 +200,7 @@ export const Main = ({ isheight, isActive }) => {
                 <SearchingBar
                     setNavBarItem={setNavBarItem}
                     navBarItem={navBarItem}
+                    isSap={isSap}
                 />
 
                 <div className="searchWrapper">
@@ -224,7 +225,7 @@ export const Main = ({ isheight, isActive }) => {
 
             </div>
 
-            <Content
+            <ContentMain
                 isResult={isResult}
                 setIsResult={setIsResult}
                 isError={isError}

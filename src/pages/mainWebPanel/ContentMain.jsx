@@ -1,12 +1,12 @@
 import { React, useContext, useEffect, useState } from 'react';
-import { Button } from 'react-bootstrap';
+import { Accordion, Button } from 'react-bootstrap';
 import DataTable from 'react-data-table-component';
 import CustomLoader from 'react-data-table-component';
 
 import { ThemeContext } from '../..';
-import { getCatalog } from '../../services/webPanelAPI';
+import { getCatalog } from '../../services/NodeAPI';
 
-export const Content = ({ isError, isResult, isItemsCatalog, isOrdersItems, pending, filteredOrders,
+export const ContentMain = ({ isError, isResult, isItemsCatalog, isOrdersItems, pending, filteredOrders,
   setIsResult, setIsError, isSetItemsCatalog, setIsOrdersItems, setPending, setFilteredOrders }) => {
 
   const { client } = useContext(ThemeContext);
@@ -75,12 +75,10 @@ export const Content = ({ isError, isResult, isItemsCatalog, isOrdersItems, pend
     }
   }, [searchOrders]);
 
-
   const hideTable = () => {
     isSetItemsCatalog();
     setIsOrdersItems();
   }
-
 
   const clearInputFilter = () => {
     setSearchCatalog('');
@@ -243,7 +241,24 @@ export const Content = ({ isError, isResult, isItemsCatalog, isOrdersItems, pend
       <button className='btnShowCatalog' type='submit' onClick={ShowCatalog}>Show Catalog</button>
       <button className='btnShowCatalog' type='submit' onClick={hideTable}>Hide Table</button>
 
-      <pre className={isError}>{isResult}</pre>
+     <div className='resultWrapper'>
+     {isResult ? 
+     <Accordion default-key="0">
+     <Accordion.Item eventKey='0'>
+       <Accordion.Header>JSON Format</Accordion.Header>
+       <Accordion.Body>
+       <pre className={isError}>{isResult}</pre>
+       </Accordion.Body>
+     </Accordion.Item>
+     <Accordion.Item eventKey='1'>
+       <Accordion.Header>Table Format</Accordion.Header>
+       <Accordion.Body>
+       <DataTable/>
+       </Accordion.Body>
+     </Accordion.Item>
+   </Accordion> 
+    : ''}
+     </div>
 
       <div className={isItemsCatalog || isOrdersItems ? 'tableWrapper' : 'tableHidden'}>  
 
@@ -257,6 +272,7 @@ export const Content = ({ isError, isResult, isItemsCatalog, isOrdersItems, pend
           progressComponent={<CustomLoader />}
           highlightOnHover
           subHeader
+          subHeaderAlign='center'
           subHeaderComponent={
             <div className='headerWrapper'>
             <div className='search'>
@@ -299,7 +315,6 @@ export const Content = ({ isError, isResult, isItemsCatalog, isOrdersItems, pend
 
             </div>
           }
-          subHeaderAlign='center'
         />
       </div>
 

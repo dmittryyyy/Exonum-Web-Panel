@@ -1,18 +1,22 @@
 import { React } from 'react';
 import { Navbar, Container, Nav, NavDropdown } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
-export const Header = () => {
+import './Header.scss';
+
+export const Header = ({ setIsSap }) => {
+
   return (
     <header>
       <Navbar bg="light">
     <Container>
-    <Navbar.Brand href="#home">WebPanel</Navbar.Brand>
+    <Link to='/'><Navbar.Brand>WebPanel</Navbar.Brand></Link>
     <Nav className="me-auto">
-      <Nav.Link href="#node">Node</Nav.Link>
-      <NavDropdown title="SAP" id="collasible-nav-dropdown">
-        <NavDropdown.Item href="#action/test_sap">SAP-TEST</NavDropdown.Item>
+      <Link to='/'><Nav.Link href="#node">Node</Nav.Link></Link>
+      <NavDropdown  title="SAP" id="collasible-nav-dropdown">
+       <NavDropdown.Item> <Link to='testsap'>SAP-TEST</Link></NavDropdown.Item>
         <NavDropdown.Divider />
-        <NavDropdown.Item href="#action/basic_sap">SAP-BASIC</NavDropdown.Item>
+        <NavDropdown.Item><Link to='basicsap'>SAP-BASIC</Link></NavDropdown.Item>
       </NavDropdown>
     </Nav>
     </Container>
