@@ -3,7 +3,7 @@ import React, { useContext, useState } from 'react';
 import { ThemeContext } from '../..';
 import { SearchingSap } from './searchingSap';
 import { ContentSapTest } from './ContentSapTest';
-import { getVendingProfilesBenefits, getUsersBenefits, getUserSapInfo, getItemsLoaded, getUserCards, getShopItemsUpdate } from '../../services/SapTestAPI';
+import { getVendingProfilesBenefits, getUsersBenefits, getUserSapInfo, getItemsLoaded, getUserCards, getShopItems, getEvents } from '../../services/SapTestAPI';
 
 export const SapTest = () => {
 
@@ -13,6 +13,9 @@ export const SapTest = () => {
     const [isError, setIsError] = useState();
 
     const [navBarSapItems, setNavBarSapItems] = useState([]);
+
+    const [countShopAndEventsItems, setCountShopAndEventsItems] = useState(10);
+    const [valueCalendar, setValueCalendar] = useState();
 
     const BenefitRules = () => {
         try {
@@ -61,10 +64,34 @@ export const SapTest = () => {
     const usersCard = async () => {
         try {
             await getUserCards(client.sveklaServerV1, '53f30c57-ca2e-5fff-8aec-313aadea2926')
-            .then(resp => {
-                setIsResult(JSON.stringify(resp, null, 2));
-            })
-        } catch(err) {
+                .then(resp => {
+                    setIsResult(JSON.stringify(resp, null, 2));
+                })
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    const ShopItems = async () => {
+        try {
+            await getShopItems(client.sveklaServerV1, countShopAndEventsItems)
+                .then(resp => {
+                    setIsResult(JSON.stringify(resp, null, 2));
+                })
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    const Events = async () => {
+        const data = valueCalendar.toISOString().slice(0, -1);
+        console.log(data);
+        try {
+            await getEvents(client.sveklaServerV1, valueCalendar.toISOString(), countShopAndEventsItems)
+                .then(resp => {
+                    console.log(resp);
+                })
+        } catch (err) {
             console.log(err);
         }
     }
@@ -72,13 +99,17 @@ export const SapTest = () => {
     return (
         <>
 
-            <button>CLICK</button>
+            <button onClick={Events}>CLICK</button>
 
             <div className="searchBlock">
 
                 <SearchingSap
                     navBarSapItems={navBarSapItems}
                     setNavBarSapItems={setNavBarSapItems}
+                    countShopAndEventsItems={countShopAndEventsItems}
+                    setCountShopAndEventsItems={setCountShopAndEventsItems}
+                    valueCalendar={valueCalendar}
+                    setValueCalendar={setValueCalendar}
                 />
 
             </div>

@@ -18,7 +18,8 @@ export const getVendingMachines = async (root) => {
 }
 
 export const getShopItems = async (root, query) => {
-    return axios.get(root, { params: { shopitems: query } })
+    const url = root + '/shopitems';
+    return axios.get(url, { params: { limit: query } })
         .then((resp) => { return resp.data })
         .catch((err) => {
             if (err) {
@@ -33,7 +34,8 @@ export const getShopItems = async (root, query) => {
 }
 
 export const getEvents = async (root, query, query2 = 100) => {
-    return axios.get(root, { params: { shopitems: `${query}`, limit: query2 }})
+    const url = root + '/events';
+    return axios.get(url, { params: { createdOn_gt: `${query}`, limit: query2 }})
         .then((resp) => { return resp.data })
         .catch((err) => {
             if (err) {
@@ -126,7 +128,6 @@ export const getUserCards = async (root, id) => {
             }
         })
 }
-
 
 //Не Проходит запрос
 export const getShopItemsUpdate = async (root) => {
