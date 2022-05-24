@@ -120,7 +120,7 @@ export const Search = () => {
                 await searchOrders(client.activeNode, isValueSearch)
                     .then((orders) => {
                         orders.data.map(elements => {
-                            elements.status.splice([0, elements.status.length - 1]);
+                            elements.status.splice(0, elements.status.length - 1);
                             setIsOrdersItems(orders.data);
                             setFilteredOrders(orders.data);
                         });

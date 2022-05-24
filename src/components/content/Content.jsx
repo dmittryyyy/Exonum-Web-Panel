@@ -37,7 +37,6 @@ export const Content = ({ isError, isResult, isItemsCatalog, isOrdersItems, pend
   const [hideDescr, setHideDescr] = useState(false);
   const [hideOrderId, setHideOrderId] = useState(false);
   const [hideSeller, setHideSeller] = useState(false);
-  const [hideStatus, setHideStatus] = useState(false);
   const [hideUpdate, setHideUpdate] = useState(false);
   const [hideUser, setHideUser] = useState(false);
   const [isHideHash, setIsHideHash] = useState(false);
@@ -77,12 +76,18 @@ export const Content = ({ isError, isResult, isItemsCatalog, isOrdersItems, pend
     }
   }, [searchOrders]);
 
+  const ExpandedComponent = (filteredCatalog, filteredOrders) => {
+    if(filteredCatalog) {
+      return <pre>{JSON.stringify(filteredCatalog, null, 2)}</pre>;
+    } else {
+      return <pre>{JSON.stringify(filteredOrders, null, 2)}</pre>;
+    }
+  }
 
   const hideTable = () => {
     isSetItemsCatalog();
     setIsOrdersItems();
   }
-
 
   const clearInputFilter = () => {
     setSearchCatalog('');
@@ -96,6 +101,7 @@ export const Content = ({ isError, isResult, isItemsCatalog, isOrdersItems, pend
       sortable: true,
       wrap: true,
       omit: hideId,
+      expandableRows: (row) => JSON.stringify(row.application_service_id)
     },
     {
       name: 'Case',
@@ -209,13 +215,6 @@ export const Content = ({ isError, isResult, isItemsCatalog, isOrdersItems, pend
       omit: hideSeller,
     },
     {
-      name: 'status',
-      selector: (row) => row.status,
-      sortable: true,
-      wrap: true,
-      omit: hideStatus,
-    },
-    {
       name: 'time update',
       selector: (row) => row.time_for_update,
       sortable: true,
@@ -252,19 +251,21 @@ export const Content = ({ isError, isResult, isItemsCatalog, isOrdersItems, pend
         <DataTable
           title='Orders'
           columns={isItemsCatalog ? columnsCatalog : columnsOrders}
-          data={isItemsCatalog ? filteredCatalog : filteredOrders}
+          data={isItemsCatalog ? isItemsCatalog : filteredOrders}
           pagination
           fixedHeader
           progressPending={pending}
           progressComponent={<CustomLoader />}
           highlightOnHover
           subHeader
+          expandableRows 
+          expandableRowsComponent={ExpandedComponent}
           subHeaderComponent={
             <div className='headerWrapper'>
             <div className='search'>
               {searchCatalog || searchOrders ? <span className='clearInput' onClick={clearInputFilter}>X</span> : ''}
               <input type='text'
-                placeholder='Search here'
+                placeholder={isItemsCatalog ? 'Search on name' : 'Search on order description'}
                 className='form-control'
                 value={isItemsCatalog ? searchCatalog : searchOrders}
                 onChange={isItemsCatalog ? (e) => setSearchCatalog(e.target.value) : (e) => setSearchOrders(e.target.value)}
@@ -292,7 +293,6 @@ export const Content = ({ isError, isResult, isItemsCatalog, isOrdersItems, pend
            <Button onClick={() => setHideDescr(!hideDescr)}>Hide Descr</Button>
            <Button onClick={() => setHideOrderId(!hideOrderId)}>Hide Order Id</Button>
            <Button onClick={() => setHideSeller(!hideSeller)}>Hide Seller</Button>
-           <Button onClick={() => setHideStatus(!hideStatus)}>Hide Status</Button>
            <Button onClick={() => setHideUpdate(!hideUpdate)}>Hide Update</Button>
            <Button onClick={() => setHideUser(!hideUser)}>Hide User</Button>
            <Button onClick={() => setIsHideHash(!isHideHash)}>Hide Hash</Button>
