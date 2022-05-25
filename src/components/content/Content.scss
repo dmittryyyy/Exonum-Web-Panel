@@ -3,12 +3,17 @@
     font-weight: 600;
     text-align: left;
 
-    .headerWrapper {
+    .resultWrapper {
+        margin-bottom: 40px;
+    }
+
+    .tableHeader {
         width: 100%;
 
         .buttonWrapperCatalog {
             display: flex;
             justify-content: space-around;
+
             button {
                 margin-right: 10px;
             }
@@ -16,17 +21,17 @@
 
         .buttonWrapperOrders {
             display: flex;
-           
+
             button {
                 margin-right: 10px;
                 font-size: 14px;
             }
         }
-
     }
 
     pre {
         overflow-y: hidden;
+        font-size: 14px;
     }
 
     .error {

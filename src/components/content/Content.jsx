@@ -1,5 +1,5 @@
 import { React, useContext, useEffect, useState } from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, Accordion, Table } from 'react-bootstrap';
 import DataTable from 'react-data-table-component';
 import CustomLoader from 'react-data-table-component';
 
@@ -9,7 +9,7 @@ import { getCatalog } from '../../services/webPanelAPI';
 import './Content.scss';
 
 export const Content = ({ isError, isResult, isItemsCatalog, isOrdersItems, pending, filteredOrders,
-  setIsResult, setIsError, isSetItemsCatalog, setIsOrdersItems, setPending, setFilteredOrders }) => {
+  setIsResult, setIsError, isSetItemsCatalog, setIsOrdersItems, setPending, setFilteredOrders, }) => {
 
   const { client } = useContext(ThemeContext);
 
@@ -18,7 +18,8 @@ export const Content = ({ isError, isResult, isItemsCatalog, isOrdersItems, pend
 
   const [filteredCatalog, setFilteredCatalog] = useState();
 
-//Button Catalog
+
+  //Button Catalog
   const [hideId, setHideId] = useState(false);
   const [hideCase, setHideCase] = useState(false);
   const [hideName, setHideName] = useState(false);
@@ -26,7 +27,7 @@ export const Content = ({ isError, isResult, isItemsCatalog, isOrdersItems, pend
   const [hideURL, setHideURL] = useState(false);
   const [hideHash, setHideHash] = useState(false);
 
-//Button Orders
+  //Button Orders
   const [hideService, setHideService] = useState(false);
   const [hideClientId, setHideClientId] = useState(false);
   const [hideTime, setHideTime] = useState(false);
@@ -77,7 +78,7 @@ export const Content = ({ isError, isResult, isItemsCatalog, isOrdersItems, pend
   }, [searchOrders]);
 
   const ExpandedComponent = (filteredCatalog, filteredOrders) => {
-    if(filteredCatalog) {
+    if (filteredCatalog) {
       return <pre>{JSON.stringify(filteredCatalog, null, 2)}</pre>;
     } else {
       return <pre>{JSON.stringify(filteredOrders, null, 2)}</pre>;
@@ -244,9 +245,20 @@ export const Content = ({ isError, isResult, isItemsCatalog, isOrdersItems, pend
       <button className='btnShowCatalog' type='submit' onClick={ShowCatalog}>Show Catalog</button>
       <button className='btnShowCatalog' type='submit' onClick={hideTable}>Hide Table</button>
 
-      <pre className={isError}>{isResult}</pre>
+      <div className='resultWrapper'>
+        {isResult ?
+          <Accordion default-key="0">
+            <Accordion.Item eventKey='0'>
+              <Accordion.Header>JSON Format</Accordion.Header>
+              <Accordion.Body>
+                <pre className={isError}>{JSON.stringify(isResult, null, 2)}</pre>
+              </Accordion.Body>
+            </Accordion.Item>
+          </Accordion>
+          : ''}
+      </div>
 
-      <div className={isItemsCatalog || isOrdersItems ? 'tableWrapper' : 'tableHidden'}>  
+      <div className={isItemsCatalog || isOrdersItems ? 'tableWrapper' : 'tableHidden'}>
 
         <DataTable
           title='Orders'
@@ -258,46 +270,46 @@ export const Content = ({ isError, isResult, isItemsCatalog, isOrdersItems, pend
           progressComponent={<CustomLoader />}
           highlightOnHover
           subHeader
-          expandableRows 
+          expandableRows
           expandableRowsComponent={ExpandedComponent}
           subHeaderComponent={
-            <div className='headerWrapper'>
-            <div className='search'>
-              {searchCatalog || searchOrders ? <span className='clearInput' onClick={clearInputFilter}>X</span> : ''}
-              <input type='text'
-                placeholder={isItemsCatalog ? 'Search on name' : 'Search on order description'}
-                className='form-control'
-                value={isItemsCatalog ? searchCatalog : searchOrders}
-                onChange={isItemsCatalog ? (e) => setSearchCatalog(e.target.value) : (e) => setSearchOrders(e.target.value)}
-              />
-            </div>
+            <div className='tableHeader'>
+              <div className='search'>
+                {searchCatalog || searchOrders ? <span className='clearInput' onClick={clearInputFilter}>X</span> : ''}
+                <input type='text'
+                  placeholder={isItemsCatalog ? 'Search on name' : 'Search on order description'}
+                  className='form-control'
+                  value={isItemsCatalog ? searchCatalog : searchOrders}
+                  onChange={isItemsCatalog ? (e) => setSearchCatalog(e.target.value) : (e) => setSearchOrders(e.target.value)}
+                />
+              </div>
 
-           {isItemsCatalog ? 
-           <div className='buttonWrapperCatalog'>
-           <Button onClick={() => setHideId(!hideId)}>Hide Id</Button>
-           <Button onClick={() => setHideCase(!hideCase)}>Hide Case</Button>
-           <Button onClick={() => setHideName(!hideName)}>Hide Name</Button>
-           <Button onClick={() => setHideTags(!hideTags)}>Hide Tags</Button>
-           <Button onClick={() => setHideURL(!hideURL)}>Hide URL</Button>
-           <Button onClick={() => setHideHash(!hideHash)}>Hide Hash</Button>
-           </div> 
-          : 
-          <div className='buttonWrapperOrders'>
-           <Button onClick={() => setHideService(!hideService)}>Hide Srvice</Button>
-           <Button onClick={() => setHideClientId(!hideClientId)}>Hide Client</Button>
-           <Button onClick={() => setHideTime(!hideTime)}>Hide Time</Button>
-           <Button onClick={() => setHideCurrency(!hideCurrency)}>Hide Currency</Button>
-           <Button onClick={() => setHideNumber(!hideNumber)}>Hide Number</Button>
-           <Button onClick={() => setHideForward(!hideForward)}>Hide Forward</Button>
-           <Button onClick={() => setHideOrder(!hideOrder)}>Hide Order</Button>
-           <Button onClick={() => setHideDescr(!hideDescr)}>Hide Descr</Button>
-           <Button onClick={() => setHideOrderId(!hideOrderId)}>Hide Order Id</Button>
-           <Button onClick={() => setHideSeller(!hideSeller)}>Hide Seller</Button>
-           <Button onClick={() => setHideUpdate(!hideUpdate)}>Hide Update</Button>
-           <Button onClick={() => setHideUser(!hideUser)}>Hide User</Button>
-           <Button onClick={() => setIsHideHash(!isHideHash)}>Hide Hash</Button>
-           </div> 
-           }
+              {isItemsCatalog ?
+                <div className='buttonWrapperCatalog'>
+                  <Button onClick={() => setHideId(!hideId)}>Hide Id</Button>
+                  <Button onClick={() => setHideCase(!hideCase)}>Hide Case</Button>
+                  <Button onClick={() => setHideName(!hideName)}>Hide Name</Button>
+                  <Button onClick={() => setHideTags(!hideTags)}>Hide Tags</Button>
+                  <Button onClick={() => setHideURL(!hideURL)}>Hide URL</Button>
+                  <Button onClick={() => setHideHash(!hideHash)}>Hide Hash</Button>
+                </div>
+                :
+                <div className='buttonWrapperOrders'>
+                  <Button onClick={() => setHideService(!hideService)}>Hide Srvice</Button>
+                  <Button onClick={() => setHideClientId(!hideClientId)}>Hide Client</Button>
+                  <Button onClick={() => setHideTime(!hideTime)}>Hide Time</Button>
+                  <Button onClick={() => setHideCurrency(!hideCurrency)}>Hide Currency</Button>
+                  <Button onClick={() => setHideNumber(!hideNumber)}>Hide Number</Button>
+                  <Button onClick={() => setHideForward(!hideForward)}>Hide Forward</Button>
+                  <Button onClick={() => setHideOrder(!hideOrder)}>Hide Order</Button>
+                  <Button onClick={() => setHideDescr(!hideDescr)}>Hide Descr</Button>
+                  <Button onClick={() => setHideOrderId(!hideOrderId)}>Hide Order Id</Button>
+                  <Button onClick={() => setHideSeller(!hideSeller)}>Hide Seller</Button>
+                  <Button onClick={() => setHideUpdate(!hideUpdate)}>Hide Update</Button>
+                  <Button onClick={() => setHideUser(!hideUser)}>Hide User</Button>
+                  <Button onClick={() => setIsHideHash(!isHideHash)}>Hide Hash</Button>
+                </div>
+              }
 
             </div>
           }

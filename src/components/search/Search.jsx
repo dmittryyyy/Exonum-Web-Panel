@@ -34,13 +34,13 @@ export const Search = () => {
                     setIsResult('type: unknown')
                 } else if (resp.type === 'committed') {
                     delete resp.location_proof
-                    setIsResult(JSON.stringify(resp, null, 2));
-                } else if (resp.type === 'in-poll') {
+                    setIsResult(resp);
+                } else if (resp.type === 'in-pool') {
                     delete resp.status
                     delete resp.content.debug
                     delete resp.location
                     delete resp.location_proof
-                    setIsResult(JSON.stringify(resp, null, 2));
+                    setIsResult(resp);
                 }
                 setIsError('');
             } else {
@@ -70,7 +70,7 @@ export const Search = () => {
         try {
             await searchService(client.activeNode, isValueSearch)
                 .then((service) => {
-                    setIsResult(JSON.stringify(service.application_service_proof.to_application_service.entries[0].value, null, 2));
+                    setIsResult(service.application_service_proof.to_application_service.entries[0].value);
                 });
             setIsError('');
         } catch (error) {
@@ -85,7 +85,7 @@ export const Search = () => {
             if (testHash(isValueSearch)) {
                 await searchUserWallet(client.activeNode, isValueSearch)
                     .then((wallet) => {
-                        setIsResult(JSON.stringify(wallet, null, 2));
+                        setIsResult(wallet.data);
                     });
                 setIsError('');
             } else {
@@ -102,7 +102,7 @@ export const Search = () => {
             if (isValueSearch) {
                 await searchDeviceKey(client.activeNode, isValueSearch, isHistory)
                     .then((wallet) => {
-                        setIsResult(JSON.stringify(wallet, null, 2));
+                        setIsResult(wallet);
                     })
                 setIsError('');
             } else {
@@ -203,7 +203,7 @@ export const Search = () => {
                     </div>
                     <button type='submit' onClick={GiveCorrectFunction}>Найти</button>
 
-                    {navBarItem.name === 'search device key' ?
+                    {navBarItem.name === 'Search device key' ?
                         <div className="checkbox">
                             <input type="checkbox"
                                 className='checkboxHistory'
