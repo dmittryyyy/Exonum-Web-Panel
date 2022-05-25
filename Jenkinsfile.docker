@@ -1,0 +1,59 @@
+node {
+    registry_url = 'cr.yandex'
+    registry_id = 'crpv21fjot6i6vo4aqq2'
+    registry_credential = 'yandex-cr-credential'
+}
+pipeline {
+    agent {
+        node {
+            label 'docker' 
+        }
+    }
+
+    environment {
+        DOCKER_IMAGE_NAME = "web-panel{env.BRANCH_NAME == "main" ? "" : "-dev"}:${env.BUILD_ID}"
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    docker.withRegistry("https://${registry_url}", "${registry_credential}") {
+                        def image = docker.build("${registry_url}/${registry_id}/${DOCKER_IMAGE_NAME}")
+                        image.push()
+
+                        image.push('latest')
+                    }
+                }
+            }
+        }    
+    }
+
+    post {
+        always {
+            cleanWs()
+        }
+
+        failure {
+            mail to: 'ci@mobylabs.co.uk',
+            subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
+            body: "Build failed: ${env.BUILD_URL}"
+        }
+
+        success {
+            script {
+                if (currentBuild.previousBuild != null && currentBuild.previousBuild.result != 'SUCCESS') {
+                    mail to: 'vk@unotex.ru',
+                    subject: "Pipeline Success: ${currentBuild.fullDisplayName}",
+                    body: "Build is back to normal (success): ${env.BUILD_URL}"     
+                }       
+            }
+        }    
+    }    
+}
