@@ -3,12 +3,12 @@ FROM node:lts as build
 WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
 RUN npm install npm@8.5.5 -g --silent
-COPY package.json ./
-COPY package-lock.json ./
 RUN npm ci --silent
 RUN npm install react-scripts@5.0.1 -g --silent
 RUN node -v
 RUN npm -v
+COPY package.json ./
+COPY package-lock.json ./
 COPY . ./
 RUN npm run build
 
