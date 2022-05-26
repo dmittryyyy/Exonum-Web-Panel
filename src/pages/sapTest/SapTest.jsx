@@ -8,34 +8,38 @@ import './SapTest.scss';
 
 export const SapTest = () => {
 
-    const [jsonFormat, setJsonFormat] = useState();
+    const [dataJsonFormat, setDataJsonFormat] = useState();
+    const [dataTableFormat, setDataTableFormat] = useState();
+    const [columnsTable, setColumnsTable] = useState();
 
-    const [shopItemsTable, setShopItemsTable] = useState();
-    const [eventsTable, setEventsTable] = useState();
+    const hideTable = () => {
+        setDataJsonFormat();
+        setDataTableFormat();
+      }
+
 
     return (
         <>
             <div className="searchBlock">
 
                 <SearchingSap
-                    setJsonFormat={setJsonFormat}
-
-                    setShopItemsTable={setShopItemsTable}
-                    setEventsTable={setEventsTable}
-                    
+                    setDataJsonFormat={setDataJsonFormat}
+                    setDataTableFormat={setDataTableFormat}
+                    setColumnsTable={setColumnsTable}
                 />
 
             </div>
 
             <div className="buttonRequest">
-                <ShowVendingMachines setJsonFormat={setJsonFormat}/>
+                <ShowVendingMachines setDataJsonFormat={setDataJsonFormat} setDataTableFormat={setDataTableFormat} setColumnsTable={setColumnsTable}/>
             </div>
 
             <div className="contentBlock">
                 <ContentSapTest
-                    jsonFormat={jsonFormat}
-                    shopItemsTable={shopItemsTable}
-                    eventsTable={eventsTable}
+                    dataJson={dataJsonFormat}
+                    dataTable={dataTableFormat}
+                    columnsTable={columnsTable}
+                    hideTable={hideTable}
                 />
             </div>
         </>

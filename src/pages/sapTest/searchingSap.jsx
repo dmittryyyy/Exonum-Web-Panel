@@ -5,7 +5,7 @@ import { ShopItems } from './requestComponents/ShopItems';
 import { Events } from './requestComponents/Events';
 
 
-export const SearchingSap = ({setJsonFormat, setShopItemsTable, setEventsTable }) => {
+export const SearchingSap = ({setDataJsonFormat, setDataTableFormat, setColumnsTable }) => {
 
     const [navBarSapItems, setNavBarSapItems] = useState([]);
 
@@ -31,11 +31,11 @@ export const SearchingSap = ({setJsonFormat, setShopItemsTable, setEventsTable }
 
                 {navBarSapItems.name === 'Events' ?
 
-                    <Events setJsonFormat={setJsonFormat} setEventsTable={setEventsTable}/>
+                    <Events setDataJsonFormat={setDataJsonFormat} setDataTableFormat={setDataTableFormat} setColumnsTable={setColumnsTable}/>
 
                     :
                     
-                    <ShopItems setJsonFormat={setJsonFormat} setShopItemsTable={setShopItemsTable}/>
+                    <ShopItems setDataJsonFormat={setDataJsonFormat} setDataTableFormat={setDataTableFormat} setColumnsTable={setColumnsTable}/>
 
                 }
         </>

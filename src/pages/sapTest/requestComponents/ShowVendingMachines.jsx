@@ -2,15 +2,18 @@ import { React, useContext } from 'react';
 
 import { ThemeContext } from '../../../index';
 import { getVendingMachines, getVendingProfilesBenefits, getUsersBenefits, getUserSapInfo, getItemsLoaded, getUserCards } from '../../../services/SapTestAPI';
+import { columnsVendingMachines, columnsBenefitsRules, columnsUserBenefits, columnsItemsLoaded, columnsUserCard } from '../../../components/columnsTable/mainPage/ColumnsTable';
 
-export const ShowVendingMachines = ({ setJsonFormat }) => {
+export const ShowVendingMachines = ({ setDataJsonFormat, setDataTableFormat, setColumnsTable }) => {
 
     const { client } = useContext(ThemeContext);
 
     const showVendingMachines = async () => {
         try {
             await getVendingMachines(client.venidngMachine).then(resp => {
-                setJsonFormat(JSON.stringify(resp, null, 2));
+                setDataTableFormat(resp);
+                setDataJsonFormat(JSON.stringify(resp, null, 2));
+                setColumnsTable(columnsVendingMachines);
             })
         } catch (err) {
             console.log(err);
@@ -21,7 +24,9 @@ export const ShowVendingMachines = ({ setJsonFormat }) => {
         try {
             getVendingProfilesBenefits(client.sveklaServer, '53f30c57-ca2e-5fff-8aec-313aadea2926')
                 .then(resp => {
-                    setJsonFormat(JSON.stringify(resp, null, 2));
+                    setDataJsonFormat(JSON.stringify(resp, null, 2));
+                    setDataTableFormat(resp);
+                    setColumnsTable(columnsBenefitsRules);
                 })
         } catch (err) {
             console.log(err);
@@ -32,7 +37,9 @@ export const ShowVendingMachines = ({ setJsonFormat }) => {
         try {
             await getUsersBenefits(client.sveklaServerV1, '53f30c57-ca2e-5fff-8aec-313aadea2926')
                 .then(resp => {
-                    setJsonFormat(JSON.stringify(resp, null, 2));
+                    setDataJsonFormat(JSON.stringify(resp, null, 2));
+                    setDataTableFormat(resp);
+                    setColumnsTable(columnsUserBenefits);
                 })
         } catch (err) {
             console.log(err)
@@ -43,7 +50,7 @@ export const ShowVendingMachines = ({ setJsonFormat }) => {
         try {
             await getUserSapInfo(client.sveklaServerV1, '53f30c57-ca2e-5fff-8aec-313aadea2926')
                 .then(resp => {
-                    setJsonFormat(JSON.stringify(resp, null, 2));
+                    setDataJsonFormat(JSON.stringify(resp, null, 2));
                 })
         } catch (err) {
             console.log(err);
@@ -54,7 +61,9 @@ export const ShowVendingMachines = ({ setJsonFormat }) => {
         try {
             await getItemsLoaded(client.sveklaServer, 'bd1e89c6-d715-4174-baa9-c7a190b6232a')
                 .then(resp => {
-                    setJsonFormat(JSON.stringify(resp, null, 2));
+                    setDataJsonFormat(JSON.stringify(resp, null, 2));
+                    setDataTableFormat(resp);
+                    setColumnsTable(columnsItemsLoaded);
                 })
         } catch (err) {
             console.log(err);
@@ -66,7 +75,9 @@ export const ShowVendingMachines = ({ setJsonFormat }) => {
         try {
             await getUserCards(client.sveklaServerV1, '53f30c57-ca2e-5fff-8aec-313aadea2926')
                 .then(resp => {
-                    setJsonFormat(JSON.stringify(resp, null, 2));
+                    setDataJsonFormat(JSON.stringify(resp, null, 2));
+                    setDataTableFormat(resp);
+                    setColumnsTable(columnsUserCard);
                 })
         } catch (err) {
             console.log(err);
@@ -75,6 +86,8 @@ export const ShowVendingMachines = ({ setJsonFormat }) => {
 
 
     return (
+        
+        <>
         <div>
             <button onClick={showVendingMachines}>Show VendingMachines</button>
             <button onClick={benefitRules}>BenefitRules</button>
@@ -83,5 +96,8 @@ export const ShowVendingMachines = ({ setJsonFormat }) => {
             <button onClick={itemsLoaded}>ItemsLoaded</button>
             <button onClick={usersCard}>UserCard</button>
         </div>
+
+        </>
+
     )
 }

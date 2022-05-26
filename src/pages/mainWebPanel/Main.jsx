@@ -107,8 +107,8 @@ export const Main = ({ isheight, isActive, isSap }) => {
         try {
             if (isValueSearch) {
                 await searchDeviceKey(client.activeNode, isValueSearch, isHistory)
-                    .then((wallet) => {
-                        setIsResult(wallet);
+                    .then((key) => {
+                        setIsResult(key);
                     })
                 setIsError('');
                 hideTable();

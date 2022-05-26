@@ -3,22 +3,21 @@ import DateTimePicker from 'react-datetime-picker';
 
 import { ThemeContext } from '../../../index';
 import { getEvents } from '../../../services/SapTestAPI';
+import { columnsEvents } from '../../../components/columnsTable/mainPage/ColumnsTable';
 
-export const Events = ({ setJsonFormat, setEventsTable }) => {
+export const Events = ({ setDataJsonFormat, setDataTableFormat, setColumnsTable }) => {
 
     const { client } = useContext(ThemeContext);
 
     const [countInput, setCountInput] = useState('');
     const [valueCalendar, setValueCalendar] = useState();
     const [classInput, setClassInput] = useState('limit');
-    const [nullCalendar, setNullCalendar] = useState('');
+    const [nullCalendar, setNullCalendar] = useState(null);
 
     const validationCalendar = () => {
-        if (nullCalendar === '') {
-            setNullCalendar('Введите дату и время!');
-        } else {
-            setNullCalendar('');
-        }
+        if (nullCalendar === null) {
+            setNullCalendar('Enter Date and Time!');
+        } 
     }
 
     const validationLimit = () => {
@@ -31,16 +30,18 @@ export const Events = ({ setJsonFormat, setEventsTable }) => {
         }
     }
 
-    const getEvents = async () => {
-        validationCalendar();
+    const Events = async () => {
         validationLimit();
+        validationCalendar();
         if (validationCalendar && validationLimit) {
             try {
                 await getEvents(client.sveklaServerV1, valueCalendar.toISOString(), countInput)
                     .then(resp => {
-                        setEventsTable(resp);
-                        setJsonFormat(JSON.stringify(resp, null, 2));
+                        setDataTableFormat(resp);
+                        setDataJsonFormat(JSON.stringify(resp, null, 2));
+                        setColumnsTable(columnsEvents);
                     })
+                    setNullCalendar(null)
             } catch (err) {
                 console.log(err);
             }
@@ -59,7 +60,7 @@ export const Events = ({ setJsonFormat, setEventsTable }) => {
 
                 <div className={classInput}>
                     <input type="number" placeholder='Enter limit elements' max={100} onChange={(e) => setCountInput(e.target.value)} value={countInput} />
-                    <button onClick={getEvents}>Найти</button>
+                    <button onClick={Events}>Найти</button>
                 </div>
             </div>
         </>

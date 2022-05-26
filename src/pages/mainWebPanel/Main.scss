@@ -85,7 +85,19 @@
     font-weight: 600;
     text-align: left;
 
-    .headerWrapper {
+    .btnHideData {
+        font-weight: 600;
+        padding: 10px;
+        border: 2px solid #000;
+        border-radius: 10px;
+        background-color: #FFF;
+        margin-bottom: 10px;
+    }
+    .btnHideData:hover {
+        background-color: rgb(223, 223, 223);
+    }
+
+    .tableHeader {
         width: 100%;
 
         .buttonWrapperCatalog {
@@ -179,6 +191,17 @@
             font-weight: 700;
             font-size: 20px;
             cursor: pointer;
+        }
+
+    }
+    .buttonWrapperOrders {
+        display: flex;
+
+        button {
+            font-size: 15px;
+            margin-right: 5px;
+            max-width: 100px;
+            max-height: 60px;
         }
     }
 }

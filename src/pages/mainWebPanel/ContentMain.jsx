@@ -95,7 +95,6 @@ export const ContentMain = ({ isError, isResult, isItemsCatalog, isOrdersItems, 
       sortable: true,
       wrap: true,
       omit: hideId,
-      expandableRows: (row) => JSON.stringify(row.application_service_id)
     },
     {
       name: 'Case',
@@ -210,7 +209,7 @@ export const ContentMain = ({ isError, isResult, isItemsCatalog, isOrdersItems, 
     },
     {
       name: 'status',
-      selector: (row) => JSON.stringify(row.status),
+      selector: (row) => row.status,
       sortable: true,
       wrap: true,
     },
@@ -250,7 +249,7 @@ export const ContentMain = ({ isError, isResult, isItemsCatalog, isOrdersItems, 
      <Accordion.Item eventKey='0'>
        <Accordion.Header>JSON Format</Accordion.Header>
        <Accordion.Body>
-       <pre className={isError}>{isResult}</pre>
+       <pre className={isError}>{JSON.stringify(isResult, null, 2)}</pre>
        </Accordion.Body>
      </Accordion.Item>
      <Accordion.Item eventKey='1'>
