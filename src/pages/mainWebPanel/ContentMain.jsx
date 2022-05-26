@@ -209,7 +209,7 @@ export const ContentMain = ({ isError, isResult, isItemsCatalog, isOrdersItems, 
     },
     {
       name: 'status',
-      selector: (row) => row.status,
+      selector: (row) => JSON.stringify(row.status),
       sortable: true,
       wrap: true,
     },
