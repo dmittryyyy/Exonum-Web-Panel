@@ -7,7 +7,7 @@ import { ThemeContext } from '../..';
 import { getCatalog } from '../../services/NodeAPI';
 
 export const ContentMain = ({ isError, isResult, isItemsCatalog, isOrdersItems, pending, filteredOrders,
-  setIsResult, setIsError, isSetItemsCatalog, setIsOrdersItems, setPending, setFilteredOrders }) => {
+  setIsResult, setIsError, isSetItemsCatalog, setIsOrdersItems, setPending, setFilteredOrders, hideTable }) => {
 
   const { client } = useContext(ThemeContext);
 
@@ -75,14 +75,17 @@ export const ContentMain = ({ isError, isResult, isItemsCatalog, isOrdersItems, 
     }
   }, [searchOrders]);
 
-  const hideTable = () => {
-    isSetItemsCatalog();
-    setIsOrdersItems();
-  }
-
   const clearInputFilter = () => {
     setSearchCatalog('');
     setSearchOrders('');
+  }
+
+  const ExpandedComponent = (filteredCatalog, filteredOrders) => {
+    if (filteredCatalog) {
+      return <pre>{JSON.stringify(filteredCatalog, null, 2)}</pre>;
+    } else {
+      return <pre>{JSON.stringify(filteredOrders, null, 2)}</pre>;
+    }
   }
 
   const columnsCatalog = [
@@ -206,7 +209,7 @@ export const ContentMain = ({ isError, isResult, isItemsCatalog, isOrdersItems, 
     },
     {
       name: 'status',
-      selector: (row) => row.status,
+      selector: (row) => JSON.stringify(row.status),
       sortable: true,
       wrap: true,
       omit: hideStatus,
@@ -263,7 +266,7 @@ export const ContentMain = ({ isError, isResult, isItemsCatalog, isOrdersItems, 
       <div className={isItemsCatalog || isOrdersItems ? 'tableWrapper' : 'tableHidden'}>  
 
         <DataTable
-          title='Orders'
+          title={isItemsCatalog? 'Catalog' : 'Orders'}
           columns={isItemsCatalog ? columnsCatalog : columnsOrders}
           data={isItemsCatalog ? filteredCatalog : filteredOrders}
           pagination
@@ -271,6 +274,8 @@ export const ContentMain = ({ isError, isResult, isItemsCatalog, isOrdersItems, 
           progressPending={pending}
           progressComponent={<CustomLoader />}
           highlightOnHover
+          expandableRows
+          expandableRowsComponent={ExpandedComponent}
           subHeader
           subHeaderAlign='center'
           subHeaderComponent={

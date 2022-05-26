@@ -1,9 +1,13 @@
 import { React, useState } from 'react';
 import { ListGroup, Button } from 'react-bootstrap';
-import DateTimePicker from 'react-datetime-picker';
+
+import { ShopItems } from './requestComponents/ShopItems';
+import { Events } from './requestComponents/Events';
 
 
-export const SearchingSap = ({ setNavBarSapItems, navBarSapItems, countShopAndEventsItems, setCountShopAndEventsItems, valueCalendar, setValueCalendar }) => {
+export const SearchingSap = ({setJsonFormat, setShopItemsTable, setEventsTable }) => {
+
+    const [navBarSapItems, setNavBarSapItems] = useState([]);
 
     const navBarItems = [
         { name: 'ShopItems', id: 1 },
@@ -25,28 +29,15 @@ export const SearchingSap = ({ setNavBarSapItems, navBarSapItems, countShopAndEv
             </ListGroup>
 
 
-            <div className='choiceQuery'>
-                {navBarSapItems.name === 'ShopItems' ?
-                    <>
-                        <div className='DataTime'>
-                            <DateTimePicker onChange={setValueCalendar} value={valueCalendar}
-                            />
-                        </div>
+                {navBarSapItems.name === 'Events' ?
 
-                        <div className='limit'>
-                            <input type="number" onChange={(e) => setCountShopAndEventsItems(e.target.value)} value={countShopAndEventsItems} />
-                        </div>
+                    <Events setJsonFormat={setJsonFormat} setEventsTable={setEventsTable}/>
 
-                        <button>Найти</button>
-                    </>
                     :
-                    <div className='limit'>
-                        <input type="number" onChange={(e) => setCountShopAndEventsItems(e.target.value)} value={countShopAndEventsItems} />
-                        <button>Найти</button>
-                    </div>
+                    
+                    <ShopItems setJsonFormat={setJsonFormat} setShopItemsTable={setShopItemsTable}/>
 
                 }
-            </div>
         </>
     )
 }

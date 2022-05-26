@@ -45,6 +45,7 @@ export const Main = ({ isheight, isActive, isSap }) => {
                     setIsResult(JSON.stringify(resp, null, 2));
                 }
                 setIsError('');
+                hideTable();
             } else {
                 setIsResult('The entered string does not match hex');
                 setIsError('error');
@@ -61,6 +62,7 @@ export const Main = ({ isheight, isActive, isSap }) => {
                     setIsResult(hexadecimal((orders.data.order_seller_part.items[0].application_data)));
                 });
             setIsError('');
+            hideTable();
         } catch (error) {
             console.log(error);
             setIsResult('Order number uncorrect or empty input field!');
@@ -75,6 +77,7 @@ export const Main = ({ isheight, isActive, isSap }) => {
                     setIsResult(JSON.stringify(service.application_service_proof.to_application_service.entries[0].value, null, 2));
                 });
             setIsError('');
+            hideTable();
         } catch (error) {
             console.log(error);
             setIsResult('Key uncorrect or empty input field!');
@@ -90,6 +93,7 @@ export const Main = ({ isheight, isActive, isSap }) => {
                         setIsResult(JSON.stringify(wallet, null, 2));
                     });
                 setIsError('');
+                hideTable();
             } else {
                 setIsResult('Key wallet uncorrect or empty input field!');
                 setIsError('error');
@@ -107,6 +111,7 @@ export const Main = ({ isheight, isActive, isSap }) => {
                         setIsResult(JSON.stringify(wallet, null, 2));
                     })
                 setIsError('');
+                hideTable();
             } else {
                 setIsResult('Device key undefined or empty input field!');
                 setIsError('error');
@@ -122,7 +127,7 @@ export const Main = ({ isheight, isActive, isSap }) => {
                 await searchOrders(client.activeNode, isValueSearch)
                     .then((orders) => {
                         orders.data.map((elements) => {
-                            elements.status.splice([0, elements.status.length - 1]);
+                            elements.status.splice(0, elements.status.length - 1);
                             setIsOrdersItems(orders.data);
                             setFilteredOrders(orders.data);
                         });
@@ -150,6 +155,11 @@ export const Main = ({ isheight, isActive, isSap }) => {
             return ('0' + (byte & 0xFF).toString(16)).slice(-2);
         }).join('')
     };
+
+    const hideTable = () => {
+        isSetItemsCatalog();
+        setIsOrdersItems();
+      }
 
     const renderPlaceholderInput = () => {
         if (navBarItem.id === 1) {
@@ -241,6 +251,8 @@ export const Main = ({ isheight, isActive, isSap }) => {
 
                 setFilteredOrders={setFilteredOrders}
                 filteredOrders={filteredOrders}
+
+                hideTable={hideTable}
             />
 
         </>
