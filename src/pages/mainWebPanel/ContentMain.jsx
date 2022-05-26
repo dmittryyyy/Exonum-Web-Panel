@@ -1,15 +1,13 @@
 import { React, useContext, useEffect, useState } from 'react';
-import { Button, Accordion, Table } from 'react-bootstrap';
+import { Accordion, Button } from 'react-bootstrap';
 import DataTable from 'react-data-table-component';
 import CustomLoader from 'react-data-table-component';
 
 import { ThemeContext } from '../..';
-import { getCatalog } from '../../services/webPanelAPI';
+import { getCatalog } from '../../services/NodeAPI';
 
-import './Content.scss';
-
-export const Content = ({ isError, isResult, isItemsCatalog, isOrdersItems, pending, filteredOrders,
-  setIsResult, setIsError, isSetItemsCatalog, setIsOrdersItems, setPending, setFilteredOrders, }) => {
+export const ContentMain = ({ isError, isResult, isItemsCatalog, isOrdersItems, pending, filteredOrders,
+  setIsResult, setIsError, isSetItemsCatalog, setIsOrdersItems, setPending, setFilteredOrders, hideTable }) => {
 
   const { client } = useContext(ThemeContext);
 
@@ -77,22 +75,17 @@ export const Content = ({ isError, isResult, isItemsCatalog, isOrdersItems, pend
     }
   }, [searchOrders]);
 
+  const clearInputFilter = () => {
+    setSearchCatalog('');
+    setSearchOrders('');
+  }
+
   const ExpandedComponent = (filteredCatalog, filteredOrders) => {
     if (filteredCatalog) {
       return <pre>{JSON.stringify(filteredCatalog, null, 2)}</pre>;
     } else {
       return <pre>{JSON.stringify(filteredOrders, null, 2)}</pre>;
     }
-  }
-
-  const hideTable = () => {
-    isSetItemsCatalog();
-    setIsOrdersItems();
-  }
-
-  const clearInputFilter = () => {
-    setSearchCatalog('');
-    setSearchOrders('');
   }
 
   const columnsCatalog = [
@@ -216,6 +209,12 @@ export const Content = ({ isError, isResult, isItemsCatalog, isOrdersItems, pend
       omit: hideSeller,
     },
     {
+      name: 'status',
+      selector: (row) => JSON.stringify(row.status),
+      sortable: true,
+      wrap: true,
+    },
+    {
       name: 'time update',
       selector: (row) => row.time_for_update,
       sortable: true,
@@ -245,23 +244,29 @@ export const Content = ({ isError, isResult, isItemsCatalog, isOrdersItems, pend
       <button className='btnShowCatalog' type='submit' onClick={ShowCatalog}>Show Catalog</button>
       <button className='btnShowCatalog' type='submit' onClick={hideTable}>Hide Table</button>
 
-      <div className='resultWrapper'>
-        {isResult ?
-          <Accordion default-key="0">
-            <Accordion.Item eventKey='0'>
-              <Accordion.Header>JSON Format</Accordion.Header>
-              <Accordion.Body>
-                <pre className={isError}>{JSON.stringify(isResult, null, 2)}</pre>
-              </Accordion.Body>
-            </Accordion.Item>
-          </Accordion>
-          : ''}
-      </div>
+     <div className='resultWrapper'>
+     {isResult ? 
+     <Accordion default-key="0">
+     <Accordion.Item eventKey='0'>
+       <Accordion.Header>JSON Format</Accordion.Header>
+       <Accordion.Body>
+       <pre className={isError}>{isResult}</pre>
+       </Accordion.Body>
+     </Accordion.Item>
+     <Accordion.Item eventKey='1'>
+       <Accordion.Header>Table Format</Accordion.Header>
+       <Accordion.Body>
+       <DataTable/>
+       </Accordion.Body>
+     </Accordion.Item>
+   </Accordion> 
+    : ''}
+     </div>
 
       <div className={isItemsCatalog || isOrdersItems ? 'tableWrapper' : 'tableHidden'}>
 
         <DataTable
-          title='Orders'
+          title={isItemsCatalog? 'Catalog' : 'Orders'}
           columns={isItemsCatalog ? columnsCatalog : columnsOrders}
           data={isItemsCatalog ? isItemsCatalog : filteredOrders}
           pagination
@@ -269,9 +274,10 @@ export const Content = ({ isError, isResult, isItemsCatalog, isOrdersItems, pend
           progressPending={pending}
           progressComponent={<CustomLoader />}
           highlightOnHover
-          subHeader
           expandableRows
           expandableRowsComponent={ExpandedComponent}
+          subHeader
+          subHeaderAlign='center'
           subHeaderComponent={
             <div className='tableHeader'>
               <div className='search'>
@@ -313,7 +319,6 @@ export const Content = ({ isError, isResult, isItemsCatalog, isOrdersItems, pend
 
             </div>
           }
-          subHeaderAlign='center'
         />
       </div>
 

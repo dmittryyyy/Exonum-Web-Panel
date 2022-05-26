@@ -1,16 +1,19 @@
 import { useContext, useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import { ThemeContext } from '../..';
 import { Header } from '../header/Header';
-import { Search } from '../search/Search';
-import { expolorerBlocks } from '../../services/webPanelAPI';
+import { Main } from '../../pages/mainWebPanel/Main';
+import { SapBasic } from '../../pages/sapBasic/SapBasic';
+import { SapTest } from '../../pages/sapTest/SapTest';
+import { expolorerBlocks } from '../../services/NodeAPI';
 
 import './App.scss';
+
 
 export const App = () => {
 
   const { client } = useContext(ThemeContext);
-  
 
   const [isheight, isSetheight] = useState('');
   const [isActive, isSetActive] = useState(false);
@@ -19,7 +22,7 @@ export const App = () => {
     async function fetchData() {
       try {
         const res = await expolorerBlocks(client.activeNode, '1').then((data) => { return data.range.start });
-        if(!res) {
+        if (!res) {
           isSetActive(false);
           isSetheight('');
           clearInterval(intervalId);
@@ -40,17 +43,31 @@ export const App = () => {
   }, []);
 
   return (
-    <div className="App">
+    <BrowserRouter>
+      <div className="App">
 
-      <Header
-        isheight={isheight}
-        isActive={isActive}
-      />
+        <Header />
 
-      <main className='wrapper'>
-        <Search />
-      </main>
+        <main className='wrapper'>
+          <Routes>
+            <Route path='/' element={
+            <Main
+              isheight={isheight}
+              isActive={isActive}
+            />} />
 
-    </div>
+            <Route path='/testsap' element={
+              <SapTest/>
+            }/>
+
+            <Route path='/basicsap' element={
+              <SapBasic/>
+            }/>
+
+          </Routes>
+        </main>
+
+      </div>
+    </BrowserRouter>
   )
 }

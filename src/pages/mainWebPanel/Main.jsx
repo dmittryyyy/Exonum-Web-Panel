@@ -1,13 +1,15 @@
 import { React, useContext, useState } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { ThemeContext } from '../..';
-import { searchTransaction, searchOrder, searchService, searchUserWallet, searchDeviceKey, searchOrders } from '../../services/webPanelAPI';
-import { Content } from '../content/Content';
-import { SearchingBar } from '../navBar/SearchingBar';
+import { searchTransaction, searchOrder, searchService, searchUserWallet, searchDeviceKey, searchOrders } from '../../services/NodeAPI';
+import { Node } from './Node';
+import { ContentMain } from './ContentMain';
+import { SearchingBar } from './SearchingBar';
 
-import './Search.scss';
+import './Main.scss';
 
-export const Search = () => {
+export const Main = ({ isheight, isActive, isSap }) => {
 
     const { client } = useContext(ThemeContext);
 
@@ -43,6 +45,7 @@ export const Search = () => {
                     setIsResult(resp);
                 }
                 setIsError('');
+                hideTable();
             } else {
                 setIsResult('The entered string does not match hex');
                 setIsError('error');
@@ -59,6 +62,7 @@ export const Search = () => {
                     setIsResult(hexadecimal((orders.data.order_seller_part.items[0].application_data)));
                 });
             setIsError('');
+            hideTable();
         } catch (error) {
             console.log(error);
             setIsResult('Order number uncorrect or empty input field!');
@@ -73,6 +77,7 @@ export const Search = () => {
                     setIsResult(service.application_service_proof.to_application_service.entries[0].value);
                 });
             setIsError('');
+            hideTable();
         } catch (error) {
             console.log(error);
             setIsResult('Key uncorrect or empty input field!');
@@ -88,6 +93,7 @@ export const Search = () => {
                         setIsResult(wallet.data);
                     });
                 setIsError('');
+                hideTable();
             } else {
                 setIsResult('Key wallet uncorrect or empty input field!');
                 setIsError('error');
@@ -105,6 +111,7 @@ export const Search = () => {
                         setIsResult(wallet);
                     })
                 setIsError('');
+                hideTable();
             } else {
                 setIsResult('Device key undefined or empty input field!');
                 setIsError('error');
@@ -119,7 +126,7 @@ export const Search = () => {
             if (testHash(isValueSearch)) {
                 await searchOrders(client.activeNode, isValueSearch)
                     .then((orders) => {
-                        orders.data.map(elements => {
+                        orders.data.map((elements) => {
                             elements.status.splice(0, elements.status.length - 1);
                             setIsOrdersItems(orders.data);
                             setFilteredOrders(orders.data);
@@ -148,6 +155,11 @@ export const Search = () => {
             return ('0' + (byte & 0xFF).toString(16)).slice(-2);
         }).join('')
     };
+
+    const hideTable = () => {
+        isSetItemsCatalog();
+        setIsOrdersItems();
+      }
 
     const renderPlaceholderInput = () => {
         if (navBarItem.id === 1) {
@@ -188,10 +200,17 @@ export const Search = () => {
 
     return (
         <>
+
+        <Node
+        isActive={isActive}
+        isheight={isheight}
+        />
+
             <div className="searchBlock">
                 <SearchingBar
                     setNavBarItem={setNavBarItem}
                     navBarItem={navBarItem}
+                    isSap={isSap}
                 />
 
                 <div className="searchWrapper">
@@ -214,10 +233,9 @@ export const Search = () => {
                         : ''}
                 </div>
 
-
             </div>
 
-            <Content
+            <ContentMain
                 isResult={isResult}
                 setIsResult={setIsResult}
                 isError={isError}
@@ -233,6 +251,8 @@ export const Search = () => {
 
                 setFilteredOrders={setFilteredOrders}
                 filteredOrders={filteredOrders}
+
+                hideTable={hideTable}
             />
 
         </>

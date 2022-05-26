@@ -1,39 +1,26 @@
-import { React, useContext } from 'react';
-
-import { ThemeContext } from '../..';
+import { React } from 'react';
+import { Navbar, Container, Nav, NavDropdown } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 import './Header.scss';
 
-export const Header = ({ isheight, isActive }) => {
+export const Header = ({ setIsSap }) => {
 
-    const { client } = useContext(ThemeContext);
-
-    const readActiveNode = (e) => {
-        client.setActiveNode(e.target.value)
-    }
-
-    return (
-        <header>
-            <div className="wrapper">
-            <div className="activeNode">
-                <div className="nodeTitle">
-                    <h3>Active Node</h3>
-                    <div className={isActive ? 'activeNode' : 'notActiveNode'}></div>
-                </div>
-                <select onChange={readActiveNode}>
-                    {client.nodesServers.map((node, index) =>
-                        <option
-                            key={index}>
-                            {node}
-                        </option>
-                    )}
-                </select>
-            </div>
-            <div className="height">
-                <h3>Height</h3>
-                <p>{isheight ? isheight : 'undifined'}</p>
-            </div>
-            </div>
-        </header>
-    )
+  return (
+    <header>
+      <Navbar bg="light">
+    <Container>
+    <Link to='/'><Navbar.Brand>WebPanel</Navbar.Brand></Link>
+    <Nav className="me-auto">
+      <Link to='/'><Nav.Link href="#node">Node</Nav.Link></Link>
+      <NavDropdown  title="SAP" id="collasible-nav-dropdown">
+       <NavDropdown.Item> <Link to='testsap'>SAP-TEST</Link></NavDropdown.Item>
+        <NavDropdown.Divider />
+        <NavDropdown.Item><Link to='basicsap'>SAP-BASIC</Link></NavDropdown.Item>
+      </NavDropdown>
+    </Nav>
+    </Container>
+  </Navbar>
+    </header>
+  )
 }
