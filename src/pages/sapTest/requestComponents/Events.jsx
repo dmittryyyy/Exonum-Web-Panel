@@ -3,7 +3,7 @@ import DateTimePicker from 'react-datetime-picker';
 
 import { ThemeContext } from '../../../index';
 import { getEvents } from '../../../services/SapTestAPI';
-import { columnsEvents } from '../../../components/columnsTable/mainPage/ColumnsTable';
+import { columnsEvents } from '../../../components/columnsTable/sapPage/ColumnsTable';
 
 export const Events = ({ setDataJsonFormat, setDataTableFormat, setColumnsTable }) => {
 
@@ -11,26 +11,31 @@ export const Events = ({ setDataJsonFormat, setDataTableFormat, setColumnsTable 
 
     const [countInput, setCountInput] = useState('');
     const [valueCalendar, setValueCalendar] = useState();
-    const [classInput, setClassInput] = useState('limit');
+    const [classInput, setClassInput] = useState('search');
     const [nullCalendar, setNullCalendar] = useState(null);
 
     const validationCalendar = () => {
-        if (nullCalendar === null) {
+        if (valueCalendar === undefined) {
             setNullCalendar('Enter Date and Time!');
-        } 
+        } else if (valueCalendar === null) {
+            setNullCalendar('Enter Date and Time!');
+        } else {
+            setNullCalendar('');
+        }
     }
 
     const validationLimit = () => {
         if (countInput > 100) {
             setCountInput(100);
         } else if (countInput <= 0 || null) {
-            setClassInput('inputError')
+            setClassInput('searchError')
         } else if (countInput > 0) {
-            setClassInput('limit')
+            setClassInput('search')
         }
     }
 
     const Events = async () => {
+        setColumnsTable(columnsEvents);
         validationLimit();
         validationCalendar();
         if (validationCalendar && validationLimit) {
@@ -39,9 +44,7 @@ export const Events = ({ setDataJsonFormat, setDataTableFormat, setColumnsTable 
                     .then(resp => {
                         setDataTableFormat(resp);
                         setDataJsonFormat(JSON.stringify(resp, null, 2));
-                        setColumnsTable(columnsEvents);
                     })
-                    setNullCalendar(null)
             } catch (err) {
                 console.log(err);
             }
@@ -50,19 +53,20 @@ export const Events = ({ setDataJsonFormat, setDataTableFormat, setColumnsTable 
 
     return (
 
-        <>
-            <div className="searchBlock">
-                <div className='DataTime'>
-                    <DateTimePicker onChange={setValueCalendar} value={valueCalendar}
-                    />
-                    <p>{nullCalendar}</p>
-                </div>
+        <div className="searchBlock">
+            <div className='DataTime'>
+                <DateTimePicker onChange={setValueCalendar} value={valueCalendar}
+                />
+                <p>{nullCalendar}</p>
+            </div>
 
+            <div className="searchWrapper">
                 <div className={classInput}>
                     <input type="number" placeholder='Enter limit elements' max={100} onChange={(e) => setCountInput(e.target.value)} value={countInput} />
-                    <button onClick={Events}>Найти</button>
                 </div>
+                <button onClick={Events}>Search</button>
             </div>
-        </>
+        </div>
+
     )
 }

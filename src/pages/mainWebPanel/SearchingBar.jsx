@@ -1,9 +1,10 @@
 import { React } from 'react';
 import { ListGroup, ListGroupItem } from 'react-bootstrap';
+import { ShowCatalog } from './requestComponents/ShowCatalog';
 
-export const SearchingBar = ({ setNavBarItem, navBarItem }) => {
+export const SearchingBar = ({ navBarItem, setNavBarItem, setDataJsonFormat, setDataTableFormat, setColumnsTable, dataJsonFormat }) => {
 
-    const navBarItems = [
+    const nodeBarItems = [
         { name: 'Search transaction', id: 1 },
         { name: 'Search order', id: 2 },
         { name: 'Service Application', id: 3 },
@@ -11,18 +12,32 @@ export const SearchingBar = ({ setNavBarItem, navBarItem }) => {
         { name: 'Search device key', id: 5 },
         { name: 'Search orders users', id: 6 },
     ];
+    
+    const hideTable = () => {
+        setDataJsonFormat();
+        setDataTableFormat();
+    }
 
     return (
-        <ListGroup>
-        {navBarItems.map((item, index) =>
-        <ListGroupItem
-            onClick={() => setNavBarItem(item)}
-            active={item.id === navBarItem.id}
-            key={index}
-        >
-            {item.name}
-        </ListGroupItem>
-    )}
-        </ListGroup>
+            <ListGroup>
+            <h3>Choose type search</h3>
+                {nodeBarItems.map((item, index) =>
+                    <ListGroupItem
+                        onClick={() => setNavBarItem(item)}
+                        active={item.id === navBarItem.id}
+                        key={index}
+                    >
+                        {item.name}
+                    </ListGroupItem>
+                )}
+                            <div className="buttonListGroup">
+                <ShowCatalog setDataJsonFormat={setDataJsonFormat} setDataTableFormat={setDataTableFormat} setColumnsTable={setColumnsTable}/>
+                {dataJsonFormat ? (
+        <button className='btnHideData' onClick={hideTable}>Hide data</button>
+      ) : (
+        ''
+      )}
+            </div>
+            </ListGroup>
     )
 }

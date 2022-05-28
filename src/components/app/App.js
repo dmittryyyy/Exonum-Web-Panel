@@ -48,9 +48,9 @@ export const App = () => {
 
         <Header />
 
-        <main className='wrapper'>
+        <main>
           <Routes>
-            <Route path='/' element={
+            <Route path='/web-panel' element={
             <Main
               isheight={isheight}
               isActive={isActive}

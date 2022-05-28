@@ -5,14 +5,11 @@ import CustomLoader from 'react-data-table-component';
 
 export const ContentSapTest = ({ dataJson, dataTable, columnsTable, hideTable }) => {
 
+  const ExpandedComponent = (dataTableFormat) => {
+    return <pre>{JSON.stringify(dataTableFormat, null, 2)}</pre>;
+}
+
   return (
-    <div className='resultSearch'>
-      
-      {dataJson || dataTable ?( 
-    <button className='btnHideData' onClick={hideTable}>Hide data</button>  
-      ):( 
-   ''
-   )}
 
       <div className='resultWrapper'>
         {dataJson ?
@@ -29,6 +26,8 @@ export const ContentSapTest = ({ dataJson, dataTable, columnsTable, hideTable })
                 <DataTable
                   columns={columnsTable}
                   data={dataTable}
+                  expandableRows
+                  expandableRowsComponent={ExpandedComponent}
                   pagination
                   fixedHeader
                   progressComponent={<CustomLoader />}
@@ -39,7 +38,6 @@ export const ContentSapTest = ({ dataJson, dataTable, columnsTable, hideTable })
           </Accordion>
           : ''}
       </div>
-    </div>
 
   )
 }

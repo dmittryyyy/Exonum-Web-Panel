@@ -7,6 +7,281 @@
   padding: 0px 20px;
 }
 
+main {
+  .navBlock {
+    display: flex;
+
+    button {
+      color: #fff;
+      border-radius: 5px;
+      padding: 5px;
+      font-weight: 600;
+    }
+
+    .list-group {
+      min-width: 20%;
+      background-color: #fff;
+      box-shadow: -10px 4px 24px rgb(0 0 0 / 10%);
+      padding-bottom: 15px;
+
+      h3 {
+        font-size: 20px;
+        font-weight: 700;
+        background-color: rgb(70, 145, 216);
+        padding: 15px;
+      }
+
+      .list-group-item {
+        cursor: pointer;
+        border: none;
+        margin-bottom: 20px;
+        text-align: left;
+        color: #000;
+        font-weight: 600;
+        font-size: 20px;
+        padding: 15px;
+        margin-right: 100px;
+        transition: .2s;
+      }
+
+      .active {
+        transition: .2s;
+        transform: scale(1.1);
+        color: #fff;
+        border-radius: 5px;
+        padding-left: 30px;
+      }
+
+      .buttonListGroup {
+        display: flex;
+        justify-content: center;
+
+        button {
+          text-align: center;
+          color: #fff;
+          background-color: rgb(247, 156, 71);
+          border-radius: 5px;
+          padding: 10px;
+          margin-right: 10px;
+        }
+
+        button:hover {
+          background-color: rgb(241, 131, 28);
+        }
+      }
+    }
+  }
+
+  .DataTime {
+    font-size: 20px;
+    font-weight: 600;
+    align-items: center;
+    margin-right: 10px;
+    margin-top: 10px;
+
+    .react-datetime-picker__calendar {
+      width: 330px;
+    }
+
+    .react-calendar__tile--now {
+      background: #000;
+    }
+
+    .react-calendar__tile--now:enabled:hover,
+    .react-calendar__tile--now:enabled:focus {
+      background: blue;
+    }
+
+    .react-calendar {
+      background: rgb(133, 133, 133);
+      border: 2px solid #000
+    }
+
+    p {
+      margin-top: 5px;
+      font-size: 14px;
+      color: red;
+    }
+
+    .react-datetime-picker {
+      width: 330px;
+      border: 2px solid #000;
+      border-radius: 5px;
+      height: 50px;
+    }
+
+    .react-datetime-picker__clear-button {
+      svg {
+        width: 30px;
+        height: 30px;
+      }
+    }
+
+    .react-datetime-picker__calendar-button {
+      svg {
+        width: 30px;
+        height: 30px;
+      }
+    }
+  }
+
+  .rightNavBlock {
+    width: 80%;
+
+    .nodeWrapper {
+      box-shadow: -10px 4px 24px rgb(0 0 0 / 10%);
+      display: flex;
+      justify-content: space-between;
+      padding: 20px;
+      background-color: #fff;
+
+      .nodeTitle {
+        display: flex;
+        justify-content: space-between;
+
+        .activeNode {
+          border-radius: 60px;
+          width: 20px;
+          height: 20px;
+          background-color: green;
+          border: none;
+        }
+
+        .notActiveNode {
+          border-radius: 60px;
+          width: 20px;
+          height: 20px;
+          background-color: red;
+          border: none;
+        }
+      }
+
+      p {
+        font-size: 20px;
+        font-weight: 500;
+      }
+
+      select {
+        font-weight: 600;
+        font-size: 20px;
+      }
+    }
+
+    .inputBlock {
+      margin-left: 20px;
+      width: 100%;
+    }
 
 
+    .searchWrapper {
+      width: 100%;
+      margin-top: 20px;
 
+      
+      .checkbox {
+        font-weight: 600;
+        margin-top: 10px;
+
+        label {
+          margin-left: 10px;
+        }
+
+        .checkboxHistory {
+          border-radius: 5px;
+          font-size: 30px;
+          cursor: pointer;
+        }
+      }
+
+      .search {
+        display: flex;
+        position: relative;
+        align-items: center;
+        border: 2px solid #000;
+        border-radius: 5px;
+        padding: 5px;
+        margin-bottom: 10px;
+        margin-left: 20px;
+        background-color: #FFF;
+
+        input {
+          border: 0;
+          font-size: 20px;
+          padding: 10px;
+          padding-right: 30px;
+          width: 100%;
+          outline: none;
+        }
+
+        span {
+          position: absolute;
+          right: 0;
+          padding-right: 10px;
+          font-weight: 700;
+          font-size: 30px;
+          cursor: pointer;
+        }
+      }
+
+      .searchError {
+        display: flex;
+        position: relative;
+        align-items: center;
+        border: 2px solid red;
+        border-radius: 5px;
+        padding: 5px;
+        margin-bottom: 10px;
+        margin-left: 20px;
+        background-color: #FFF;
+
+        input {
+          border: 0;
+          font-size: 20px;
+          padding: 10px;
+          padding-right: 30px;
+          width: 100%;
+          outline: none;
+        }
+
+        span {
+          position: absolute;
+          right: 0;
+          padding-right: 10px;
+          font-weight: 700;
+          font-size: 30px;
+          cursor: pointer;
+        }
+      }
+
+      button {
+        text-align: center;
+        color: #fff;
+        background-color: rgb(245, 84, 133);
+        border-radius: 5px;
+        padding: 10px;
+      }
+
+      button:hover {
+        background-color: rgb(241, 40, 100);
+      }
+    }
+  }
+
+  .resultWrapper {
+    margin: 15px;
+
+    pre {
+      text-align: left;
+    }
+  }
+}
+
+@media (max-width: 1024.98px) {
+  .list-group {
+    min-width: 30%;
+  }
+  
+  .rightNavBlock {
+    width: 70%;
+  }
+}

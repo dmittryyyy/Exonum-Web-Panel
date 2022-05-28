@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 
-import { SearchingSap } from './searchingSap';
+import { SearchingSap } from './SearchingSap';
 import { ContentSapTest } from './ContentSapTest';
-import { ShowVendingMachines } from './requestComponents/ShowVendingMachines';
+import { SearchingInput } from './SearchingInput';
 
-import './SapTest.scss';
 
 export const SapTest = () => {
 
@@ -12,36 +11,39 @@ export const SapTest = () => {
     const [dataTableFormat, setDataTableFormat] = useState();
     const [columnsTable, setColumnsTable] = useState();
 
-    const hideTable = () => {
-        setDataJsonFormat();
-        setDataTableFormat();
-      }
-
+    const [navBarItem, setNavBarItem] = useState([]);
 
     return (
         <>
-            <div className="searchBlock">
+            <div className="navBlock">
 
                 <SearchingSap
                     setDataJsonFormat={setDataJsonFormat}
                     setDataTableFormat={setDataTableFormat}
                     setColumnsTable={setColumnsTable}
+                    dataJsonFormat={dataJsonFormat}
+                    navBarItem={navBarItem}
+                    setNavBarItem={setNavBarItem}
                 />
 
+                <div className='rightNavBlock'>
+
+                    <SearchingInput
+                        setDataJsonFormat={setDataJsonFormat}
+                        setDataTableFormat={setDataTableFormat}
+                        setColumnsTable={setColumnsTable}
+                        navBarItem={navBarItem}
+                    />
+                </div>
+
             </div>
 
-            <div className="buttonRequest">
-                <ShowVendingMachines setDataJsonFormat={setDataJsonFormat} setDataTableFormat={setDataTableFormat} setColumnsTable={setColumnsTable}/>
-            </div>
+            <ContentSapTest
+                dataJson={dataJsonFormat}
+                dataTable={dataTableFormat}
+                columnsTable={columnsTable}
+            />
 
-            <div className="contentBlock">
-                <ContentSapTest
-                    dataJson={dataJsonFormat}
-                    dataTable={dataTableFormat}
-                    columnsTable={columnsTable}
-                    hideTable={hideTable}
-                />
-            </div>
         </>
     )
 }

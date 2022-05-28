@@ -1,3 +1,22 @@
 header {
-    margin-bottom: 20px;
+    background-color: rgb(70, 145, 216);
+    padding: 10px 0;
+    border-bottom: 2px solid rgb(250, 196, 145);
+
+    nav {
+        .navbar-brand {
+            font-size: 30px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .nav-item {
+            font-size: 20px;
+            font-weight: 500;
+        }
+    }
+
+    .navbar-light .navbar-nav .nav-link  {
+        color: #fff;
+    }
 }
