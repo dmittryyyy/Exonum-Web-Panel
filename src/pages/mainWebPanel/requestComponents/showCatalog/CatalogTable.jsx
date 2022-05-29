@@ -17,9 +17,7 @@ export const CatalogTable = ({ dataJsonFormat, dataTableFormat }) => {
 
     return (
 
-        <Routes>
-            <Route path={WebPanel_route + '/ShowCatalog'}
-            element={<div className='resultWrapper'>
+            <div className='resultWrapper'>
             {dataJsonFormat ?
                 <Accordion default-key="0">
                     <Accordion.Item eventKey='0'>
@@ -58,9 +56,6 @@ export const CatalogTable = ({ dataJsonFormat, dataTableFormat }) => {
                     </Accordion.Item>
                 </Accordion>
                 : ''}
-        </div>}
-            />
-        </Routes>
-
+        </div>
     )
 }

@@ -25,7 +25,7 @@ export const ShowCatalog = ({ setDataJsonFormat, setDataTableFormat }) => {
   return (
 
     <div>
-      <Link to={WebPanel_route + '/ShowCatalog'}><button onClick={showCatalog}>Show Catalog</button></Link>
+      <button onClick={showCatalog}>Show Catalog</button>
     </div> 
 
   )
