@@ -2,16 +2,15 @@ import { React, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { Node } from './Node';
-import { ContentMain } from './ContentMain';
 import { SearchingBar } from './SearchingBar';
 import { SearchingInput } from './SearchingInput';
+import { CatalogTable } from './requestComponents/showCatalog/CatalogTable';
 
 
 export const Main = ({ isheight, isActive }) => {
 
-    const [dataJsonFormat, setDataJsonFormat] = useState();
-    const [dataTableFormat, setDataTableFormat] = useState();
-    const [columnsTable, setColumnsTable] = useState();
+    const [jsonCatalog, setJsonCatalog] = useState();
+    const [tableCatalog, setTableCatalog] = useState();
 
     const [navBarItem, setNavBarItem] = useState([]);
 
@@ -22,13 +21,11 @@ export const Main = ({ isheight, isActive }) => {
 
             <div className="navBlock">
                 <SearchingBar
-                    dataTableFormat={dataTableFormat}
+                    jsonCatalog={jsonCatalog}
                     navBarItem={navBarItem}
-                    dataJsonFormat={dataJsonFormat}
                     setNavBarItem={setNavBarItem}
-                    setDataJsonFormat={setDataJsonFormat}
-                    setDataTableFormat={setDataTableFormat}
-                    setColumnsTable={setColumnsTable}
+                    setJsonCatalog={setJsonCatalog}
+                    setTableCatalog={setTableCatalog}
                 />
 
                 <div className='rightNavBlock'>
@@ -39,28 +36,12 @@ export const Main = ({ isheight, isActive }) => {
 
                 <SearchingInput
                     navBarItem={navBarItem}
-                    setDataJsonFormat={setDataJsonFormat}
-                    setDataTableFormat={setDataTableFormat}
-                    setColumnsTable={setColumnsTable}
                 />
+
+                <CatalogTable dataJsonFormat={jsonCatalog} dataTableFormat={tableCatalog}/>
                 </div>
 
             </div>
-
-
-            <>
-                <ContentMain
-                    dataJsonFormat={dataJsonFormat}
-                    dataTableFormat={dataTableFormat}
-                    setDataTableFormat={setDataTableFormat}
-                    columnsTable={columnsTable}
-
-
-                    isError={isError}
-                    setIsError={setIsError}
-
-                />
-            </>
 
         </>
     )

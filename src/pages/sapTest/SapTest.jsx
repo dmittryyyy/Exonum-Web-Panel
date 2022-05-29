@@ -34,15 +34,16 @@ export const SapTest = () => {
                         setColumnsTable={setColumnsTable}
                         navBarItem={navBarItem}
                     />
+
+                    <ContentSapTest
+                        dataJson={dataJsonFormat}
+                        dataTable={dataTableFormat}
+                        setDataTableFormat={setDataTableFormat}
+                        columnsTable={columnsTable}
+                    />
                 </div>
 
             </div>
-
-            <ContentSapTest
-                dataJson={dataJsonFormat}
-                dataTable={dataTableFormat}
-                columnsTable={columnsTable}
-            />
 
         </>
     )

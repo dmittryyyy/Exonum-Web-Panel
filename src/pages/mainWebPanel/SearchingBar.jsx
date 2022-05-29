@@ -1,8 +1,12 @@
 import { React } from 'react';
+import { useParams } from 'react-router-dom';
 import { ListGroup, ListGroupItem } from 'react-bootstrap';
-import { ShowCatalog } from './requestComponents/ShowCatalog';
+import { ShowCatalog } from './requestComponents/showCatalog/ShowCatalog';
+import { Link } from 'react-router-dom';
 
-export const SearchingBar = ({ navBarItem, setNavBarItem, setDataJsonFormat, setDataTableFormat, setColumnsTable, dataJsonFormat }) => {
+import { WebPanel_route } from '../../routes/constants';
+
+export const SearchingBar = ({ navBarItem, setNavBarItem, setJsonCatalog, setTableCatalog, jsonCatalog }) => {
 
     const nodeBarItems = [
         { name: 'Search transaction', id: 1 },
@@ -12,32 +16,37 @@ export const SearchingBar = ({ navBarItem, setNavBarItem, setDataJsonFormat, set
         { name: 'Search device key', id: 5 },
         { name: 'Search orders users', id: 6 },
     ];
-    
+
+    function BlogPost() {
+        let { slug } = useParams();
+        return <div>Now showing post {slug}</div>;
+      }
+
     const hideTable = () => {
-        setDataJsonFormat();
-        setDataTableFormat();
+        setJsonCatalog();
+        setTableCatalog();
     }
 
     return (
-            <ListGroup>
+        <ListGroup>
             <h3>Choose type search</h3>
-                {nodeBarItems.map((item, index) =>
-                    <ListGroupItem
-                        onClick={() => setNavBarItem(item)}
-                        active={item.id === navBarItem.id}
-                        key={index}
-                    >
-                        {item.name}
-                    </ListGroupItem>
+            {nodeBarItems.map((item, index) =>
+                <ListGroupItem
+                    onClick={() => setNavBarItem(item)}
+                    active={item.id === navBarItem.id}
+                    key={index}
+                >
+                    {item.name}
+                </ListGroupItem>
+            )}
+            <div className="buttonListGroup">
+                <ShowCatalog setDataJsonFormat={setJsonCatalog} setDataTableFormat={setTableCatalog} />
+                {jsonCatalog ? (
+                    <button className='btnHideData' onClick={hideTable}>Hide data</button>
+                ) : (
+                    ''
                 )}
-                            <div className="buttonListGroup">
-                <ShowCatalog setDataJsonFormat={setDataJsonFormat} setDataTableFormat={setDataTableFormat} setColumnsTable={setColumnsTable}/>
-                {dataJsonFormat ? (
-        <button className='btnHideData' onClick={hideTable}>Hide data</button>
-      ) : (
-        ''
-      )}
             </div>
-            </ListGroup>
+        </ListGroup>
     )
 }

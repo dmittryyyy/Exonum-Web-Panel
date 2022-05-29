@@ -1,15 +1,15 @@
 import { React, useContext } from 'react';
+import { Link } from 'react-router-dom';
+import { WebPanel_route } from '../../../../routes/constants';
 
-import { ThemeContext } from '../../../index';
-import { getCatalog } from '../../../services/NodeAPI';
-import { columnsCatalog } from '../../../components/columnsTable/mainPage/columnsTable';
+import { ThemeContext } from '../../../../index';
+import { getCatalog } from '../../../../services/NodeAPI';
 
-export const ShowCatalog = ({ setDataJsonFormat, setDataTableFormat, setColumnsTable }) => {
+export const ShowCatalog = ({ setDataJsonFormat, setDataTableFormat }) => {
 
   const { client } = useContext(ThemeContext);
 
   const showCatalog = async () => {
-    setColumnsTable(columnsCatalog);
     try {
       await getCatalog(client.activeNode)
         .then(items => {
@@ -25,8 +25,8 @@ export const ShowCatalog = ({ setDataJsonFormat, setDataTableFormat, setColumnsT
   return (
 
     <div>
-      <button onClick={showCatalog}>Show Catalog</button>
-    </div>
+      <Link to={WebPanel_route + '/ShowCatalog'}><button onClick={showCatalog}>Show Catalog</button></Link>
+    </div> 
 
   )
 }

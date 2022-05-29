@@ -1,13 +1,22 @@
-import { React } from 'react';
+import { React, useEffect, useState } from 'react';
 import { Accordion } from 'react-bootstrap';
 import DataTable from 'react-data-table-component';
 import CustomLoader from 'react-data-table-component';
 
-export const ContentSapTest = ({ dataJson, dataTable, columnsTable, hideTable }) => {
+export const ContentSapTest = ({ dataJson, dataTable, columnsTable, setDataTableFormat}) => {
+
+  const [isValueSearch, setIsValueSearch] = useState('');
 
   const ExpandedComponent = (dataTableFormat) => {
     return <pre>{JSON.stringify(dataTableFormat, null, 2)}</pre>;
 }
+
+ useEffect(() => {
+    const result = dataTable?.filter(items => {
+      return items.name.toLowerCase().match(isValueSearch.toLocaleLowerCase());
+    });
+    setDataTableFormat(result);
+  }, [isValueSearch]);
 
   return (
 
@@ -32,6 +41,18 @@ export const ContentSapTest = ({ dataJson, dataTable, columnsTable, hideTable })
                   fixedHeader
                   progressComponent={<CustomLoader />}
                   highlightOnHover
+                  subHeaderComponent={
+                    <div className='tableHeader'>
+                      <div className='search'>
+                        {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
+                        <input type='text'
+                          placeholder='Search here'
+                          className='form-control'
+                          value={isValueSearch}
+                          onChange={(e) => setIsValueSearch(e.target.value)}
+                        />
+                      </div>
+                    </div>}
                   subHeader />
               </Accordion.Body>
             </Accordion.Item>

@@ -6,28 +6,28 @@ import { GetUserWallet } from './requestComponents/GetUserWallet';
 import { GetDeviceKey } from './requestComponents/GetDeviceKey';
 import { GetOrders } from './requestComponents/GetOrders';
 
-export const SearchingInput = ({ navBarItem, setDataJsonFormat, setDataTableFormat, setColumnsTable }) => {
+export const SearchingInput = ({ navBarItem }) => {
 
 
     return (
         <div>
             {navBarItem.id === 1 ?
-                <GetTransaction setDataJsonFormat={setDataJsonFormat} setDataTableFormat={setDataTableFormat} setColumnsTable={setColumnsTable} />
+                <GetTransaction />
 
                 : navBarItem.id === 2 ?
-                    <GetOrder setDataJsonFormat={setDataJsonFormat} setDataTableFormat={setDataTableFormat} />
+                    <GetOrder />
 
                     : navBarItem.id === 3 ?
-                        <ServiceApplication setDataJsonFormat={setDataJsonFormat} setDataTableFormat={setDataTableFormat} setColumnsTable={setColumnsTable} />
+                        <ServiceApplication />
 
                         : navBarItem.id === 4 ?
-                            <GetUserWallet setDataJsonFormat={setDataJsonFormat} setDataTableFormat={setDataTableFormat} setColumnsTable={setColumnsTable} />
+                            <GetUserWallet />
 
                             : navBarItem.id === 5 ?
-                                <GetDeviceKey setDataJsonFormat={setDataJsonFormat} setDataTableFormat={setDataTableFormat} navBarItem={navBarItem} setColumnsTable={setColumnsTable} />
+                                <GetDeviceKey navBarItem={navBarItem}/>
 
                                 : navBarItem.id === 6 ?
-                                    <GetOrders setDataJsonFormat={setDataJsonFormat} setDataTableFormat={setDataTableFormat} setColumnsTable={setColumnsTable} />
+                                    <GetOrders />
 
                                     : ''
             }

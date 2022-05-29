@@ -1,10 +1,38 @@
-import { React, useContext } from 'react';
+import { React, useContext, useEffect, useState } from 'react';
 
 import { ThemeContext } from '../..';
+import { expolorerBlocks } from '../../services/NodeAPI';
 
-export const Node = ({ isheight, isActive }) => {
+export const Node = () => {
 
     const { client } = useContext(ThemeContext);
+
+    const [isheight, isSetheight] = useState('');
+    const [isActive, isSetActive] = useState(false);
+
+    useEffect(() => {
+        async function fetchData() {
+          try {
+            const res = await expolorerBlocks(client.activeNode, '1').then((data) => { return data.range.start });
+            if (!res) {
+              isSetActive(false);
+              isSetheight('');
+              clearInterval(intervalId);
+            }
+            isSetheight(res);
+            isSetActive(true);
+          } catch (e) {
+            console.log(e);
+            isSetActive(false);
+            isSetheight('');
+            clearInterval(intervalId);
+          }
+        }
+    
+        const intervalId = setInterval(function () {
+          fetchData();
+        }, 2000);
+      }, []);
 
     const readActiveNode = (e) => {
         client.setActiveNode(e.target.value)
