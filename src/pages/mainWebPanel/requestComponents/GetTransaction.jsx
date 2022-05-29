@@ -5,7 +5,7 @@ import CustomLoader from 'react-data-table-component';
 
 import { ThemeContext } from '../../../index';
 import { searchTransaction } from '../../../services/NodeAPI';
-import { columnsTransaction } from '../../../components/columnsTable/mainPage/columnsTable';
+import { columnsTransaction } from '../ColumnsTable';
 
 export const GetTransaction = () => {
 

@@ -5,7 +5,7 @@ import CustomLoader from 'react-data-table-component';
 
 import { ThemeContext } from '../../../index';
 import { searchUserWallet } from '../../../services/NodeAPI';
-import { columnsUserWallet } from '../../../components/columnsTable/mainPage/columnsTable';
+import { columnsUserWallet } from '../ColumnsTable';
 
 export const GetUserWallet = () => {
 

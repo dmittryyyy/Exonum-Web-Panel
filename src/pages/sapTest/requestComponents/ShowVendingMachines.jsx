@@ -2,7 +2,7 @@ import { React, useContext } from 'react';
 
 import { ThemeContext } from '../../../index';
 import { getVendingMachines } from '../../../services/SapTestAPI';
-import { columnsVendingMachines } from '../../../components/columnsTable/sapPage/ColumnsTable';
+import { columnsVendingMachines } from '../ColumnsTable';
 
 export const ShowVendingMachines = ({ setDataJsonFormat, setDataTableFormat, setColumnsTable }) => {
 

@@ -2,7 +2,7 @@ import { React, useContext, useState } from 'react';
 
 import { ThemeContext } from '../../../index';
 import { getUsersBenefits } from '../../../services/SapTestAPI';
-import { columnsUserBenefits } from '../../../components/columnsTable/sapPage/ColumnsTable';
+import { columnsUserBenefits } from '../ColumnsTable';
 
 export const UserBenefits = ({ setDataJsonFormat, setDataTableFormat, setColumnsTable }) => {
 

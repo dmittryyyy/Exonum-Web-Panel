@@ -3,7 +3,7 @@ import DateTimePicker from 'react-datetime-picker';
 
 import { ThemeContext } from '../../../index';
 import { getEvents } from '../../../services/SapTestAPI';
-import { columnsEvents } from '../../../components/columnsTable/sapPage/ColumnsTable';
+import { columnsEvents } from '../ColumnsTable';
 
 export const Events = ({ setDataJsonFormat, setDataTableFormat, setColumnsTable }) => {
 

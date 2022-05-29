@@ -5,7 +5,7 @@ import CustomLoader from 'react-data-table-component';
 
 import { ThemeContext } from '../../../index';
 import { searchOrders } from '../../../services/NodeAPI';
-import { columnsOrders } from '../../../components/columnsTable/mainPage/columnsTable';
+import { columnsOrders } from '../ColumnsTable';
 
 export const GetOrders = () => {
 

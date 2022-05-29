@@ -2,7 +2,7 @@ import { React, useContext, useState } from 'react';
 
 import { ThemeContext } from '../../../index';
 import { getUserCards } from '../../../services/SapTestAPI';
-import { columnsUserCard } from '../../../components/columnsTable/sapPage/ColumnsTable';
+import { columnsUserCard } from '../ColumnsTable';
 
 export const UserCard = ({ setDataJsonFormat, setDataTableFormat, setColumnsTable }) => {
 

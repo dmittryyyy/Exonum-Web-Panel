@@ -3,7 +3,7 @@ import { Accordion } from 'react-bootstrap';
 import DataTable from 'react-data-table-component';
 import CustomLoader from 'react-data-table-component';
 
-import { columnsCatalog } from '../../../../components/columnsTable/mainPage/columnsTable';
+import { columnsCatalog } from '../../ColumnsTable';
 
 export const CatalogTable = ({ dataJsonFormat, dataTableFormat }) => {
 

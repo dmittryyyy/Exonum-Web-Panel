@@ -2,7 +2,7 @@ import { React, useContext, useState } from 'react';
 
 import { ThemeContext } from '../../../index';
 import { getShopItems } from '../../../services/SapTestAPI';
-import { columnsShop } from '../../../components/columnsTable/sapPage/ColumnsTable';
+import { columnsShop } from '../ColumnsTable';
 
 export const ShopItems = ({ setDataJsonFormat, setDataTableFormat, setColumnsTable }) => {
 

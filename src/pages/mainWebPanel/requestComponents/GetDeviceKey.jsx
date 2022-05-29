@@ -5,7 +5,7 @@ import CustomLoader from 'react-data-table-component';
 
 import { ThemeContext } from '../../../index';
 import { searchDeviceKey } from '../../../services/NodeAPI';
-import { columnsDeviceKey } from '../../../components/columnsTable/mainPage/columnsTable';
+import { columnsDeviceKey } from '../ColumnsTable';
 
 export const GetDeviceKey = ({ navBarItem }) => {
 
