@@ -1,10 +1,6 @@
 import { React } from 'react';
-import { useParams } from 'react-router-dom';
 import { ListGroup, ListGroupItem } from 'react-bootstrap';
 import { ShowCatalog } from './requestComponents/showCatalog/ShowCatalog';
-import { Link } from 'react-router-dom';
-
-import { WebPanel_route } from '../../routes/constants';
 
 export const SearchingBar = ({ navBarItem, setNavBarItem, setJsonCatalog, setTableCatalog, jsonCatalog }) => {
 
@@ -16,11 +12,6 @@ export const SearchingBar = ({ navBarItem, setNavBarItem, setJsonCatalog, setTab
         { name: 'Search device key', id: 5 },
         { name: 'Search orders users', id: 6 },
     ];
-
-    function BlogPost() {
-        let { slug } = useParams();
-        return <div>Now showing post {slug}</div>;
-      }
 
     const hideTable = () => {
         setJsonCatalog();
@@ -42,7 +33,7 @@ export const SearchingBar = ({ navBarItem, setNavBarItem, setJsonCatalog, setTab
             <div className="buttonListGroup">
                 <ShowCatalog setDataJsonFormat={setJsonCatalog} setDataTableFormat={setTableCatalog} />
                 {jsonCatalog ? (
-                    <button className='btnHideData' onClick={hideTable}>Hide data</button>
+                    <button className='btnHideData' onClick={hideTable}>Hide catalog</button>
                 ) : (
                     ''
                 )}

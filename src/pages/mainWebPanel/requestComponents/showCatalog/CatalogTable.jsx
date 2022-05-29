@@ -2,8 +2,6 @@ import { React, useState } from 'react';
 import { Accordion } from 'react-bootstrap';
 import DataTable from 'react-data-table-component';
 import CustomLoader from 'react-data-table-component';
-import { Routes, Route } from 'react-router-dom';
-import { WebPanel_route } from '../../../../routes/constants';
 
 import { columnsCatalog } from '../../../../components/columnsTable/mainPage/columnsTable';
 

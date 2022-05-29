@@ -1,6 +1,4 @@
 import { React, useContext } from 'react';
-import { Link } from 'react-router-dom';
-import { WebPanel_route } from '../../../../routes/constants';
 
 import { ThemeContext } from '../../../../index';
 import { getCatalog } from '../../../../services/NodeAPI';

@@ -5,7 +5,6 @@ import CustomLoader from 'react-data-table-component';
 
 import { ThemeContext } from '../../../index';
 import { searchService } from '../../../services/NodeAPI';
-import { columnsServiceApplication } from '../../../components/columnsTable/mainPage/columnsTable';
 
 export const ServiceApplication = () => {
 
@@ -59,7 +58,6 @@ export const ServiceApplication = () => {
                             <Accordion.Header>Table Format</Accordion.Header>
                             <Accordion.Body>
                                 <DataTable
-                                    columns={columnsServiceApplication}
                                     data={dataTableFormat}
                                     expandableRows
                                     expandableRowsComponent={ExpandedComponent}
