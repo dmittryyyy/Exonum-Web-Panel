@@ -3,12 +3,17 @@ import { React, useContext, useState } from 'react';
 import { ThemeContext } from '../../../index';
 import { getShopItems } from '../../../services/SapTestAPI';
 import { columnsShop } from '../ColumnsTable';
+import { ContentSapTest } from '../ContentSapTest';
 
-export const ShopItems = ({ setDataJsonFormat, setDataTableFormat, setColumnsTable }) => {
+
+export const ShopItems = () => {
 
     const { client } = useContext(ThemeContext);
 
     const [countInput, setCountInput] = useState('');
+    const [dataJsonFormat, setDataJsonFormat] = useState();
+    const [dataTableFormat, setDataTableFormat] = useState();
+    const [columnsTable, setColumnsTable] = useState();
 
     const shopItems = async () => {
         setColumnsTable(columnsShop);
@@ -25,12 +30,16 @@ export const ShopItems = ({ setDataJsonFormat, setDataTableFormat, setColumnsTab
 
     return (
 
+       <>
         <div className="searchWrapper">
             <div className='search'>
                 <input type="number" placeholder='Enter limit elements' max={100} onChange={(e) => setCountInput(e.target.value)} value={countInput} />
             </div>
             <button onClick={shopItems}>Search</button>
         </div>
+
+        <ContentSapTest dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable}/>
+       </>
 
     )
 }

@@ -3,12 +3,17 @@ import { React, useContext, useState } from 'react';
 import { ThemeContext } from '../../../index';
 import { getUserCards } from '../../../services/SapTestAPI';
 import { columnsUserCard } from '../ColumnsTable';
+import { ContentSapTest } from '../ContentSapTest';
 
-export const UserCard = ({ setDataJsonFormat, setDataTableFormat, setColumnsTable }) => {
+export const UserCard = () => {
 
     const { client } = useContext(ThemeContext);
 
     const [isValueSearch, setIsValueSearch] = useState('');
+    const [dataJsonFormat, setDataJsonFormat] = useState();
+    const [dataTableFormat, setDataTableFormat] = useState();
+    const [columnsTable, setColumnsTable] = useState();
+
 
     const usersCard = async () => {
         setColumnsTable(columnsUserCard);
@@ -25,6 +30,7 @@ export const UserCard = ({ setDataJsonFormat, setDataTableFormat, setColumnsTabl
 
     return (
 
+        <>
         <div className="searchWrapper">
         <div className='search'>
             {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
@@ -34,6 +40,9 @@ export const UserCard = ({ setDataJsonFormat, setDataTableFormat, setColumnsTabl
         </div>
         <button onClick={usersCard}>Search</button>
     </div>
+
+<ContentSapTest dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} setDataTableFormat={setDataTableFormat}/>
+        </>
 
     )
 }

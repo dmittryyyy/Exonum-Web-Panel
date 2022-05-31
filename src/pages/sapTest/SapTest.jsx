@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 
 import { SearchingSap } from './SearchingSap';
-import { ContentSapTest } from './ContentSapTest';
 import { SearchingInput } from './SearchingInput';
+import { ContentSapTest } from './ContentSapTest';
 
 
 export const SapTest = () => {
@@ -35,12 +35,8 @@ export const SapTest = () => {
                         navBarItem={navBarItem}
                     />
 
-                    <ContentSapTest
-                        dataJson={dataJsonFormat}
-                        dataTable={dataTableFormat}
-                        setDataTableFormat={setDataTableFormat}
-                        columnsTable={columnsTable}
-                    />
+                    <ContentSapTest dataTableFormat={dataTableFormat} columnsTable={columnsTable} dataJsonFormat={dataJsonFormat}/>
+
                 </div>
 
             </div>

@@ -8,26 +8,29 @@ import { GetOrders } from './requestComponents/GetOrders';
 
 export const SearchingInput = ({ navBarItem }) => {
 
+    const testHash = (str) => {
+        return /^[A-F0-9]+$/i.test(str);
+    };
 
     return (
         <div>
             {navBarItem.id === 1 ?
-                <GetTransaction />
+                <GetTransaction testHash={testHash}/>
 
                 : navBarItem.id === 2 ?
-                    <GetOrder />
+                    <GetOrder testHash={testHash}/>
 
                     : navBarItem.id === 3 ?
-                        <ServiceApplication />
+                        <ServiceApplication testHash={testHash}/>
 
                         : navBarItem.id === 4 ?
-                            <GetUserWallet />
+                            <GetUserWallet testHash={testHash}/>
 
                             : navBarItem.id === 5 ?
-                                <GetDeviceKey navBarItem={navBarItem}/>
+                                <GetDeviceKey navBarItem={navBarItem} testHash={testHash}/>
 
                                 : navBarItem.id === 6 ?
-                                    <GetOrders />
+                                    <GetOrders testHash={testHash}/>
 
                                     : ''
             }

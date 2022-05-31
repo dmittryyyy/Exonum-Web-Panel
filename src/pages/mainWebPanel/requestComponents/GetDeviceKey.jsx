@@ -1,13 +1,13 @@
 import { React, useContext, useState } from 'react';
 import { Accordion } from 'react-bootstrap';
-import DataTable  from 'react-data-table-component';
+import DataTable from 'react-data-table-component';
 import CustomLoader from 'react-data-table-component';
 
 import { ThemeContext } from '../../../index';
 import { searchDeviceKey } from '../../../services/NodeAPI';
 import { columnsDeviceKey } from '../ColumnsTable';
 
-export const GetDeviceKey = ({ navBarItem }) => {
+export const GetDeviceKey = ({ testHash }) => {
 
     const { client } = useContext(ThemeContext);
 
@@ -16,47 +16,60 @@ export const GetDeviceKey = ({ navBarItem }) => {
     const [dataJsonFormat, setDataJsonFormat] = useState();
     const [dataTableFormat, setDataTableFormat] = useState();
 
+    const [isError, setIsError] = useState('');
+    const [classInput, setClassInput] = useState('search');
+
     const [isHistory, seIsHistory] = useState();
 
     const getDeviceKey = async () => {
-        try {
-            if (isValueSearch) {
-                await searchDeviceKey(client.activeNode, isValueSearch, isHistory)
-                    .then((key) => {
-                        setDataJsonFormat(key);
-                        setDataTableFormat([key]);
-                    })
+        if (isValueSearch) {
+            if (testHash(isValueSearch)) {
+                try {
+                    await searchDeviceKey(client.activeNode, isValueSearch, isHistory)
+                        .then((key) => {
+                            setDataJsonFormat(key);
+                            setDataTableFormat([key]);
+                        });
+                    setIsError('');
+                    setClassInput('search')
+                } catch (error) {
+                    console.log(error);
+                }
             } else {
-                setDataJsonFormat('Device key undefined or empty input field!');
+                setIsError('Not a HEX string');
+                setClassInput('searchError')
             }
-        } catch (error) {
-            console.log(error);
+        } else {
+            setIsError('Empty search string!');
+            setClassInput('searchError')
         }
     }
 
     const ExpandedComponent = (dataTableFormat) => {
         return <pre>{JSON.stringify(dataTableFormat, null, 2)}</pre>;
-      }
+    }
 
     return (
         <>
             <div className="searchWrapper">
-                <div className='search'>
+                <div className={classInput}>
                     {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
                     <input placeholder='Enter device key'
                         value={isValueSearch}
                         onChange={(e) => setIsValueSearch(e.target.value)} />
                 </div>
                 <button onClick={getDeviceKey}>Search</button>
-
-                    <div className="checkbox">
-                        <input type="checkbox"
-                            className='checkboxHistory'
-                            onChange={(e) => seIsHistory(e.target.checked)}
-                        />
-                        <label>Show History</label>
-                    </div>
             </div>
+
+            <div className="checkbox">
+                <input type="checkbox"
+                    className='checkboxHistory'
+                    onChange={(e) => seIsHistory(e.target.checked)}
+                />
+                <label>Show History</label>
+            </div>
+
+            <p>{isError}</p>
 
             <div className='resultWrapper'>
                 {dataJsonFormat ?

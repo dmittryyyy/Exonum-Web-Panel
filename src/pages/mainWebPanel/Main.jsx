@@ -14,8 +14,6 @@ export const Main = ({ isheight, isActive }) => {
 
     const [navBarItem, setNavBarItem] = useState([]);
 
-    const [isError, setIsError] = useState();
-
     return (
         <>
 
@@ -34,9 +32,7 @@ export const Main = ({ isheight, isActive }) => {
                     isheight={isheight}
                 />
 
-                <SearchingInput
-                    navBarItem={navBarItem}
-                />
+                <SearchingInput navBarItem={navBarItem}/>
 
                 <CatalogTable dataJsonFormat={jsonCatalog} dataTableFormat={tableCatalog}/>
                 </div>

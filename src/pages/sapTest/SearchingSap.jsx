@@ -37,7 +37,7 @@ export const SearchingSap = ({ navBarItem, setNavBarItem, dataJsonFormat, setDat
                 <div className="buttonListGroup">
                     <ShowVendingMachines setDataJsonFormat={setDataJsonFormat} setDataTableFormat={setDataTableFormat} setColumnsTable={setColumnsTable} />
                     {dataJsonFormat ? (
-                        <button className='btnHideData' onClick={hideTable}>Hide data</button>
+                        <button className='btnHideData' onClick={hideTable}>Hide</button>
                     ) : (
                         ''
                     )}

@@ -7,7 +7,7 @@ import { ThemeContext } from '../../../index';
 import { searchTransaction } from '../../../services/NodeAPI';
 import { columnsTransaction } from '../ColumnsTable';
 
-export const GetTransaction = () => {
+export const GetTransaction = ({ testHash }) => {
 
   const { client } = useContext(ThemeContext);
 
@@ -16,32 +16,38 @@ export const GetTransaction = () => {
   const [dataJsonFormat, setDataJsonFormat] = useState();
   const [dataTableFormat, setDataTableFormat] = useState();
 
-  const testHash = (str) => {
-    return /^[A-F0-9]+$/i.test(str);
-  };
+  const [isError, setIsError] = useState('');
+  const [classInput, setClassInput] = useState('search');
 
   const getTransaction = async () => {
-    try {
+    if (isValueSearch) {
       if (testHash(isValueSearch)) {
-        const resp = await searchTransaction(client.activeNode, isValueSearch);
-        if (!resp) {
-          setDataJsonFormat('type: unknown')
-        } else if (resp.type === 'committed') {
-          delete resp.location_proof
-          setDataJsonFormat(resp);
-          setDataTableFormat([resp]);
-        } else if (resp.type === 'in-pool') {
-          delete resp.status
-          delete resp.content.debug
-          delete resp.location
-          delete resp.location_proof
-          setDataJsonFormat(resp);
+        try {
+          const resp = await searchTransaction(client.activNode, isValueSearch);
+          if (!resp) {
+            setDataJsonFormat('type: unknown')
+          } else if (resp.type === 'committed') {
+            delete resp.location_proof
+            setDataJsonFormat(resp);
+            setDataTableFormat([resp]);
+          } else if (resp.type === 'in-pool') {
+            delete resp.status
+            delete resp.content.debug
+            delete resp.location
+            delete resp.location_proof
+            setDataJsonFormat(resp);
+          };
+          setIsError('');
+        } catch (error) {
+          console.log(error);
         }
       } else {
-        setDataJsonFormat('The entered string does not match hex');
+        setIsError('Not a HEX string');
+        setClassInput('searchError');
       }
-    } catch (error) {
-      console.log(error);
+    } else {
+      setIsError('Empty search string!');
+      setClassInput('searchError');
     }
   }
 
@@ -79,13 +85,14 @@ export const GetTransaction = () => {
 
     <>
       <div className="searchWrapper">
-        <div className='search'>
+        <div className={classInput}>
           {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
           <input placeholder='Enter transaction number'
             value={isValueSearch}
             onChange={(e) => setIsValueSearch(e.target.value)} />
         </div>
         <button onClick={getTransaction}>Search</button>
+        <p>{isError}</p>
       </div>
 
       <div className='resultWrapper'>

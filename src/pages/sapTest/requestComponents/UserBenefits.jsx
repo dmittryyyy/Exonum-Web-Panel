@@ -3,12 +3,17 @@ import { React, useContext, useState } from 'react';
 import { ThemeContext } from '../../../index';
 import { getUsersBenefits } from '../../../services/SapTestAPI';
 import { columnsUserBenefits } from '../ColumnsTable';
+import { ContentSapTest } from '../ContentSapTest';
 
-export const UserBenefits = ({ setDataJsonFormat, setDataTableFormat, setColumnsTable }) => {
+export const UserBenefits = () => {
 
     const { client } = useContext(ThemeContext);
 
     const [isValueSearch, setIsValueSearch] = useState('');
+    const [dataJsonFormat, setDataJsonFormat] = useState();
+    const [dataTableFormat, setDataTableFormat] = useState();
+    const [columnsTable, setColumnsTable] = useState();
+
 
     const usersBenefits = async () => {
         setColumnsTable(columnsUserBenefits);
@@ -25,6 +30,7 @@ export const UserBenefits = ({ setDataJsonFormat, setDataTableFormat, setColumns
 
     return (
 
+        <>
             <div className="searchWrapper">
                 <div className='search'>
                     {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
@@ -34,5 +40,8 @@ export const UserBenefits = ({ setDataJsonFormat, setDataTableFormat, setColumns
                 </div>
                 <button onClick={usersBenefits}>Search</button>
             </div>
+
+            <ContentSapTest dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} setDataTableFormat={setDataTableFormat} />
+        </>
     )
 }

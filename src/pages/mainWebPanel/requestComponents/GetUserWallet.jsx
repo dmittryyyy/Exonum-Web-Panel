@@ -7,7 +7,7 @@ import { ThemeContext } from '../../../index';
 import { searchUserWallet } from '../../../services/NodeAPI';
 import { columnsUserWallet } from '../ColumnsTable';
 
-export const GetUserWallet = () => {
+export const GetUserWallet = ({ testHash }) => {
 
     const { client } = useContext(ThemeContext);
 
@@ -16,23 +16,29 @@ export const GetUserWallet = () => {
     const [dataJsonFormat, setDataJsonFormat] = useState();
     const [dataTableFormat, setDataTableFormat] = useState();
 
-    const testHash = (str) => {
-        return /^[A-F0-9]+$/i.test(str);
-    };
+    const [classInput, setClassInput] = useState('search');
+    const [isError, setIsError] = useState('');
 
     const GetUserWallet = async () => {
-        try {
+        if (isValueSearch) {
             if (testHash(isValueSearch)) {
-                await searchUserWallet(client.activeNode, isValueSearch)
-                    .then((wallet) => {
-                        setDataJsonFormat(wallet.data);
-                        setDataTableFormat([wallet.data]);
-                    });
+                try {
+                    await searchUserWallet(client.activeNode, isValueSearch)
+                        .then((wallet) => {
+                            setDataJsonFormat(wallet.data);
+                            setDataTableFormat([wallet.data]);
+                        });
+                        setIsError('');
+                } catch (error) {
+                    console.log(error);
+                }
             } else {
-                setDataJsonFormat('Key wallet uncorrect or empty input field!');
+                setIsError('Not a HEX string');
+                setClassInput('searchError');
             }
-        } catch (error) {
-            console.log(error);
+        } else {
+            setIsError('Empty search string!');
+            setClassInput('searchError');
         }
     }
 
@@ -44,13 +50,14 @@ export const GetUserWallet = () => {
 
         <>
             <div className="searchWrapper">
-                <div className='search'>
+                <div className={classInput}>
                     {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
                     <input placeholder='Enter user wallet'
                         value={isValueSearch}
                         onChange={(e) => setIsValueSearch(e.target.value)} />
                 </div>
                 <button onClick={GetUserWallet}>Search</button>
+                <p>{isError}</p>
             </div>
 
             <div className='resultWrapper'>

@@ -2,12 +2,14 @@ import { React, useContext, useState } from 'react';
 
 import { ThemeContext } from '../../../index';
 import { getUserSapInfo } from '../../../services/SapTestAPI';
+import { ContentSapTest } from '../ContentSapTest';
 
-export const UserSapInfo = ({ setDataJsonFormat, }) => {
+export const UserSapInfo = () => {
 
     const { client } = useContext(ThemeContext);
 
     const [isValueSearch, setIsValueSearch] = useState('');
+    const [dataJsonFormat, setDataJsonFormat] = useState();
 
     const userSapInfo = async () => {
         try {
@@ -22,6 +24,7 @@ export const UserSapInfo = ({ setDataJsonFormat, }) => {
 
     return (
 
+        <>
             <div className="searchWrapper">
                 <div className='search'>
                     {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
@@ -31,5 +34,8 @@ export const UserSapInfo = ({ setDataJsonFormat, }) => {
                 </div>
                 <button onClick={userSapInfo}>Search</button>
             </div>
+
+            <ContentSapTest dataJsonFormat={dataJsonFormat} />
+        </>
     )
 }

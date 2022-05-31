@@ -4,12 +4,18 @@ import DateTimePicker from 'react-datetime-picker';
 import { ThemeContext } from '../../../index';
 import { getEvents } from '../../../services/SapTestAPI';
 import { columnsEvents } from '../ColumnsTable';
+import { ContentSapTest } from '../ContentSapTest';
 
-export const Events = ({ setDataJsonFormat, setDataTableFormat, setColumnsTable }) => {
+
+export const Events = () => {
 
     const { client } = useContext(ThemeContext);
 
     const [countInput, setCountInput] = useState('');
+    const [dataJsonFormat, setDataJsonFormat] = useState();
+    const [dataTableFormat, setDataTableFormat] = useState();
+    const [columnsTable, setColumnsTable] = useState();
+
     const [valueCalendar, setValueCalendar] = useState();
     const [classInput, setClassInput] = useState('search');
     const [nullCalendar, setNullCalendar] = useState(null);
@@ -53,6 +59,7 @@ export const Events = ({ setDataJsonFormat, setDataTableFormat, setColumnsTable 
 
     return (
 
+        <>
         <div className="searchBlock">
             <div className='DataTime'>
                 <DateTimePicker onChange={setValueCalendar} value={valueCalendar}
@@ -67,6 +74,9 @@ export const Events = ({ setDataJsonFormat, setDataTableFormat, setColumnsTable 
                 <button onClick={Events}>Search</button>
             </div>
         </div>
+
+        <ContentSapTest dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable}/>
+        </>
 
     )
 }

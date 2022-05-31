@@ -1,63 +1,70 @@
 import { React, useContext, useState } from 'react';
 import { Accordion } from 'react-bootstrap';
-import DataTable  from 'react-data-table-component';
+import DataTable from 'react-data-table-component';
 import CustomLoader from 'react-data-table-component';
 
 import { ThemeContext } from '../../../index';
 import { searchOrders } from '../../../services/NodeAPI';
 import { columnsOrders } from '../ColumnsTable';
 
-export const GetOrders = () => {
+export const GetOrders = ({ testHash }) => {
 
-    const { client } = useContext(ThemeContext);
+  const { client } = useContext(ThemeContext);
 
-    const [isValueSearch, setIsValueSearch] = useState('');
-    const [tableSearchValue, setTableSearchValue] = useState('');
-    const [dataJsonFormat, setDataJsonFormat] = useState();
-    const [dataTableFormat, setDataTableFormat] = useState();
+  const [isValueSearch, setIsValueSearch] = useState('');
+  const [tableSearchValue, setTableSearchValue] = useState('');
+  const [dataJsonFormat, setDataJsonFormat] = useState();
+  const [dataTableFormat, setDataTableFormat] = useState();
 
-    const testHash = (str) => {
-        return /^[A-F0-9]+$/i.test(str);
-    };
-   
-    const GetOrders = async () => {
+  const [isError, setIsError] = useState('');
+  const [classInput, setClassInput] = useState('search');
+
+  const GetOrders = async () => {
+    if (isValueSearch) {
+      if (testHash(isValueSearch)) {
         try {
-            if (testHash(isValueSearch)) {
-                await searchOrders(client.activeNode, isValueSearch)
-                    .then((orders) => {
-                        orders.data.map((elements) => {
-                            elements.status.splice(0, elements.status.length - 1);
-                            setDataJsonFormat(orders.data);
-                            setDataTableFormat(orders.data);
-                        });
-                    });
-            } else {
-                setDataJsonFormat('Order number uncorrect or empty input field!');
-            }
+          await searchOrders(client.activeNode, isValueSearch)
+            .then((orders) => {
+              orders.data.map((elements) => {
+                elements.status.splice(0, elements.status.length - 1);
+                setDataJsonFormat(orders.data);
+                setDataTableFormat(orders.data);
+              });
+            });
+          setIsError('');
         } catch (error) {
-            console.log(error);
+          console.log(error);
         }
-    }
-
-    const ExpandedComponent = (dataTableFormat) => {
-        return <pre>{JSON.stringify(dataTableFormat, null, 2)}</pre>;
+      } else {
+        setIsError('Not a HEX string');
+        setClassInput('searchError');
       }
+    } else {
+      setIsError('Empty search string!');
+      setClassInput('searchError');
+    }
+  }
+
+  const ExpandedComponent = (dataTableFormat) => {
+    return <pre>{JSON.stringify(dataTableFormat, null, 2)}</pre>;
+  }
 
 
-    return (
+  return (
 
-        <>
-        <div className="searchWrapper">
-            <div className='search'>
-                {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
-                <input placeholder='Orders search'
-                    value={isValueSearch}
-                    onChange={(e) => setIsValueSearch(e.target.value)} />
-            </div>
-            <button onClick={GetOrders}>Search</button>
+    <>
+      <div className="searchWrapper">
+        <div className={classInput}>
+          {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
+          <input placeholder='Orders search'
+            value={isValueSearch}
+            onChange={(e) => setIsValueSearch(e.target.value)} />
         </div>
+        <button onClick={GetOrders}>Search</button>
+        <p>{isError}</p>
+      </div>
 
-        <div className='resultWrapper'>
+      <div className='resultWrapper'>
         {dataJsonFormat ?
           <Accordion default-key="0">
             <Accordion.Item eventKey='0'>
@@ -97,7 +104,7 @@ export const GetOrders = () => {
           </Accordion>
           : ''}
       </div>
-        </>
+    </>
 
-    )
+  )
 }
