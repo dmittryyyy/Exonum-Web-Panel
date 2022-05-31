@@ -2,7 +2,6 @@ import { React } from 'react';
 import { ListGroup, ListGroupItem } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-import { WebPanel_route } from '../../routes/constants';
 import { ShowCatalog } from './requestComponents/showCatalog/ShowCatalog';
 
 export const SearchingBar = ({ navBarItem, setNavBarItem, setJsonCatalog, setTableCatalog, jsonCatalog }) => {
@@ -25,13 +24,15 @@ export const SearchingBar = ({ navBarItem, setNavBarItem, setJsonCatalog, setTab
         <ListGroup>
             <h3>Choose type search</h3>
             {nodeBarItems.map((item, index) =>
-                    <ListGroupItem
-                        onClick={() => setNavBarItem(item)}
-                        active={item.name === navBarItem.name}
-                        key={index}
-                    >
-                        {item.name}
-                    </ListGroupItem>
+                <Link to={item.name}>
+                <ListGroupItem
+                    onClick={() => setNavBarItem(item)}
+                    active={item.id === navBarItem.id}
+                    key={index}
+                >
+                    {item.name}
+                </ListGroupItem>
+                </Link>
             )}
             <div className="buttonListGroup">
                 <ShowCatalog setDataJsonFormat={setJsonCatalog} setDataTableFormat={setTableCatalog} />

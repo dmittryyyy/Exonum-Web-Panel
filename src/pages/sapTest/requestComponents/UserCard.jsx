@@ -14,34 +14,45 @@ export const UserCard = () => {
     const [dataTableFormat, setDataTableFormat] = useState();
     const [columnsTable, setColumnsTable] = useState();
 
+    const [classInput, setClassInput] = useState('search');
+    const [isError, setIsError] = useState('');
+
+
 
     const usersCard = async () => {
         setColumnsTable(columnsUserCard);
-        try {
-            await getUserCards(client.sveklaServerV1, isValueSearch)
-                .then(resp => {
-                    setDataJsonFormat(JSON.stringify(resp, null, 2));
-                    setDataTableFormat(resp);
-                })
-        } catch (err) {
-            console.log(err);
+        if (isValueSearch) {
+            try {
+                await getUserCards(client.sveklaServerV1, isValueSearch)
+                    .then(resp => {
+                        setDataJsonFormat(JSON.stringify(resp, null, 2));
+                        setDataTableFormat(resp);
+                    });
+                    setIsError('');
+            } catch (err) {
+                console.log(err);
+            }
+        } else {
+            setIsError('Empty search string!')
+            setClassInput('searchError');
         }
     }
 
     return (
 
         <>
-        <div className="searchWrapper">
-        <div className='search'>
-            {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
-            <input placeholder='Enter user id'
-                value={isValueSearch}
-                onChange={(e) => setIsValueSearch(e.target.value)} />
-        </div>
-        <button onClick={usersCard}>Search</button>
-    </div>
+            <div className="searchWrapper">
+                <div className={classInput}>
+                    {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
+                    <input placeholder='Enter user id'
+                        value={isValueSearch}
+                        onChange={(e) => setIsValueSearch(e.target.value)} />
+                </div>
+                <button onClick={usersCard}>Search</button>
+                <p>{isError}</p>
+            </div>
 
-<ContentSapTest dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} setDataTableFormat={setDataTableFormat}/>
+            <ContentSapTest dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} setDataTableFormat={setDataTableFormat} />
         </>
 
     )

@@ -13,7 +13,8 @@ export const AppRouter = observer (() => {
                 <Route key={path} path={path} element={Component} exact />
             )}
 
-            <Route path='/web-panel' element={<Main />} />
+            <Route path='web-panel/*' element={<Main />} />
+            
         </Routes>
     )
 });

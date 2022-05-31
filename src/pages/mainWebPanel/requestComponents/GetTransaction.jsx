@@ -23,7 +23,7 @@ export const GetTransaction = ({ testHash }) => {
     if (isValueSearch) {
       if (testHash(isValueSearch)) {
         try {
-          const resp = await searchTransaction(client.activNode, isValueSearch);
+          const resp = await searchTransaction(client.activeNode, isValueSearch);
           if (!resp) {
             setDataJsonFormat('type: unknown')
           } else if (resp.type === 'committed') {

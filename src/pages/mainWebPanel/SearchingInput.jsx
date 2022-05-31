@@ -1,4 +1,6 @@
 import { React } from 'react';
+import { Routes, Route } from 'react-router-dom';
+
 import { GetTransaction } from './requestComponents/GetTransaction';
 import { GetOrder } from './requestComponents/GetOrder';
 import { ServiceApplication } from './requestComponents/ServiceApplication';
@@ -14,26 +16,22 @@ export const SearchingInput = ({ navBarItem }) => {
 
     return (
         <div>
-            {navBarItem.id === 1 ?
-                <GetTransaction testHash={testHash}/>
 
-                : navBarItem.id === 2 ?
-                    <GetOrder testHash={testHash}/>
+                <Routes>
+                <Route path='Search%20transaction' element={<GetTransaction testHash={testHash} />}/>
 
-                    : navBarItem.id === 3 ?
-                        <ServiceApplication testHash={testHash}/>
+                <Route path='Search%20order' element={<GetOrder testHash={testHash} />}/>
 
-                        : navBarItem.id === 4 ?
-                            <GetUserWallet testHash={testHash}/>
+                <Route path='Service%20Application' element={<ServiceApplication testHash={testHash} />}/>
 
-                            : navBarItem.id === 5 ?
-                                <GetDeviceKey navBarItem={navBarItem} testHash={testHash}/>
+                <Route path='Search%20transaction' element={<GetUserWallet testHash={testHash} />}/>
 
-                                : navBarItem.id === 6 ?
-                                    <GetOrders testHash={testHash}/>
+                <Route path='Search%20transaction' element={<GetDeviceKey testHash={testHash} />}/>
 
-                                    : ''
-            }
+                <Route path='Search%20transaction' element={<GetOrders testHash={testHash} />}/>
+                </Routes>
+
+
         </div>
     )
 }

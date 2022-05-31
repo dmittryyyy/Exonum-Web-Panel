@@ -14,17 +14,25 @@ export const UserBenefits = () => {
     const [dataTableFormat, setDataTableFormat] = useState();
     const [columnsTable, setColumnsTable] = useState();
 
+    const [classInput, setClassInput] = useState('search');
+    const [isError, setIsError] = useState('');
 
     const usersBenefits = async () => {
         setColumnsTable(columnsUserBenefits);
-        try {
-            await getUsersBenefits(client.sveklaServerV1, isValueSearch)
-                .then(resp => {
-                    setDataJsonFormat(JSON.stringify(resp, null, 2));
-                    setDataTableFormat(resp);
-                })
-        } catch (err) {
-            console.log(err)
+        if (isValueSearch) {
+            try {
+                await getUsersBenefits(client.sveklaServerV1, isValueSearch)
+                    .then(resp => {
+                        setDataJsonFormat(JSON.stringify(resp, null, 2));
+                        setDataTableFormat(resp);
+                    });
+                setIsError('');
+            } catch (err) {
+                console.log(err);
+            }
+        } else {
+            setIsError('Empty search string!')
+            setClassInput('searchError');
         }
     }
 
@@ -32,13 +40,14 @@ export const UserBenefits = () => {
 
         <>
             <div className="searchWrapper">
-                <div className='search'>
+                <div className={classInput}>
                     {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
                     <input placeholder='Enter user id'
                         value={isValueSearch}
                         onChange={(e) => setIsValueSearch(e.target.value)} />
                 </div>
                 <button onClick={usersBenefits}>Search</button>
+                <p>{isError}</p>
             </div>
 
             <ContentSapTest dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} setDataTableFormat={setDataTableFormat} />

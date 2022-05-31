@@ -32,7 +32,9 @@ export const Main = ({ isheight, isActive }) => {
                     isheight={isheight}
                 />
 
-                <SearchingInput navBarItem={navBarItem}/>
+                <SearchingInput
+                    navBarItem={navBarItem}
+                />
 
                 <CatalogTable dataJsonFormat={jsonCatalog} dataTableFormat={tableCatalog}/>
                 </div>

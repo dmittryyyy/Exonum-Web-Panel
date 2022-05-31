@@ -4,7 +4,6 @@ import { SapTest } from '../pages/sapTest/SapTest';
 import { WebPanel_route } from './constants';
 import { SapTest_route } from './constants';
 
-
 export const publicRoutes = [
     {
         path: WebPanel_route,

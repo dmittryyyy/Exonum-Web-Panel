@@ -11,14 +11,24 @@ export const UserSapInfo = () => {
     const [isValueSearch, setIsValueSearch] = useState('');
     const [dataJsonFormat, setDataJsonFormat] = useState();
 
+    const [classInput, setClassInput] = useState('search');
+    const [isError, setIsError] = useState('');
+
+
     const userSapInfo = async () => {
-        try {
-            await getUserSapInfo(client.sveklaServerV1, isValueSearch)
-                .then(resp => {
-                    setDataJsonFormat(JSON.stringify(resp, null, 2));
-                })
-        } catch (err) {
-            console.log(err);
+        if(isValueSearch) {
+            try {
+                await getUserSapInfo(client.sveklaServerV1, isValueSearch)
+                    .then(resp => {
+                        setDataJsonFormat(JSON.stringify(resp, null, 2));
+                    });
+                    setIsError('');
+            } catch (err) {
+                console.log(err);
+            }
+        } else {
+            setIsError('Empty search string!')
+            setClassInput('searchError');
         }
     }
 
@@ -26,13 +36,14 @@ export const UserSapInfo = () => {
 
         <>
             <div className="searchWrapper">
-                <div className='search'>
+                <div className={classInput}>
                     {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
                     <input placeholder='Enter user id'
                         value={isValueSearch}
                         onChange={(e) => setIsValueSearch(e.target.value)} />
                 </div>
                 <button onClick={userSapInfo}>Search</button>
+                <p>{isError}</p>
             </div>
 
             <ContentSapTest dataJsonFormat={dataJsonFormat} />
