@@ -19,7 +19,7 @@ export const SearchingInput = () => {
             
                 <Routes>
 
-                <Route path='transaction/*' element={<GetTransaction testHash={testHash} />}/>
+                <Route path='transaction/:transaction_id' element={<GetTransaction testHash={testHash} />}/>
 
                 <Route path='order' element={<GetOrder testHash={testHash} />}/>
 

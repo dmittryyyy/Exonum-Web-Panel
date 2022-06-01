@@ -22,6 +22,9 @@ export const GetTransaction = ({ testHash }) => {
   const [isError, setIsError] = useState('');
   const [classInput, setClassInput] = useState('search');
 
+  let { transaction_id } = useParams();
+
+
   const getTransaction = async () => {
     setColumnsTable(columnsTransaction);
     if (isValueSearch) {
@@ -63,9 +66,10 @@ export const GetTransaction = ({ testHash }) => {
         <div className={classInput}>
           {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
           <input placeholder='Enter transaction number'
-            value={isValueSearch}
+            value={transaction_id || isValueSearch}
             onChange={(e) => setIsValueSearch(e.target.value)} />
         </div>
+        <h3>URL parameter: {transaction_id}</h3>
         <button onClick={getTransaction}>Search</button>
         <p>{isError}</p>
       </div>
