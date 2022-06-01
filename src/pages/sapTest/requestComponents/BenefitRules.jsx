@@ -52,7 +52,6 @@ export const BenefitRules = () => {
 
             <ContentSapTest dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} setDataTableFormat={setDataTableFormat}/>
             </>
-
-
+            
     )
 }

@@ -1,8 +1,8 @@
 import { React, useContext, useState } from 'react';
-import { Accordion } from 'react-bootstrap';
 
 import { ThemeContext } from '../../../index';
 import { searchOrder } from '../../../services/NodeAPI';
+import { ContentMain } from '../ContentMain';
 
 export const GetOrder = ({ testHash }) => {
 
@@ -29,6 +29,7 @@ export const GetOrder = ({ testHash }) => {
                             setDataJsonFormat(hexadecimal((orders.data.order_seller_part.items[0].application_data)));
                         });
                     setIsError('');
+                    setClassInput('search');
                 } catch (error) {
                     console.log(error);
                     setIsError('Order number uncorrect!');
@@ -57,18 +58,7 @@ export const GetOrder = ({ testHash }) => {
                 <p>{isError}</p>
             </div>
 
-            <div className='resultWrapper'>
-                {dataJsonFormat ?
-                    <Accordion default-key="0">
-                        <Accordion.Item eventKey='0'>
-                            <Accordion.Header>JSON Format</Accordion.Header>
-                            <Accordion.Body>
-                                <pre className={'isError'}>{JSON.stringify(dataJsonFormat, null, 2)}</pre>
-                            </Accordion.Body>
-                        </Accordion.Item>
-                    </Accordion>
-                    : ''}
-            </div>
+            <ContentMain dataJsonFormat={dataJsonFormat} />
         </>
 
     )

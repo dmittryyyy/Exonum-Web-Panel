@@ -1,16 +1,16 @@
 import { React, useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { Routes, Route, Outlet } from 'react-router-dom';
 
 import { Node } from './Node';
 import { SearchingBar } from './SearchingBar';
-import { SearchingInput } from './SearchingInput';
-import { CatalogTable } from './requestComponents/showCatalog/CatalogTable';
+import { ContentMain } from './ContentMain';
 
 
 export const Main = ({ isheight, isActive }) => {
 
-    const [jsonCatalog, setJsonCatalog] = useState();
-    const [tableCatalog, setTableCatalog] = useState();
+    const [dataJsonFormat, setDataJsonFormat] = useState();
+    const [dataTableFormat, setDataTableFormat] = useState();
+    const [columnsTable, setColumnsTable] = useState();
 
     const [navBarItem, setNavBarItem] = useState([]);
 
@@ -19,11 +19,12 @@ export const Main = ({ isheight, isActive }) => {
 
             <div className="navBlock">
                 <SearchingBar
-                    jsonCatalog={jsonCatalog}
                     navBarItem={navBarItem}
                     setNavBarItem={setNavBarItem}
-                    setJsonCatalog={setJsonCatalog}
-                    setTableCatalog={setTableCatalog}
+                    setDataJsonFormat={setDataJsonFormat}
+                    dataJsonFormat={dataJsonFormat}
+                    setDataTableFormat={setDataTableFormat}
+                    setColumnsTable={setColumnsTable}
                 />
 
                 <div className='rightNavBlock'>
@@ -32,11 +33,9 @@ export const Main = ({ isheight, isActive }) => {
                     isheight={isheight}
                 />
 
-                <SearchingInput
-                    navBarItem={navBarItem}
-                />
+                <Outlet />
 
-                <CatalogTable dataJsonFormat={jsonCatalog} dataTableFormat={tableCatalog}/>
+                <ContentMain dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} />
                 </div>
 
             </div>

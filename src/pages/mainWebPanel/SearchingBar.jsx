@@ -1,42 +1,31 @@
 import { React } from 'react';
-import { ListGroup, ListGroupItem } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { ListGroup } from 'react-bootstrap';
+import { NavLink } from 'react-router-dom';
 
-import { ShowCatalog } from './requestComponents/showCatalog/ShowCatalog';
+import { ShowCatalog } from './requestComponents/ShowCatalog';
 
-export const SearchingBar = ({ navBarItem, setNavBarItem, setJsonCatalog, setTableCatalog, jsonCatalog }) => {
-
-    const nodeBarItems = [
-        { name: 'Search transaction', id: 1 },
-        { name: 'Search order', id: 2 },
-        { name: 'Service Application', id: 3 },
-        { name: 'Search user wallet', id: 4 },
-        { name: 'Search device key', id: 5 },
-        { name: 'Search orders users', id: 6 },
-    ];
+export const SearchingBar = ({ setDataJsonFormat, setDataTableFormat, setColumnsTable, dataJsonFormat }) => {
 
     const hideTable = () => {
-        setJsonCatalog();
-        setTableCatalog();
+        setDataJsonFormat();
+        setDataTableFormat();
     }
 
     return (
         <ListGroup>
+
             <h3>Choose type search</h3>
-            {nodeBarItems.map((item, index) =>
-                <Link to={item.name}>
-                <ListGroupItem
-                    onClick={() => setNavBarItem(item)}
-                    active={item.id === navBarItem.id}
-                    key={index}
-                >
-                    {item.name}
-                </ListGroupItem>
-                </Link>
-            )}
+            
+            <NavLink className='list-group-item' to='search/transaction'>Transaction</NavLink>
+            <NavLink className='list-group-item' to='search/order'>Order</NavLink>
+            <NavLink className='list-group-item' to='search/service-application'>Service Application</NavLink>
+            <NavLink className='list-group-item' to='search/user-wallet'>User wallet</NavLink>
+            <NavLink className='list-group-item' to='search/device-key'>Device key</NavLink>
+            <NavLink className='list-group-item' to='search/orders'>Orders</NavLink>
+
             <div className="buttonListGroup">
-                <ShowCatalog setDataJsonFormat={setJsonCatalog} setDataTableFormat={setTableCatalog} />
-                {jsonCatalog ? (
+                <ShowCatalog setDataJsonFormat={setDataJsonFormat} setDataTableFormat={setDataTableFormat} setColumnsTable={setColumnsTable}/>
+                {dataJsonFormat ? (
                     <button className='btnHideData' onClick={hideTable}>Hide catalog</button>
                 ) : (
                     ''

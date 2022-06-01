@@ -48,8 +48,8 @@ main {
       .active {
         transition: .2s;
         transform: scale(1.1);
-        color: #fff;
         border-radius: 5px;
+        color: #FFF;
       }
 
       .buttonListGroup {
@@ -260,6 +260,7 @@ main {
 
     pre {
       text-align: left;
+      padding: 10px;
     }
 
     .tableHeader {
