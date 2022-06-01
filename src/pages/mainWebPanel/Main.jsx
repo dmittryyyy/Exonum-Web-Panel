@@ -35,7 +35,10 @@ export const Main = ({ isheight, isActive }) => {
 
                 <Outlet />
 
-                <ContentMain dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} />
+                <Routes>
+                    <Route path='catalog' element={<ContentMain dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} />}/>
+                </Routes>
+                
                 </div>
 
             </div>

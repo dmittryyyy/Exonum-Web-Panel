@@ -10,7 +10,7 @@ import { GetOrders } from './requestComponents/GetOrders';
 
 export const SearchingInput = () => {
 
-    const testHash = (str) => {
+    const testHex = (str) => {
         return /^[A-F0-9]+$/i.test(str);
     };
 
@@ -19,17 +19,17 @@ export const SearchingInput = () => {
             
                 <Routes>
 
-                <Route path='transaction/*' element={<GetTransaction testHash={testHash} />}/>
+                <Route path='transaction/*' element={<GetTransaction testHex={testHex} />}/>
 
-                <Route path='order' element={<GetOrder testHash={testHash} />}/>
+                <Route path='order' element={<GetOrder testHex={testHex} />}/>
 
-                <Route path='service-application' element={<ServiceApplication testHash={testHash} />}/>
+                <Route path='service-application' element={<ServiceApplication testHex={testHex} />}/>
 
-                <Route path='user-wallet' element={<GetUserWallet testHash={testHash} />}/>
+                <Route path='user-wallet' element={<GetUserWallet testHex={testHex} />}/>
 
-                <Route path='device-key' element={<GetDeviceKey testHash={testHash} />}/>
+                <Route path='device-key' element={<GetDeviceKey testHex={testHex} />}/>
 
-                <Route path='orders' element={<GetOrders testHash={testHash} />}/>
+                <Route path='orders' element={<GetOrders testHex={testHex} />}/>
                 
                 </Routes>
 

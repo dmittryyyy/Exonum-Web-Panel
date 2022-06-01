@@ -43,6 +43,7 @@ export const GetTransaction = ({ testHash }) => {
           };
           setIsError('');
           setClassInput('search');
+          navigate('result');
         } catch (error) {
           console.log(error);
         }
@@ -55,6 +56,7 @@ export const GetTransaction = ({ testHash }) => {
       setClassInput('searchError');
     }
   }
+
 
   return (
 
@@ -70,7 +72,12 @@ export const GetTransaction = ({ testHash }) => {
         <p>{isError}</p>
       </div>
 
-     <ContentMain dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} setDataTableFormat={setDataTableFormat}/>
+     <Routes>
+       <Route 
+       path='result/:id'
+       element={<ContentMain dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} setDataTableFormat={setDataTableFormat}/>}
+       />
+     </Routes>
     </>
 
   )

@@ -54,6 +54,7 @@ export const GetDeviceKey = ({ testHash }) => {
                         onChange={(e) => setIsValueSearch(e.target.value)} />
                 </div>
                 <button onClick={getDeviceKey}>Search</button>
+                <p>{isError}</p>
             </div>
 
             <div className="checkbox">
@@ -63,8 +64,6 @@ export const GetDeviceKey = ({ testHash }) => {
                 />
                 <label>Show History</label>
             </div>
-
-            <p>{isError}</p>
 
             <ContentMain dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} setDataTableFormat={setDataTableFormat}/>
         </>

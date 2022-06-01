@@ -17,7 +17,7 @@ export const App = observer (() => {
           <Routes>
             <Route path='web-panel/*' element={<Layout/>}>
 
-            <Route path='' element={<Main />}>
+            <Route path='*' element={<Main />}>
               <Route path='search/*' element={<SearchingInput />}/>
             </Route>
 

@@ -6,10 +6,6 @@ import { ShowCatalog } from './requestComponents/ShowCatalog';
 
 export const SearchingBar = ({ setDataJsonFormat, setDataTableFormat, setColumnsTable, dataJsonFormat }) => {
 
-    const hideTable = () => {
-        setDataJsonFormat();
-        setDataTableFormat();
-    }
 
     return (
         <ListGroup>
@@ -25,11 +21,6 @@ export const SearchingBar = ({ setDataJsonFormat, setDataTableFormat, setColumns
 
             <div className="buttonListGroup">
                 <ShowCatalog setDataJsonFormat={setDataJsonFormat} setDataTableFormat={setDataTableFormat} setColumnsTable={setColumnsTable}/>
-                {dataJsonFormat ? (
-                    <button className='btnHideData' onClick={hideTable}>Hide catalog</button>
-                ) : (
-                    ''
-                )}
             </div>
         </ListGroup>
     )
