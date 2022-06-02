@@ -1,4 +1,5 @@
-import { React, useContext, useState } from 'react';
+import { React, useContext, useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router';
 
 import { ThemeContext } from '../../../index';
 import { getUserCards } from '../../../services/SapTestAPI';
@@ -9,15 +10,16 @@ export const UserCard = () => {
 
     const { client } = useContext(ThemeContext);
 
-    const [isValueSearch, setIsValueSearch] = useState('');
+    let { user_card } = useParams();
+    const navigate = useNavigate();
+
+    const [isValueSearch, setIsValueSearch] = useState(user_card ? user_card : '');
     const [dataJsonFormat, setDataJsonFormat] = useState();
     const [dataTableFormat, setDataTableFormat] = useState();
     const [columnsTable, setColumnsTable] = useState();
 
     const [classInput, setClassInput] = useState('search');
     const [isError, setIsError] = useState('');
-
-
 
     const usersCard = async () => {
         setColumnsTable(columnsUserCard);
@@ -29,6 +31,7 @@ export const UserCard = () => {
                         setDataTableFormat(resp);
                     });
                     setIsError('');
+                    navigate(isValueSearch);
             } catch (err) {
                 console.log(err);
             }
@@ -36,6 +39,16 @@ export const UserCard = () => {
             setIsError('Empty search string!')
             setClassInput('searchError');
         }
+    }
+
+    useEffect(() => {
+        if (isValueSearch) {
+            usersCard();
+        }
+    }, []);
+
+    const readValueInput = (e) => {
+        setIsValueSearch(e.target.value);
     }
 
     return (
@@ -46,7 +59,7 @@ export const UserCard = () => {
                     {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
                     <input placeholder='Enter user id'
                         value={isValueSearch}
-                        onChange={(e) => setIsValueSearch(e.target.value)} />
+                        onChange={readValueInput} />
                 </div>
                 <button onClick={usersCard}>Search</button>
                 <p>{isError}</p>

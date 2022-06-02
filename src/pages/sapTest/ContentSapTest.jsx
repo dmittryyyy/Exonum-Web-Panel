@@ -11,14 +11,14 @@ export const ContentSapTest = ({ dataJsonFormat, dataTableFormat, columnsTable, 
     return <pre>{JSON.stringify(dataTableFormat, null, 2)}</pre>;
 }
 
- useEffect(() => {
-    if(dataTableFormat) {
-      const result = dataTableFormat?.filter(items => {
-        return items.name.toLowerCase().match(isValueSearch.toLocaleLowerCase());
-      });
-      setDataTableFormat(result);
-    }
-  }, [isValueSearch]);
+//  useEffect(() => {
+//     if(dataTableFormat) {
+//       const result = dataTableFormat?.filter(items => {
+//         return items.name.toLowerCase().match(isValueSearch.toLocaleLowerCase());
+//       });
+//       setDataTableFormat(result);
+//     }
+//   }, [isValueSearch]);
 
   return (
 

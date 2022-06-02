@@ -11,7 +11,7 @@ export const SearchingBar = ({ setDataJsonFormat, setDataTableFormat, setColumns
         <ListGroup>
 
             <h3>Choose type search</h3>
-            
+
             <NavLink className='list-group-item' to='search/transaction'>Transaction</NavLink>
             <NavLink className='list-group-item' to='search/order'>Order</NavLink>
             <NavLink className='list-group-item' to='search/service-application'>Service Application</NavLink>
@@ -20,7 +20,9 @@ export const SearchingBar = ({ setDataJsonFormat, setDataTableFormat, setColumns
             <NavLink className='list-group-item' to='search/orders'>Orders</NavLink>
 
             <div className="buttonListGroup">
-                <ShowCatalog setDataJsonFormat={setDataJsonFormat} setDataTableFormat={setDataTableFormat} setColumnsTable={setColumnsTable}/>
+
+                <ShowCatalog setDataJsonFormat={setDataJsonFormat} setDataTableFormat={setDataTableFormat} setColumnsTable={setColumnsTable} />
+
             </div>
         </ListGroup>
     )

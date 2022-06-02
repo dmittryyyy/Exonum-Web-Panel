@@ -28,17 +28,21 @@ export const Main = ({ isheight, isActive }) => {
                 />
 
                 <div className='rightNavBlock'>
-                <Node
-                    isActive={isActive}
-                    isheight={isheight}
-                />
+                    <Node
+                        isActive={isActive}
+                        isheight={isheight}
+                    />
 
-                <Outlet />
+                    <Outlet />
 
+<<<<<<< HEAD
                 <Routes>
                     <Route path='catalog' element={<ContentMain dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} />}/>
                 </Routes>
                 
+=======
+                    <ContentMain dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} />
+>>>>>>> routring-parametrs
                 </div>
 
             </div>

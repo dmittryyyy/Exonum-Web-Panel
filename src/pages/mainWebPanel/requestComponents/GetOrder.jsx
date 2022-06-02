@@ -1,4 +1,5 @@
-import { React, useContext, useState } from 'react';
+import { React, useContext, useState, useEffect } from 'react';
+import { Routes, Route, useNavigate, useParams } from 'react-router-dom';
 
 import { ThemeContext } from '../../../index';
 import { searchOrder } from '../../../services/NodeAPI';
@@ -8,7 +9,10 @@ export const GetOrder = ({ testHash }) => {
 
     const { client } = useContext(ThemeContext);
 
-    const [isValueSearch, setIsValueSearch] = useState('');
+    let { orderId } = useParams();
+    const navigate = useNavigate();
+
+    const [isValueSearch, setIsValueSearch] = useState(orderId ? orderId : '');
     const [dataJsonFormat, setDataJsonFormat] = useState();
 
     const [isError, setIsError] = useState('');
@@ -30,6 +34,7 @@ export const GetOrder = ({ testHash }) => {
                         });
                     setIsError('');
                     setClassInput('search');
+                    navigate(isValueSearch);
                 } catch (error) {
                     console.log(error);
                     setIsError('Order number uncorrect!');
@@ -44,6 +49,16 @@ export const GetOrder = ({ testHash }) => {
         }
     }
 
+    useEffect(() => {
+        if (isValueSearch) {
+            getOrder();
+        }
+    }, []);
+
+    const readValueInput = (e) => {
+        setIsValueSearch(e.target.value);
+    }
+
     return (
 
         <>
@@ -52,13 +67,15 @@ export const GetOrder = ({ testHash }) => {
                     {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
                     <input placeholder='Order search'
                         value={isValueSearch}
-                        onChange={(e) => setIsValueSearch(e.target.value)} />
+                        onChange={readValueInput} />
                 </div>
                 <button onClick={getOrder}>Search</button>
                 <p>{isError}</p>
             </div>
 
-            <ContentMain dataJsonFormat={dataJsonFormat} />
+            <Routes>
+                <Route path={isValueSearch} element={<ContentMain dataJsonFormat={dataJsonFormat} />} />
+            </Routes>
         </>
 
     )

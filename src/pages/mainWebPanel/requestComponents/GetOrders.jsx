@@ -1,4 +1,5 @@
-import { React, useContext, useState } from 'react';
+import { React, useContext, useState, useEffect } from 'react';
+import { Routes, Route, useNavigate, useParams } from 'react-router-dom';
 
 import { ThemeContext } from '../../../index';
 import { searchOrders } from '../../../services/NodeAPI';
@@ -9,7 +10,10 @@ export const GetOrders = ({ testHash }) => {
 
   const { client } = useContext(ThemeContext);
 
-  const [isValueSearch, setIsValueSearch] = useState('');
+  let { orders } = useParams();
+  const navigate = useNavigate();
+
+  const [isValueSearch, setIsValueSearch] = useState(orders ? orders : '');
   const [dataJsonFormat, setDataJsonFormat] = useState();
   const [dataTableFormat, setDataTableFormat] = useState();
   const [columnsTable, setColumnsTable] = useState();
@@ -17,7 +21,7 @@ export const GetOrders = ({ testHash }) => {
   const [isError, setIsError] = useState('');
   const [classInput, setClassInput] = useState('search');
 
-  const GetOrders = async () => {
+  const getOrders = async () => {
     setColumnsTable(columnsOrders);
     if (isValueSearch) {
       if (testHash(isValueSearch)) {
@@ -32,6 +36,7 @@ export const GetOrders = ({ testHash }) => {
             });
           setIsError('');
           setClassInput('search');
+          navigate(isValueSearch);
         } catch (error) {
           console.log(error);
         }
@@ -45,6 +50,16 @@ export const GetOrders = ({ testHash }) => {
     }
   }
 
+  useEffect(() => {
+    if (isValueSearch) {
+      getOrders();
+    }
+}, []);
+
+const readValueInput = (e) => {
+    setIsValueSearch(e.target.value);
+}
+
   return (
 
     <>
@@ -53,13 +68,15 @@ export const GetOrders = ({ testHash }) => {
           {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
           <input placeholder='Orders search'
             value={isValueSearch}
-            onChange={(e) => setIsValueSearch(e.target.value)} />
+            onChange={readValueInput} />
         </div>
-        <button onClick={GetOrders}>Search</button>
+        <button onClick={getOrders}>Search</button>
         <p>{isError}</p>
       </div>
 
-      <ContentMain dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} setDataTableFormat={setDataTableFormat}/>
+      <Routes>
+        <Route path={isValueSearch} element={<ContentMain dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} setDataTableFormat={setDataTableFormat}/>}/>
+      </Routes>
     </>
 
   )

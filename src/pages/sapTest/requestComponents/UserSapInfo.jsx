@@ -1,4 +1,5 @@
-import { React, useContext, useState } from 'react';
+import { React, useContext, useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router';
 
 import { ThemeContext } from '../../../index';
 import { getUserSapInfo } from '../../../services/SapTestAPI';
@@ -8,12 +9,14 @@ export const UserSapInfo = () => {
 
     const { client } = useContext(ThemeContext);
 
-    const [isValueSearch, setIsValueSearch] = useState('');
+    let { user_infoId } = useParams();
+    const navigate = useNavigate();
+
+    const [isValueSearch, setIsValueSearch] = useState(user_infoId ? user_infoId : '');
     const [dataJsonFormat, setDataJsonFormat] = useState();
 
     const [classInput, setClassInput] = useState('search');
     const [isError, setIsError] = useState('');
-
 
     const userSapInfo = async () => {
         if(isValueSearch) {
@@ -23,6 +26,7 @@ export const UserSapInfo = () => {
                         setDataJsonFormat(JSON.stringify(resp, null, 2));
                     });
                     setIsError('');
+                    navigate(isValueSearch);
             } catch (err) {
                 console.log(err);
             }
@@ -30,6 +34,16 @@ export const UserSapInfo = () => {
             setIsError('Empty search string!')
             setClassInput('searchError');
         }
+    }
+
+    useEffect(() => {
+        if (isValueSearch) {
+            userSapInfo();
+        }
+    }, []);
+
+    const readValueInput = (e) => {
+        setIsValueSearch(e.target.value);
     }
 
     return (
@@ -40,7 +54,7 @@ export const UserSapInfo = () => {
                     {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
                     <input placeholder='Enter user id'
                         value={isValueSearch}
-                        onChange={(e) => setIsValueSearch(e.target.value)} />
+                        onChange={readValueInput} />
                 </div>
                 <button onClick={userSapInfo}>Search</button>
                 <p>{isError}</p>

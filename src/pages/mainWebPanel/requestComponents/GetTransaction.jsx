@@ -11,10 +11,10 @@ export const GetTransaction = ({ testHash }) => {
 
   const { client } = useContext(ThemeContext);
 
+  let { transactionId } = useParams();
   const navigate = useNavigate();
-  const data = useParams();
 
-  const [isValueSearch, setIsValueSearch] = useState();
+  const [isValueSearch, setIsValueSearch] = useState(transactionId ? transactionId : '');
   const [dataJsonFormat, setDataJsonFormat] = useState();
   const [dataTableFormat, setDataTableFormat] = useState();
   const [columnsTable, setColumnsTable] = useState();
@@ -43,7 +43,11 @@ export const GetTransaction = ({ testHash }) => {
           };
           setIsError('');
           setClassInput('search');
+<<<<<<< HEAD
           navigate('result');
+=======
+          navigate(isValueSearch);
+>>>>>>> routring-parametrs
         } catch (error) {
           console.log(error);
         }
@@ -57,6 +61,15 @@ export const GetTransaction = ({ testHash }) => {
     }
   }
 
+  useEffect(() => {
+    if (isValueSearch) {
+      getTransaction();
+    }
+  }, []);
+
+  const readValueInput = (e) => {
+    setIsValueSearch(e.target.value);
+  }
 
   return (
 
@@ -66,18 +79,17 @@ export const GetTransaction = ({ testHash }) => {
           {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
           <input placeholder='Enter transaction number'
             value={isValueSearch}
-            onChange={(e) => setIsValueSearch(e.target.value)} />
+            onChange={readValueInput} />
         </div>
         <button onClick={getTransaction}>Search</button>
         <p>{isError}</p>
       </div>
 
-     <Routes>
-       <Route 
-       path='result/:id'
-       element={<ContentMain dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} setDataTableFormat={setDataTableFormat}/>}
-       />
-     </Routes>
+
+      <Routes>
+        <Route path={isValueSearch} element={<ContentMain dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} setDataTableFormat={setDataTableFormat} />} />
+      </Routes>
+
     </>
 
   )
