@@ -30,7 +30,9 @@ export const SapTest = () => {
 
                     <Outlet />
 
-                    <ContentSapTest dataTableFormat={dataTableFormat} columnsTable={columnsTable} dataJsonFormat={dataJsonFormat} />
+                    <Routes>
+                        <Route path='vending-machines' element={<ContentSapTest dataTableFormat={dataTableFormat} columnsTable={columnsTable} dataJsonFormat={dataJsonFormat} />}/>
+                    </Routes>
                 </div>
 
             </div>

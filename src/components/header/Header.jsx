@@ -9,7 +9,7 @@ export const Header = () => {
   return (
     <header>
       <Navbar className='wrapper'>
-    <img src="logo.svg" alt="" />
+    <img src="images/logo.svg" alt="" />
     <Link to='/web-panel'><Navbar.Brand>WebPanel</Navbar.Brand></Link>
     <Nav className="me-auto">
        <NavLink className='NavItem' to='sapTest'>SAP-TEST</NavLink>

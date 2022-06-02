@@ -35,14 +35,10 @@ export const Main = ({ isheight, isActive }) => {
 
                     <Outlet />
 
-<<<<<<< HEAD
-                <Routes>
-                    <Route path='catalog' element={<ContentMain dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} />}/>
-                </Routes>
-                
-=======
-                    <ContentMain dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} />
->>>>>>> routring-parametrs
+                    <Routes>
+                        <Route path='catalog' element={<ContentMain dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} />}/>
+                    </Routes>
+
                 </div>
 
             </div>

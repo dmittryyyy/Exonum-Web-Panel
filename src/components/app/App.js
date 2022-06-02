@@ -16,9 +16,9 @@ export const App = observer(() => {
     <div className="App">
 
       <Routes>
-        <Route path='web-panel/*' element={<Layout />}>
+        <Route path='/' element={<Layout />}>
 
-          <Route path='' element={<Main />}>
+          <Route path='web-panel/*' element={<Main />}>
             <Route path='search/*' element={<MainSearchingInput />} />
           </Route>
 

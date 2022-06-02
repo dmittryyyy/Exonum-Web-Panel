@@ -31,18 +31,9 @@ export const ShowCatalog = ({ setDataJsonFormat, setDataTableFormat, setColumnsT
 
   useEffect(() => {
     setColumnsTable(columnsCatalog);
-    if (url == 'http://localhost:3000/web-panel/catalog') {
-      try {
-        getCatalog(client.activeNode)
-          .then(items => {
-            setDataJsonFormat(items.data);
-            setDataTableFormat(items.data);
-          });
-      } catch (error) {
-        console.log(error);
-        setDataJsonFormat('Catalog undefined or server error');
-      }
-    }
+    if (url === 'https://exonum.unotex.ru/web-panel/catalog') {
+      showCatalog();
+  }
   }, []);
 
   return (

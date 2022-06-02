@@ -43,11 +43,7 @@ export const GetTransaction = ({ testHash }) => {
           };
           setIsError('');
           setClassInput('search');
-<<<<<<< HEAD
-          navigate('result');
-=======
           navigate(isValueSearch);
->>>>>>> routring-parametrs
         } catch (error) {
           console.log(error);
         }
