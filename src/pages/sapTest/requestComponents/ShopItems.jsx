@@ -1,45 +1,78 @@
-import { React, useContext, useState } from 'react';
+import { React, useContext, useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router';
 
 import { ThemeContext } from '../../../index';
 import { getShopItems } from '../../../services/SapTestAPI';
 import { columnsShop } from '../ColumnsTable';
 import { ContentSapTest } from '../ContentSapTest';
 
-
 export const ShopItems = () => {
 
     const { client } = useContext(ThemeContext);
 
-    const [countInput, setCountInput] = useState('');
+    let { limit } = useParams();
+    const navigate = useNavigate();
+
+    const [countInput, setCountInput] = useState(limit ? limit : '');
     const [dataJsonFormat, setDataJsonFormat] = useState();
     const [dataTableFormat, setDataTableFormat] = useState();
     const [columnsTable, setColumnsTable] = useState();
 
+    const [classInput, setClassInput] = useState('search');
+    const [isError, setIsError] = useState('');
+
+
+    const validationLimit = (str) => {
+        if(countInput) {
+            return str > 0 && str < 1001;
+        } else {
+            setClassInput('searchError');
+        }
+    };
+
     const shopItems = async () => {
         setColumnsTable(columnsShop);
-        try {
-            await getShopItems(client.sveklaServerV1, countInput)
-                .then(resp => {
-                    setDataTableFormat(resp);
-                    setDataJsonFormat(JSON.stringify(resp, null, 2));
-                })
-        } catch (err) {
-            console.log(err);
+        if (validationLimit(countInput)) {
+            try {
+                await getShopItems(client.sveklaServerV1, countInput)
+                    .then(resp => {
+                        setDataTableFormat(resp);
+                        setDataJsonFormat(JSON.stringify(resp, null, 2));
+                    });
+                navigate(countInput);
+                setIsError('');
+                setClassInput('search');
+            } catch (err) {
+                console.log(err);
+            }
+        } else {
+
         }
+    }
+
+    useEffect(() => {
+        if (countInput) {
+            shopItems();
+        }
+    }, []);
+
+    const readValueInput = (e) => {
+        setCountInput(e.target.value);
     }
 
     return (
 
-       <>
-        <div className="searchWrapper">
-            <div className='search'>
-                <input type="number" placeholder='Enter limit elements' max={100} onChange={(e) => setCountInput(e.target.value)} value={countInput} />
+        <>
+            <div className="searchWrapper">
+                <div className={classInput}>
+                    <input type="number" placeholder='Enter limit elements' max={100} onChange={readValueInput} value={countInput} />
+                </div>
+                <button onClick={shopItems}>Search</button>
+                <p>{isError}</p>
             </div>
-            <button onClick={shopItems}>Search</button>
-        </div>
 
-        <ContentSapTest dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable}/>
-       </>
+                <ContentSapTest dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} />
+        </>
 
     )
 }

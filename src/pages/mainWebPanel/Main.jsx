@@ -28,14 +28,14 @@ export const Main = ({ isheight, isActive }) => {
                 />
 
                 <div className='rightNavBlock'>
-                <Node
-                    isActive={isActive}
-                    isheight={isheight}
-                />
+                    <Node
+                        isActive={isActive}
+                        isheight={isheight}
+                    />
 
-                <Outlet />
+                    <Outlet />
 
-                <ContentMain dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} />
+                    <ContentMain dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} />
                 </div>
 
             </div>

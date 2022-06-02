@@ -1,4 +1,5 @@
-import { React, useContext, useState } from 'react';
+import { React, useContext, useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router';
 
 import { ThemeContext } from '../../../index';
 import { getItemsLoaded } from '../../../services/SapTestAPI';
@@ -9,7 +10,10 @@ export const ItemsLoaded = () => {
 
     const { client } = useContext(ThemeContext);
 
-    const [isValueSearch, setIsValueSearch] = useState('');
+    let { items_loadedId } = useParams();
+    const navigate = useNavigate();
+
+    const [isValueSearch, setIsValueSearch] = useState(items_loadedId ? items_loadedId : '');
     const [dataJsonFormat, setDataJsonFormat] = useState();
     const [dataTableFormat, setDataTableFormat] = useState();
     const [columnsTable, setColumnsTable] = useState();
@@ -28,6 +32,7 @@ export const ItemsLoaded = () => {
                         });
                         setIsError('');
                         setClassInput('search');
+                        navigate(isValueSearch);
                 } catch (err) {
                     console.log(err);
                 }
@@ -35,6 +40,16 @@ export const ItemsLoaded = () => {
             setIsError('Empty search string!');
             setClassInput('searchError');
         }
+    }
+
+    useEffect(() => {
+        if (isValueSearch) {
+            itemsLoaded();
+        }
+    }, []);
+
+    const readValueInput = (e) => {
+        setIsValueSearch(e.target.value);
     }
 
     return (
@@ -45,7 +60,7 @@ export const ItemsLoaded = () => {
                     {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
                     <input placeholder='Enter id VendingMachines'
                         value={isValueSearch}
-                        onChange={(e) => setIsValueSearch(e.target.value)} />
+                        onChange={readValueInput} />
                 </div>
                 <button onClick={itemsLoaded}>Search</button>
                 <p>{isError}</p>

@@ -1,4 +1,5 @@
-import { React, useContext, useState } from 'react';
+import { React, useContext, useState, useEffect } from 'react';
+import { Routes, Route, useNavigate, useParams } from 'react-router-dom';
 
 import { ThemeContext } from '../../../index';
 import { searchDeviceKey } from '../../../services/NodeAPI';
@@ -9,7 +10,10 @@ export const GetDeviceKey = ({ testHash }) => {
 
     const { client } = useContext(ThemeContext);
 
-    const [isValueSearch, setIsValueSearch] = useState('');
+    let { device_Key } = useParams();
+    const navigate = useNavigate();
+
+    const [isValueSearch, setIsValueSearch] = useState(device_Key ? device_Key : '');
     const [dataJsonFormat, setDataJsonFormat] = useState();
     const [dataTableFormat, setDataTableFormat] = useState();
     const [columnsTable, setColumnsTable] = useState();
@@ -30,7 +34,8 @@ export const GetDeviceKey = ({ testHash }) => {
                             setDataTableFormat([key]);
                         });
                     setIsError('');
-                    setClassInput('search')
+                    setClassInput('search');
+                    navigate(isValueSearch);
                 } catch (error) {
                     console.log(error);
                 }
@@ -44,6 +49,16 @@ export const GetDeviceKey = ({ testHash }) => {
         }
     }
 
+    useEffect(() => {
+        if (isValueSearch) {
+            getDeviceKey();
+        }
+    }, []);
+
+    const readValueInput = (e) => {
+        setIsValueSearch(e.target.value);
+    }
+
     return (
         <>
             <div className="searchWrapper">
@@ -51,7 +66,7 @@ export const GetDeviceKey = ({ testHash }) => {
                     {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
                     <input placeholder='Enter device key'
                         value={isValueSearch}
-                        onChange={(e) => setIsValueSearch(e.target.value)} />
+                        onChange={readValueInput} />
                 </div>
                 <button onClick={getDeviceKey}>Search</button>
             </div>
@@ -66,7 +81,9 @@ export const GetDeviceKey = ({ testHash }) => {
 
             <p>{isError}</p>
 
-            <ContentMain dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} setDataTableFormat={setDataTableFormat}/>
+            <Routes>
+                <Route path={isValueSearch} element={<ContentMain dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} setDataTableFormat={setDataTableFormat} />} />
+            </Routes>
         </>
 
 

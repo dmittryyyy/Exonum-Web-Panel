@@ -1,4 +1,5 @@
-import { React, useContext, useState } from 'react';
+import { React, useContext, useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router';
 
 import { ThemeContext } from '../../../index';
 import { getVendingProfilesBenefits } from '../../../services/SapTestAPI';
@@ -9,7 +10,10 @@ export const BenefitRules = () => {
 
     const { client } = useContext(ThemeContext);
 
-    const [isValueSearch, setIsValueSearch] = useState('');
+    let { benefit_rulesId } = useParams();
+    const navigate = useNavigate();
+
+    const [isValueSearch, setIsValueSearch] = useState(benefit_rulesId ? benefit_rulesId : '');
     const [dataJsonFormat, setDataJsonFormat] = useState();
     const [dataTableFormat, setDataTableFormat] = useState();
     const [columnsTable, setColumnsTable] = useState();
@@ -19,14 +23,15 @@ export const BenefitRules = () => {
 
     const benefitRules = () => {
         setColumnsTable(columnsBenefitsRules);
-        if(isValueSearch) {
+        if (isValueSearch) {
             try {
                 getVendingProfilesBenefits(client.sveklaServer, isValueSearch)
                     .then(resp => {
                         setDataJsonFormat(JSON.stringify(resp, null, 2));
                         setDataTableFormat(resp);
                     });
-                    setIsError('');
+                setIsError('');
+                navigate(isValueSearch);
             } catch (err) {
                 console.log(err);
             }
@@ -36,22 +41,32 @@ export const BenefitRules = () => {
         }
     }
 
+    useEffect(() => {
+        if (isValueSearch) {
+            benefitRules();
+        }
+    }, []);
+
+    const readValueInput = (e) => {
+        setIsValueSearch(e.target.value);
+    }
+
     return (
 
-            <>
+        <>
             <div className="searchWrapper">
                 <div className={classInput}>
                     {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
                     <input placeholder='Enter user id'
                         value={isValueSearch}
-                        onChange={(e) => setIsValueSearch(e.target.value)} />
+                        onChange={readValueInput} />
                 </div>
                 <button onClick={benefitRules}>Search</button>
                 <p>{isError}</p>
             </div>
 
-            <ContentSapTest dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} setDataTableFormat={setDataTableFormat}/>
-            </>
-            
+            <ContentSapTest dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} setDataTableFormat={setDataTableFormat} />
+        </>
+
     )
 }

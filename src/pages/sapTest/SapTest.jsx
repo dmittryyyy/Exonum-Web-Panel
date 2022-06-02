@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
+import { Routes, Route, Outlet } from 'react-router-dom';
 
 import { SearchingSap } from './SearchingSap';
-import { SearchingInput } from './SearchingInput';
 import { ContentSapTest } from './ContentSapTest';
 
 
@@ -28,15 +28,9 @@ export const SapTest = () => {
 
                 <div className='rightNavBlock'>
 
-                    <SearchingInput
-                        setDataJsonFormat={setDataJsonFormat}
-                        setDataTableFormat={setDataTableFormat}
-                        setColumnsTable={setColumnsTable}
-                        navBarItem={navBarItem}
-                    />
+                    <Outlet />
 
-                    <ContentSapTest dataTableFormat={dataTableFormat} columnsTable={columnsTable} dataJsonFormat={dataJsonFormat}/>
-
+                    <ContentSapTest dataTableFormat={dataTableFormat} columnsTable={columnsTable} dataJsonFormat={dataJsonFormat} />
                 </div>
 
             </div>

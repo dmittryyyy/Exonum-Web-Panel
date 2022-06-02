@@ -11,19 +11,16 @@ export const GetTransaction = ({ testHash }) => {
 
   const { client } = useContext(ThemeContext);
 
+  let { transactionId } = useParams();
   const navigate = useNavigate();
-  const data = useParams();
 
-  const [isValueSearch, setIsValueSearch] = useState();
+  const [isValueSearch, setIsValueSearch] = useState(transactionId ? transactionId : '');
   const [dataJsonFormat, setDataJsonFormat] = useState();
   const [dataTableFormat, setDataTableFormat] = useState();
   const [columnsTable, setColumnsTable] = useState();
 
   const [isError, setIsError] = useState('');
   const [classInput, setClassInput] = useState('search');
-
-  let { transactionId } = useParams();
-
 
   const getTransaction = async () => {
     setColumnsTable(columnsTransaction);
@@ -46,6 +43,7 @@ export const GetTransaction = ({ testHash }) => {
           };
           setIsError('');
           setClassInput('search');
+          navigate(isValueSearch);
         } catch (error) {
           console.log(error);
         }
@@ -59,6 +57,16 @@ export const GetTransaction = ({ testHash }) => {
     }
   }
 
+  useEffect(() => {
+    if (isValueSearch) {
+      getTransaction();
+    }
+  }, []);
+
+  const readValueInput = (e) => {
+    setIsValueSearch(e.target.value);
+  }
+
   return (
 
     <>
@@ -66,15 +74,16 @@ export const GetTransaction = ({ testHash }) => {
         <div className={classInput}>
           {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
           <input placeholder='Enter transaction number'
-            value={transactionId || isValueSearch}
-            onChange={(e) => setIsValueSearch(e.target.value)} />
+            value={isValueSearch}
+            onChange={readValueInput} />
         </div>
-        <h3>URL parameter: {transactionId}</h3>
         <button onClick={getTransaction}>Search</button>
         <p>{isError}</p>
       </div>
 
-     <ContentMain dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} setDataTableFormat={setDataTableFormat}/>
+      <Routes>
+        <Route path={isValueSearch} element={<ContentMain dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} setDataTableFormat={setDataTableFormat} />} />
+      </Routes>
     </>
 
   )

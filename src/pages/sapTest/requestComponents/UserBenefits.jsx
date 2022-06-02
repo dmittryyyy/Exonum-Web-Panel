@@ -1,4 +1,5 @@
-import { React, useContext, useState } from 'react';
+import { React, useContext, useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router';
 
 import { ThemeContext } from '../../../index';
 import { getUsersBenefits } from '../../../services/SapTestAPI';
@@ -9,7 +10,10 @@ export const UserBenefits = () => {
 
     const { client } = useContext(ThemeContext);
 
-    const [isValueSearch, setIsValueSearch] = useState('');
+    let { user_benefitsId } = useParams();
+    const navigate = useNavigate();
+
+    const [isValueSearch, setIsValueSearch] = useState(user_benefitsId ? user_benefitsId : '');
     const [dataJsonFormat, setDataJsonFormat] = useState();
     const [dataTableFormat, setDataTableFormat] = useState();
     const [columnsTable, setColumnsTable] = useState();
@@ -27,6 +31,7 @@ export const UserBenefits = () => {
                         setDataTableFormat(resp);
                     });
                 setIsError('');
+                navigate(isValueSearch);
             } catch (err) {
                 console.log(err);
             }
@@ -34,6 +39,16 @@ export const UserBenefits = () => {
             setIsError('Empty search string!')
             setClassInput('searchError');
         }
+    }
+
+    useEffect(() => {
+        if (isValueSearch) {
+            usersBenefits();
+        }
+    }, []);
+
+    const readValueInput = (e) => {
+        setIsValueSearch(e.target.value);
     }
 
     return (
@@ -44,7 +59,7 @@ export const UserBenefits = () => {
                     {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
                     <input placeholder='Enter user id'
                         value={isValueSearch}
-                        onChange={(e) => setIsValueSearch(e.target.value)} />
+                        onChange={readValueInput} />
                 </div>
                 <button onClick={usersBenefits}>Search</button>
                 <p>{isError}</p>

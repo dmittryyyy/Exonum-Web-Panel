@@ -5,29 +5,32 @@ import { Main } from '../../pages/mainWebPanel/Main';
 import { SapTest } from '../../pages/sapTest/SapTest';
 import { SapBasic } from '../../pages/sapBasic/SapBasic';
 import { Layout } from '../layout/Layout';
-import { SearchingInput } from '../../pages/mainWebPanel/SearchingInput';
+import { MainSearchingInput } from '../../pages/mainWebPanel/MainSearchingInput';
+import { SapTestSearchingInput } from '../../pages/sapTest/SapTestSearchingInput';
 
 import './App.scss';
 
-export const App = observer (() => {
+export const App = observer(() => {
 
   return (
-      <div className="App">
+    <div className="App">
 
-          <Routes>
-            <Route path='web-panel/*' element={<Layout/>}>
+      <Routes>
+        <Route path='web-panel/*' element={<Layout />}>
 
-            <Route path='' element={<Main />}>
-              <Route path='search/*' element={<SearchingInput />}/>
-            </Route>
+          <Route path='' element={<Main />}>
+            <Route path='search/*' element={<MainSearchingInput />} />
+          </Route>
 
-            <Route path='sapTest' element={<SapTest />}/>
+          <Route path='sapTest/*' element={<SapTest />}>
+            <Route path='search/*' element={<SapTestSearchingInput />} />
+          </Route>
 
-            <Route path='sapBasic' element={<SapBasic/>}/>
-            
-            </Route>
-          </Routes>
+          <Route path='sapBasic' element={<SapBasic />} />
 
-      </div>
+        </Route>
+      </Routes>
+
+    </div>
   )
 });

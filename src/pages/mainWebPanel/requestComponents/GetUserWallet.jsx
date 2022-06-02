@@ -1,4 +1,5 @@
-import { React, useContext, useState } from 'react';
+import { React, useContext, useState, useEffect } from 'react';
+import { Routes, Route, useNavigate, useParams } from 'react-router-dom';
 
 import { ThemeContext } from '../../../index';
 import { searchUserWallet } from '../../../services/NodeAPI';
@@ -9,7 +10,10 @@ export const GetUserWallet = ({ testHash }) => {
 
     const { client } = useContext(ThemeContext);
 
-    const [isValueSearch, setIsValueSearch] = useState('');
+    let { user_walletId } = useParams();
+    const navigate = useNavigate();
+
+    const [isValueSearch, setIsValueSearch] = useState(user_walletId ? user_walletId : '');
     const [dataJsonFormat, setDataJsonFormat] = useState();
     const [dataTableFormat, setDataTableFormat] = useState();
     const [columnsTable, setColumnsTable] = useState();
@@ -17,7 +21,7 @@ export const GetUserWallet = ({ testHash }) => {
     const [classInput, setClassInput] = useState('search');
     const [isError, setIsError] = useState('');
 
-    const GetUserWallet = async () => {
+    const getUserWallet = async () => {
         setColumnsTable(columnsUserWallet);
         if (isValueSearch) {
             if (testHash(isValueSearch)) {
@@ -29,6 +33,7 @@ export const GetUserWallet = ({ testHash }) => {
                         });
                         setIsError('');
                         setClassInput('search');
+                        navigate(isValueSearch);
                 } catch (error) {
                     console.log(error);
                 }
@@ -42,6 +47,16 @@ export const GetUserWallet = ({ testHash }) => {
         }
     }
 
+    useEffect(() => {
+        if (isValueSearch) {
+            getUserWallet();
+        }
+    }, []);
+    
+    const readValueInput = (e) => {
+        setIsValueSearch(e.target.value);
+    }
+
     return (
 
         <>
@@ -50,12 +65,15 @@ export const GetUserWallet = ({ testHash }) => {
                     {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
                     <input placeholder='Enter user wallet'
                         value={isValueSearch}
-                        onChange={(e) => setIsValueSearch(e.target.value)} />
+                        onChange={readValueInput} />
                 </div>
-                <button onClick={GetUserWallet}>Search</button>
+                <button onClick={getUserWallet}>Search</button>
                 <p>{isError}</p>
             </div>
-            <ContentMain dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} setDataTableFormat={setDataTableFormat}/>
+
+            <Routes>
+                <Route path={isValueSearch} element={<ContentMain dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} setDataTableFormat={setDataTableFormat}/>}/>
+            </Routes>
         </>
 
     )

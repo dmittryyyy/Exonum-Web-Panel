@@ -1,4 +1,5 @@
-import { React, useContext, useState } from 'react';
+import { React, useContext, useState, useEffect } from 'react';
+import { Routes, Route, useNavigate, useParams } from 'react-router-dom';
 
 import { ThemeContext } from '../../../index';
 import { searchService } from '../../../services/NodeAPI';
@@ -8,14 +9,17 @@ export const ServiceApplication = ({ testHash }) => {
 
     const { client } = useContext(ThemeContext);
 
-    const [isValueSearch, setIsValueSearch] = useState('');
+    let { service_applicationId } = useParams();
+    const navigate = useNavigate();
+
+    const [isValueSearch, setIsValueSearch] = useState(service_applicationId ? service_applicationId : '');
     const [dataJsonFormat, setDataJsonFormat] = useState();
     const [dataTableFormat, setDataTableFormat] = useState();
 
     const [isError, setIsError] = useState('');
     const [classInput, setClassInput] = useState('search');
 
-    const GetService = async () => {
+    const getService = async () => {
         if (isValueSearch) {
             if (testHash(isValueSearch)) {
                 try {
@@ -26,6 +30,7 @@ export const ServiceApplication = ({ testHash }) => {
                         });
                     setIsError('');
                     setClassInput('search');
+                    navigate(isValueSearch);
                 } catch (error) {
                     console.log(error);
                     setDataJsonFormat('Key uncorrect or empty input field!');
@@ -40,6 +45,16 @@ export const ServiceApplication = ({ testHash }) => {
         }
     }
 
+    useEffect(() => {
+        if (isValueSearch) {
+            getService();
+        }
+    }, []);
+    
+    const readValueInput = (e) => {
+        setIsValueSearch(e.target.value);
+    }
+
     return (
 
         <>
@@ -48,13 +63,15 @@ export const ServiceApplication = ({ testHash }) => {
                     {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
                     <input placeholder='Service Application'
                         value={isValueSearch}
-                        onChange={(e) => setIsValueSearch(e.target.value)} />
+                        onChange={readValueInput} />
                 </div>
-                <button onClick={GetService}>Search</button>
+                <button onClick={getService}>Search</button>
                 <p>{isError}</p>
             </div>
 
-            <ContentMain dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} setDataTableFormat={setDataTableFormat}/>
+            <Routes>
+                <Route path={isValueSearch} element={<ContentMain dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} setDataTableFormat={setDataTableFormat}/>}/>
+            </Routes>
         </>
 
     )
