@@ -1,10 +1,10 @@
-import { observer } from 'mobx-react-lite';
+// import { observer } from 'mobx-react-lite';
 import { Routes, Route } from 'react-router-dom';
 import { Layout } from '../layout/Layout';
 
 import './App.scss';
 
-export const App = observer(() => {
+export const App = () => {
 
   return (
     <div className="App">
@@ -15,4 +15,4 @@ export const App = observer(() => {
 
     </div>
   )
-});
+};
