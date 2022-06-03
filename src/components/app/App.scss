@@ -199,43 +199,4 @@ main {
       }
     }
   }
-
-  .resultWrapper {
-    margin: 15px;
-
-    pre {
-      text-align: left;
-      padding: 10px;
-    }
-
-    .tableHeader {
-      .search {
-        display: flex;
-        align-items: center;
-        margin-bottom: 10px;
-      }
-
-      input {
-        border: 0;
-        padding: 10px;
-        padding-right: 30px;
-        outline: none;
-      }
-
-      .clearInput {
-        position: absolute;
-        right: 0;
-        padding-right: 20px;
-        font-weight: 700;
-        font-size: 20px;
-        cursor: pointer;
-      }
-    }
-  }
-
-  .accordion-header {
-    button {
-      color: #000;
-    }
-  }
 }

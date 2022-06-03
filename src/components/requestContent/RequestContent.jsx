@@ -3,6 +3,8 @@ import { Accordion } from 'react-bootstrap';
 import DataTable from 'react-data-table-component';
 import CustomLoader from 'react-data-table-component';
 
+import './RequestContent.scss';
+
 export const RequestContent = ({ dataJsonFormat, dataTableFormat, columnsTable, setDataTableFormat }) => {
 
   const [isValueSearch, setIsValueSearch] = useState('');

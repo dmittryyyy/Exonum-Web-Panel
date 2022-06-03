@@ -15,7 +15,7 @@ export const ShowVendingMachines = ({ setDataJsonFormat, setDataTableFormat, set
         try {
             await getVendingMachines(client.venidngMachine).then(resp => {
                 setDataTableFormat(resp);
-                setDataJsonFormat(JSON.stringify(resp, null, 2));
+                setDataJsonFormat(resp);
             });
             navigate('vending-machines')
         } catch (err) {
@@ -26,14 +26,14 @@ export const ShowVendingMachines = ({ setDataJsonFormat, setDataTableFormat, set
     useEffect(() => {
         if (window.location.href.indexOf('vending-machines') >= 0) {
             showVendingMachines();
-      }
-      }, []);
+        }
+    }, []);
 
     return (
 
-            <div>
-                <button onClick={showVendingMachines}>Show VendingMachines</button>
-            </div>
+        <div>
+            <button onClick={showVendingMachines}>Show VendingMachines</button>
+        </div>
 
     )
 }
