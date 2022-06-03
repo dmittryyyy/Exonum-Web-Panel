@@ -4,7 +4,7 @@ import { useParams, useNavigate } from 'react-router';
 import { ThemeContext } from '../../../index';
 import { getVendingProfilesBenefits } from '../../../services/SapTestAPI';
 import { columnsBenefitsRules } from '../ColumnsTable';
-import { ContentSapTest } from '../ContentSapTest';
+import { RequestContent } from '../../../components/requestContent/RequestContent';
 
 export const BenefitRules = () => {
 
@@ -65,7 +65,7 @@ export const BenefitRules = () => {
                 <p>{isError}</p>
             </div>
 
-            <ContentSapTest dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} setDataTableFormat={setDataTableFormat} />
+            <RequestContent dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} setDataTableFormat={setDataTableFormat} />
         </>
 
     )

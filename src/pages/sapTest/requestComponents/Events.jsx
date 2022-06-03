@@ -1,11 +1,11 @@
 import { React, useContext, useState, useEffect } from 'react';
-import { Routes, Route, useParams, useNavigate } from 'react-router';
+import { useParams, useNavigate } from 'react-router';
 import DateTimePicker from 'react-datetime-picker';
 
 import { ThemeContext } from '../../../index';
 import { getEvents } from '../../../services/SapTestAPI';
 import { columnsEvents } from '../ColumnsTable';
-import { ContentSapTest } from '../ContentSapTest';
+import { RequestContent } from '../../../components/requestContent/RequestContent';
 
 export const Events = () => {
 
@@ -91,7 +91,7 @@ export const Events = () => {
                 </div>
             </div>
 
-            <ContentSapTest dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} />
+            <RequestContent dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} />
         </>
 
     )

@@ -2,11 +2,11 @@ import { React, useState } from 'react';
 import { Routes, Route, Outlet } from 'react-router-dom';
 
 import { Node } from './Node';
-import { SearchingBar } from './SearchingBar';
-import { ContentMain } from './ContentMain';
+import { NavBar } from '../../components/navBar/NavBar';
+import { RequestContent } from '../../components/requestContent/RequestContent'
 
 
-export const Main = ({ isheight, isActive }) => {
+export const Blockchain = ({ isMenu }) => {
 
     const [dataJsonFormat, setDataJsonFormat] = useState();
     const [dataTableFormat, setDataTableFormat] = useState();
@@ -16,33 +16,28 @@ export const Main = ({ isheight, isActive }) => {
 
     return (
         <>
-
             <div className="navBlock">
-                <SearchingBar
+                <NavBar
                     navBarItem={navBarItem}
                     setNavBarItem={setNavBarItem}
                     setDataJsonFormat={setDataJsonFormat}
                     dataJsonFormat={dataJsonFormat}
                     setDataTableFormat={setDataTableFormat}
                     setColumnsTable={setColumnsTable}
+                    isMenu={isMenu}
                 />
 
                 <div className='rightNavBlock'>
-                    <Node
-                        isActive={isActive}
-                        isheight={isheight}
-                    />
+                    <Node />
 
                     <Outlet />
 
                     <Routes>
-                        <Route path='catalog' element={<ContentMain dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} />}/>
+                        <Route path='catalog' element={<RequestContent dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} />} />
                     </Routes>
 
                 </div>
-
             </div>
-
         </>
     )
 }

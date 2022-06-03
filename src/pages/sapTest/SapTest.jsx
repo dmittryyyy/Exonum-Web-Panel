@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Routes, Route, Outlet } from 'react-router-dom';
 
-import { SearchingSap } from './SearchingSap';
-import { ContentSapTest } from './ContentSapTest';
+import { NavBar } from '../../components/navBar/NavBar';
+import { RequestContent } from '../../components/requestContent/RequestContent';
 
 
-export const SapTest = () => {
+export const SapTest = ({ isMenu }) => {
 
     const [dataJsonFormat, setDataJsonFormat] = useState();
     const [dataTableFormat, setDataTableFormat] = useState();
@@ -17,13 +17,14 @@ export const SapTest = () => {
         <>
             <div className="navBlock">
 
-                <SearchingSap
+                <NavBar
                     setDataJsonFormat={setDataJsonFormat}
                     setDataTableFormat={setDataTableFormat}
                     setColumnsTable={setColumnsTable}
                     dataJsonFormat={dataJsonFormat}
                     navBarItem={navBarItem}
                     setNavBarItem={setNavBarItem}
+                    isMenu={isMenu}
                 />
 
                 <div className='rightNavBlock'>
@@ -31,7 +32,7 @@ export const SapTest = () => {
                     <Outlet />
 
                     <Routes>
-                        <Route path='vending-machines' element={<ContentSapTest dataTableFormat={dataTableFormat} columnsTable={columnsTable} dataJsonFormat={dataJsonFormat} />}/>
+                        <Route path='vending-machines' element={<RequestContent dataTableFormat={dataTableFormat} columnsTable={columnsTable} dataJsonFormat={dataJsonFormat} />}/>
                     </Routes>
                 </div>
 

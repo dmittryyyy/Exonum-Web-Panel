@@ -4,7 +4,7 @@ import { useParams, useNavigate } from 'react-router';
 import { ThemeContext } from '../../../index';
 import { getShopItems } from '../../../services/SapTestAPI';
 import { columnsShop } from '../ColumnsTable';
-import { ContentSapTest } from '../ContentSapTest';
+import { RequestContent } from '../../../components/requestContent/RequestContent';
 
 export const ShopItems = () => {
 
@@ -23,7 +23,7 @@ export const ShopItems = () => {
 
 
     const validationLimit = (str) => {
-        if(countInput) {
+        if (countInput) {
             return str > 0 && str < 1001;
         } else {
             setClassInput('searchError');
@@ -71,7 +71,7 @@ export const ShopItems = () => {
                 <p>{isError}</p>
             </div>
 
-                <ContentSapTest dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} />
+            <RequestContent dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} />
         </>
 
     )

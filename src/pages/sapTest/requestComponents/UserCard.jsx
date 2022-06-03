@@ -4,7 +4,7 @@ import { useParams, useNavigate } from 'react-router';
 import { ThemeContext } from '../../../index';
 import { getUserCards } from '../../../services/SapTestAPI';
 import { columnsUserCard } from '../ColumnsTable';
-import { ContentSapTest } from '../ContentSapTest';
+import { RequestContent } from '../../../components/requestContent/RequestContent';
 
 export const UserCard = () => {
 
@@ -30,8 +30,8 @@ export const UserCard = () => {
                         setDataJsonFormat(JSON.stringify(resp, null, 2));
                         setDataTableFormat(resp);
                     });
-                    setIsError('');
-                    navigate(isValueSearch);
+                setIsError('');
+                navigate(isValueSearch);
             } catch (err) {
                 console.log(err);
             }
@@ -65,7 +65,7 @@ export const UserCard = () => {
                 <p>{isError}</p>
             </div>
 
-            <ContentSapTest dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} setDataTableFormat={setDataTableFormat} />
+            <RequestContent dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} setDataTableFormat={setDataTableFormat} />
         </>
 
     )

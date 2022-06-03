@@ -11,8 +11,6 @@ export const ShowCatalog = ({ setDataJsonFormat, setDataTableFormat, setColumnsT
 
   const navigate = useNavigate();
 
-  const url = window.location.href;
-
   const showCatalog = async () => {
     setColumnsTable(columnsCatalog);
     try {
@@ -30,8 +28,7 @@ export const ShowCatalog = ({ setDataJsonFormat, setDataTableFormat, setColumnsT
   }
 
   useEffect(() => {
-    setColumnsTable(columnsCatalog);
-    if (url === 'https://exonum.unotex.ru/web-panel/catalog') {
+    if (window.location.href.indexOf('catalog') >= 0) {
       showCatalog();
   }
   }, []);

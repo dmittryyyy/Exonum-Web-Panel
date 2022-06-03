@@ -10,8 +10,6 @@ export const ShowVendingMachines = ({ setDataJsonFormat, setDataTableFormat, set
     const { client } = useContext(ThemeContext);
     const navigate = useNavigate();
 
-    const url = window.location.href;
-
     const showVendingMachines = async () => {
         setColumnsTable(columnsVendingMachines);
         try {
@@ -26,7 +24,7 @@ export const ShowVendingMachines = ({ setDataJsonFormat, setDataTableFormat, set
     }
 
     useEffect(() => {
-        if (url === 'https://exonum.unotex.ru/web-panel/vending-machines') {
+        if (window.location.href.indexOf('vending-machines') >= 0) {
             showVendingMachines();
       }
       }, []);

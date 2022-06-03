@@ -1,10 +1,10 @@
 import { React, useContext, useState, useEffect } from 'react';
-import { Routes, Route, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { ThemeContext } from '../../../index';
 import { searchOrders } from '../../../services/NodeAPI';
 import { columnsOrders } from '../ColumnsTable';
-import { ContentMain } from '../ContentMain';
+import { RequestContent } from '../../../components/requestContent/RequestContent';
 
 export const GetOrders = ({ testHash }) => {
 
@@ -54,11 +54,11 @@ export const GetOrders = ({ testHash }) => {
     if (isValueSearch) {
       getOrders();
     }
-}, []);
+  }, []);
 
-const readValueInput = (e) => {
+  const readValueInput = (e) => {
     setIsValueSearch(e.target.value);
-}
+  }
 
   return (
 
@@ -74,9 +74,8 @@ const readValueInput = (e) => {
         <p>{isError}</p>
       </div>
 
-      <Routes>
-        <Route path={isValueSearch} element={<ContentMain dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} setDataTableFormat={setDataTableFormat}/>}/>
-      </Routes>
+
+      <RequestContent dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} setDataTableFormat={setDataTableFormat} />
     </>
 
   )

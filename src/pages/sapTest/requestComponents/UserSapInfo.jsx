@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router';
 
 import { ThemeContext } from '../../../index';
 import { getUserSapInfo } from '../../../services/SapTestAPI';
-import { ContentSapTest } from '../ContentSapTest';
+import { RequestContent } from '../../../components/requestContent/RequestContent';
 
 export const UserSapInfo = () => {
 
@@ -19,14 +19,14 @@ export const UserSapInfo = () => {
     const [isError, setIsError] = useState('');
 
     const userSapInfo = async () => {
-        if(isValueSearch) {
+        if (isValueSearch) {
             try {
                 await getUserSapInfo(client.sveklaServerV1, isValueSearch)
                     .then(resp => {
                         setDataJsonFormat(JSON.stringify(resp, null, 2));
                     });
-                    setIsError('');
-                    navigate(isValueSearch);
+                setIsError('');
+                navigate(isValueSearch);
             } catch (err) {
                 console.log(err);
             }
@@ -60,7 +60,7 @@ export const UserSapInfo = () => {
                 <p>{isError}</p>
             </div>
 
-            <ContentSapTest dataJsonFormat={dataJsonFormat} />
+            <RequestContent dataJsonFormat={dataJsonFormat} />
         </>
     )
 }

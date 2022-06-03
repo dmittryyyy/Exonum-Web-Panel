@@ -1,0 +1,71 @@
+.navBar {
+  background-color: #FFF;
+  box-shadow: -10px 4px 24px rgb(0 0 0 / 10%);
+  max-width: 20%;
+
+  .list-group {
+    padding-bottom: 15px;
+    animation-name: open;
+    animation-duration: .2s;
+  
+    @keyframes open {
+      from {
+        margin-left: -200px;
+      }
+  
+      to {
+        margin-left: 0;
+      }
+    }
+  }
+  
+  .closeNavBar {
+    display: none;
+  }
+  
+  h3 {
+    font-size: 20px;
+    font-weight: 700;
+    background-color: rgb(70, 145, 216);
+    color: #fff;
+    padding: 15px;
+  }
+  
+  .list-group-item {
+    cursor: pointer;
+    border: none;
+    margin-bottom: 20px;
+    text-align: left;
+    color: #000;
+    font-weight: 600;
+    font-size: 20px;
+    padding: 20px 30px;
+    margin-right: 80px;
+    transition: .2s;
+  }
+  
+  .active {
+    transition: .2s;
+    transform: scale(1.1);
+    border-radius: 5px;
+    color: #FFF;
+  }
+  
+  .buttonListGroup {
+    display: flex;
+    justify-content: center;
+  
+    button {
+      text-align: center;
+      color: #fff;
+      background-color: rgb(247, 156, 71);
+      border-radius: 5px;
+      padding: 8px;
+      margin-right: 5px;
+    }
+  
+    button:hover {
+      background-color: rgb(241, 131, 28);
+    }
+  }
+}

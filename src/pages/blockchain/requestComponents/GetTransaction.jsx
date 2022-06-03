@@ -1,11 +1,11 @@
 import { React, useContext, useState, useEffect } from 'react';
-import { Routes, Route, useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 
 import { ThemeContext } from '../../../index';
 import { searchTransaction } from '../../../services/NodeAPI';
 import { columnsTransaction } from '../ColumnsTable';
-import { ContentMain } from '../ContentMain';
+import { RequestContent } from '../../../components/requestContent/RequestContent';
 
 export const GetTransaction = ({ testHash }) => {
 
@@ -81,10 +81,7 @@ export const GetTransaction = ({ testHash }) => {
         <p>{isError}</p>
       </div>
 
-
-      <Routes>
-        <Route path={isValueSearch} element={<ContentMain dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} setDataTableFormat={setDataTableFormat} />} />
-      </Routes>
+      <RequestContent dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} setDataTableFormat={setDataTableFormat} />
 
     </>
 

@@ -1,10 +1,10 @@
 import { React, useContext, useState, useEffect } from 'react';
-import { Routes, Route, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { ThemeContext } from '../../../index';
 import { searchUserWallet } from '../../../services/NodeAPI';
 import { columnsUserWallet } from '../ColumnsTable';
-import { ContentMain } from '../ContentMain';
+import { RequestContent } from '../../../components/requestContent/RequestContent';
 
 export const GetUserWallet = ({ testHash }) => {
 
@@ -31,9 +31,9 @@ export const GetUserWallet = ({ testHash }) => {
                             setDataJsonFormat(wallet.data);
                             setDataTableFormat([wallet.data]);
                         });
-                        setIsError('');
-                        setClassInput('search');
-                        navigate(isValueSearch);
+                    setIsError('');
+                    setClassInput('search');
+                    navigate(isValueSearch);
                 } catch (error) {
                     console.log(error);
                 }
@@ -52,7 +52,7 @@ export const GetUserWallet = ({ testHash }) => {
             getUserWallet();
         }
     }, []);
-    
+
     const readValueInput = (e) => {
         setIsValueSearch(e.target.value);
     }
@@ -71,9 +71,7 @@ export const GetUserWallet = ({ testHash }) => {
                 <p>{isError}</p>
             </div>
 
-            <Routes>
-                <Route path={isValueSearch} element={<ContentMain dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} setDataTableFormat={setDataTableFormat}/>}/>
-            </Routes>
+            <RequestContent dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} setDataTableFormat={setDataTableFormat} />
         </>
 
     )

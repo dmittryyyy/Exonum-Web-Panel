@@ -1,39 +1,43 @@
 import { React, useContext, useState, useEffect } from 'react';
-import { Routes, Route, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { ThemeContext } from '../../../index';
-import { searchService } from '../../../services/NodeAPI';
-import { ContentMain } from '../ContentMain';
+import { searchOrder } from '../../../services/NodeAPI';
+import { RequestContent } from '../../../components/requestContent/RequestContent';
 
-export const ServiceApplication = ({ testHash }) => {
+export const GetOrder = ({ testHash }) => {
 
     const { client } = useContext(ThemeContext);
 
-    let { service_applicationId } = useParams();
+    let { orderId } = useParams();
     const navigate = useNavigate();
 
-    const [isValueSearch, setIsValueSearch] = useState(service_applicationId ? service_applicationId : '');
+    const [isValueSearch, setIsValueSearch] = useState(orderId ? orderId : '');
     const [dataJsonFormat, setDataJsonFormat] = useState();
-    const [dataTableFormat, setDataTableFormat] = useState();
 
     const [isError, setIsError] = useState('');
     const [classInput, setClassInput] = useState('search');
 
-    const getService = async () => {
+    const hexadecimal = (byteArray) => {
+        return Array.from(byteArray, function (byte) {
+            return ('0' + (byte & 0xFF).toString(16)).slice(-2);
+        }).join('')
+    };
+
+    const getOrder = async () => {
         if (isValueSearch) {
             if (testHash(isValueSearch)) {
                 try {
-                    await searchService(client.activeNode, isValueSearch)
-                        .then((service) => {
-                            setDataJsonFormat(service.application_service_proof.to_application_service.entries[0].value);
-                            setDataTableFormat('');
+                    await searchOrder(client.activeNode, isValueSearch)
+                        .then((orders) => {
+                            setDataJsonFormat(hexadecimal((orders.data.order_seller_part.items[0].application_data)));
                         });
                     setIsError('');
                     setClassInput('search');
                     navigate(isValueSearch);
                 } catch (error) {
                     console.log(error);
-                    setDataJsonFormat('Key uncorrect or empty input field!');
+                    setIsError('Order number uncorrect!');
                 }
             } else {
                 setIsError('Not a HEX string');
@@ -47,10 +51,10 @@ export const ServiceApplication = ({ testHash }) => {
 
     useEffect(() => {
         if (isValueSearch) {
-            getService();
+            getOrder();
         }
     }, []);
-    
+
     const readValueInput = (e) => {
         setIsValueSearch(e.target.value);
     }
@@ -61,17 +65,15 @@ export const ServiceApplication = ({ testHash }) => {
             <div className="searchWrapper">
                 <div className={classInput}>
                     {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
-                    <input placeholder='Service Application'
+                    <input placeholder='Order search'
                         value={isValueSearch}
                         onChange={readValueInput} />
                 </div>
-                <button onClick={getService}>Search</button>
+                <button onClick={getOrder}>Search</button>
                 <p>{isError}</p>
             </div>
 
-            <Routes>
-                <Route path={isValueSearch} element={<ContentMain dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} setDataTableFormat={setDataTableFormat}/>}/>
-            </Routes>
+            <RequestContent dataJsonFormat={dataJsonFormat} />
         </>
 
     )
