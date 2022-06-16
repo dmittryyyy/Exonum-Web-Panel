@@ -33,9 +33,9 @@ export const NavBar = ({ setDataJsonFormat, setDataTableFormat, setColumnsTable,
                         <NavLink className='list-group-item' to='search/events'>Events</NavLink>
                         <NavLink className='list-group-item' to='search/items-loaded'>ItemsLoaded</NavLink>
                         <NavLink className='list-group-item' to='search/benefit-rules'>BenefitRules</NavLink>
-                        <NavLink className='list-group-item' to='search/user-benefits'>UserBenefits</NavLink>
-                        <NavLink className='list-group-item' to='search/user-sapInfo'>UserSapInfo</NavLink>
-                        <NavLink className='list-group-item' to='search/user-card'>UserCard</NavLink>
+                        <NavLink className='list-group-item' to='search/user-benefits'>Benefits</NavLink>
+                        <NavLink className='list-group-item' to='search/user-sapInfo'>User SapInfo</NavLink>
+                        <NavLink className='list-group-item' to='search/user-card'>User Cards</NavLink>
 
                         <div className="buttonListGroup">
                             <ShowVendingMachines setDataJsonFormat={setDataJsonFormat} setDataTableFormat={setDataTableFormat} setColumnsTable={setColumnsTable} />

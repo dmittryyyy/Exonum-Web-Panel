@@ -51,7 +51,7 @@ export const Events = () => {
                 await getEvents(client.sveklaServerV1, valueCalendar.toISOString(), countInput)
                     .then(resp => {
                         setDataTableFormat(resp);
-                        setDataJsonFormat(JSON.stringify(resp, null, 2));
+                        setDataJsonFormat(resp, null, 2);
                     });
                 navigate(valueCalendar + `/${countInput}`);
                 setClassInput('search');

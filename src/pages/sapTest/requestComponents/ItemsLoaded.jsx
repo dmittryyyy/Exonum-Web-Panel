@@ -27,7 +27,7 @@ export const ItemsLoaded = () => {
                 try {
                     await getItemsLoaded(client.sveklaServer, isValueSearch)
                         .then(resp => {
-                            setDataJsonFormat(JSON.stringify(resp, null, 2));
+                            setDataJsonFormat(resp, null, 2);
                             setDataTableFormat(resp);
                         });
                         setIsError('');

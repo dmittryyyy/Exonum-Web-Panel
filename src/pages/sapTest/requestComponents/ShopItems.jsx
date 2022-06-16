@@ -37,7 +37,7 @@ export const ShopItems = () => {
                 await getShopItems(client.sveklaServerV1, countInput)
                     .then(resp => {
                         setDataTableFormat(resp);
-                        setDataJsonFormat(JSON.stringify(resp, null, 2));
+                        setDataJsonFormat(resp, null, 2);
                     });
                 navigate(countInput);
                 setIsError('');

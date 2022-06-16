@@ -23,7 +23,7 @@ export const UserSapInfo = () => {
             try {
                 await getUserSapInfo(client.sveklaServerV1, isValueSearch)
                     .then(resp => {
-                        setDataJsonFormat(JSON.stringify(resp, null, 2));
+                        setDataJsonFormat(resp, null, 2);
                     });
                 setIsError('');
                 navigate(isValueSearch);

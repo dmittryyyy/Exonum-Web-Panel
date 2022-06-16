@@ -21,7 +21,7 @@ export const RequestContent = ({ dataJsonFormat, dataTableFormat, columnsTable, 
           <Accordion.Item eventKey='0'>
             <Accordion.Header>JSON Format</Accordion.Header>
             <Accordion.Body>
-              <pre className={'Error'}>{JSON.stringify(dataJsonFormat, null, 2)}</pre>
+              <pre>{JSON.stringify(dataJsonFormat, null, 2)}</pre>
             </Accordion.Body>
           </Accordion.Item>
           {dataTableFormat ? <Accordion.Item eventKey='1'>

@@ -27,7 +27,7 @@ export const UserBenefits = () => {
             try {
                 await getUsersBenefits(client.sveklaServerV1, isValueSearch)
                     .then(resp => {
-                        setDataJsonFormat(JSON.stringify(resp, null, 2));
+                        setDataJsonFormat(resp, null, 2);
                         setDataTableFormat(resp);
                     });
                 setIsError('');
