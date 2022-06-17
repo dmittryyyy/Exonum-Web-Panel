@@ -130,20 +130,36 @@ export const getUserCards = async (root, id) => {
 }
 
 //Не Проходит запрос
-export const getShopItemsUpdate = async (root) => {
-    const url = root + '/shopitems/update';
-    return axios.get(url)
-        .then((resp) => { return resp.data })
-        .catch((err) => {
-            if (err) {
-                console.log(err.response.data);
-                console.log(err.response.status);
-            } else if (err.request) {
-                console.log(err.request);
-            } else {
-                console.log('Error', err.message);
-            }
-        })
+// export const getShopItemsUpdate = async (root) => {
+//     const url = root + '/shopitems/update';
+//     return axios.get(url)
+//         .then((resp) => { return resp.data })
+//         .catch((err) => {
+//             if (err) {
+//                 console.log(err.response.data);
+//                 console.log(err.response.status);
+//             } else if (err.request) {
+//                 console.log(err.request);
+//             } else {
+//                 console.log('Error', err.message);
+//             }
+//         })
+// }
+
+//For a chain of related queries
+export const chainQueries = async (root, startParam, userId) => {
+    return axios.get(root + `/${startParam}/${userId}`).then((resp) =>  { return resp.data });
+}
+
+export const getDataOnId = async (array, root, path) => {
+    const res = [];
+    const resp = [];
+    array.map(async item => { res.push(item.id) });
+    for (let i = 0; i < res.length; i++) {
+        await axios.get(root + path + `/${res[i]}`)
+        .then(res => resp.push(res.data));
+    }
+    return resp;
 }
 
 

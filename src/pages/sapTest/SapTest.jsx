@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Routes, Route, Outlet } from 'react-router-dom';
 
 import { NavBar } from '../../components/navBar/NavBar';
+import { ActiveAPI } from './ActiveAPI';
 import { RequestContent } from '../../components/requestContent/RequestContent';
-
 
 export const SapTest = ({ isMenu }) => {
 
@@ -28,6 +28,7 @@ export const SapTest = ({ isMenu }) => {
                 />
 
                 <div className='rightNavBlock'>
+                    <ActiveAPI/>
 
                     <Outlet />
 

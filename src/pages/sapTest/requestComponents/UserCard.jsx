@@ -2,9 +2,9 @@ import { React, useContext, useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router';
 
 import { ThemeContext } from '../../../index';
-import { getUserCards } from '../../../services/SapTestAPI';
-import { columnsUserCard } from '../ColumnsTable';
+import { getUserCards, chainQueries, getDataOnId } from '../../../services/SapTestAPI';
 import { RequestContent } from '../../../components/requestContent/RequestContent';
+import { RelatedContentQueries } from '../../../components/requestContent/RelatedContentQueries';
 
 export const UserCard = () => {
 
@@ -21,13 +21,37 @@ export const UserCard = () => {
     const [classInput, setClassInput] = useState('search');
     const [isError, setIsError] = useState('');
 
+    const [chainsDataJson, setChainsDataJson] = useState([]);
+    const [dataOnId, setDataOnId] = useState();
+
+    const columnsUserCard = [
+        {
+            name: 'id',
+            selector: (row) => row.id,
+            sortable: true,
+            wrap: true
+        },
+        {
+            name: 'number',
+            selector: (row) => row.number,
+            sortable: true,
+            wrap: true
+        },
+        {
+            name: 'cardHolderId',
+            selector: (row) => row.cardHolderId,
+            sortable: true,
+            wrap: true
+        },
+    ]
+
     const usersCard = async () => {
         setColumnsTable(columnsUserCard);
         if (isValueSearch) {
             try {
                 await getUserCards(client.sveklaServerV1, isValueSearch)
                     .then(resp => {
-                        setDataJsonFormat(resp, null, 2);
+                        setDataJsonFormat(resp);
                         setDataTableFormat(resp);
                     });
                 setIsError('');
@@ -51,6 +75,17 @@ export const UserCard = () => {
         setIsValueSearch(e.target.value);
     }
 
+    const onChainQueries = async () => {
+        await chainQueries(client.sveklaServerV1, 'users', dataJsonFormat[0].cardHolderId, 'cards')
+            .then(resp => setDataOnId(resp));
+            await getDataOnId(dataJsonFormat, client.sveklaServerV1, '/cards/')
+            .then(resp => {
+                setChainsDataJson([...chainsDataJson, resp]);
+            });
+
+            console.log(chainsDataJson)
+    }
+
     return (
 
         <>
@@ -66,6 +101,14 @@ export const UserCard = () => {
             </div>
 
             <RequestContent dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} setDataTableFormat={setDataTableFormat} />
+
+            {dataJsonFormat ?
+                <div className='btnRelatedQueries'>
+                    <button className='btn' onClick={onChainQueries}>Chain of related queries</button>
+
+                    <RelatedContentQueries chainsDataJson={chainsDataJson} dataOnId={dataOnId}/>
+                </div>
+                : ''}
         </>
 
     )

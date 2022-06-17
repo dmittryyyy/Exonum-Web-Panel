@@ -1,6 +1,5 @@
 export class ClientNode {
     constructor() {
-        //Node
         this._nodeServers = [
             'https://node1.unotex.ru/auditor1/api',
             'https://node1.unotex.ru/auditor2/api',
@@ -12,8 +11,19 @@ export class ClientNode {
             'https://node1.unotex.ru/validator4/api',
         ];
         this._activeNode = 'https://node1.unotex.ru/auditor1/api';
-        
-        //Sap
+
+        this._sapServers = [
+            'https://angara.sveklapay.com',
+            'https://oms-nkz.sveklapay.com',
+            'https://oms-osk.sveklapay.com',
+            'https://oms-ural.sveklapay.com',
+            'http://roteks.sveklapay.com/',
+            'http://angara-test.sveklapay.com',
+            'https://metinvest-oemk.sveklapay.com',
+            'https://metinvest-mgok.sveklapay.com',
+        ];
+        this._activeAPI = 'https://angara.sveklapay.com';
+
         this._sveklaServerV1 = 'https://angara-test.sveklapay.com/external/api/v1';
         this._sveklaServer = 'https://angara-test.sveklapay.com/api'
         this._venidngMachine = 'https://roteks.sveklapay.com/api/';
@@ -39,6 +49,10 @@ export class ClientNode {
         this._venidngMachine = venidngMachine;
     }
 
+    setActiveAPI(activeAPI) {
+        this._activeAPI = activeAPI;
+    }
+
     get nodesServers() {
         return this._nodeServers;
     }
@@ -57,6 +71,14 @@ export class ClientNode {
 
     get venidngMachine() {
         return this._venidngMachine;
+    }
+
+    get sapServers() {
+        return this._sapServers;
+    }
+
+    get activeAPI() {
+        return this._activeAPI;
     }
 }
 

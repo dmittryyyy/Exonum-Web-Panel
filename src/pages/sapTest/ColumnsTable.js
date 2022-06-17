@@ -250,24 +250,3 @@ export const columnsItemsLoaded = [
         wrap: true,
     },
 ]
-
-export const columnsUserCard = [
-    {
-        name: 'id',
-        selector: (row) => row.id,
-        sortable: true,
-        wrap: true
-    },
-    {
-        name: 'number',
-        selector: (row) => row.number,
-        sortable: true,
-        wrap: true
-    },
-    {
-        name: 'cardHolderId',
-        selector: (row) => row.cardHolderId,
-        sortable: true,
-        wrap: true
-    },
-]

@@ -20,7 +20,19 @@
   }
   
   .closeNavBar {
-    display: none;
+    margin-left: -400px;
+    animation-name: close;
+    animation-duration: .2s;
+
+    @keyframes close {
+      from {
+        margin-left: 0px;
+      }
+  
+      to {
+        margin-left: -400px;
+      }
+    }
   }
   
   h3 {

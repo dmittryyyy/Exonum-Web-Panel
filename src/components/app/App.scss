@@ -111,6 +111,62 @@ main {
       }
     }
 
+    .wrapperCustomAPI {
+      width: 100%;
+
+      button {
+        font-size: 20px;
+        background-color: rgb(241, 131, 28);
+        margin-bottom: 10px;
+      }
+
+      .clearInput {
+        position: absolute;
+        right: 0;
+        padding-right: 10px;
+        font-weight: 700;
+        font-size: 20px;
+        cursor: pointer;
+      }
+
+      input {
+        border: 0;
+        font-size: 20px;
+        font-weight: 500;
+        padding: 5px;
+        padding-right: 20px;
+        width: 100%;
+        outline: none;
+      }
+
+      .newAPI {
+        display: flex;
+        position: relative;
+        align-items: center;
+        border: 2px solid #000;
+        border-radius: 5px;
+        padding: 5px;
+        margin-left: 20px;
+        background-color: #FFF;
+        animation-name: showInput;
+        animation-duration: .3s;
+      }
+
+      .hiddenNewAPI {
+        display: none;
+      }
+
+      @keyframes showInput {
+        from {
+          margin-left: 100%;
+        }
+
+        to {
+          margin-left: 20px;
+        }
+      }
+    }
+
     .inputBlock {
       margin-left: 20px;
       width: 100%;
@@ -195,6 +251,20 @@ main {
       }
 
       button:hover {
+        background-color: rgb(241, 40, 100);
+      }
+    }
+
+    .btnRelatedQueries {
+      .btn {
+        text-align: center;
+        color: #fff;
+        background-color: rgb(245, 84, 133);
+        border-radius: 5px;
+        padding: 10px;
+      }
+
+      .btn:hover {
         background-color: rgb(241, 40, 100);
       }
     }
