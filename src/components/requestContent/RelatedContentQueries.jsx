@@ -3,18 +3,16 @@ import { Accordion } from 'react-bootstrap';
 
 import './RequestContent.scss';
 
-export const RelatedContentQueries = ({ chainsDataJson, dataOnId }) => {
+export const RelatedContentQueries = ({ dataRelatedReq }) => {
 
   return (
     <div className='resultWrapper'>
-      {chainsDataJson.length > 0 ?
+      {dataRelatedReq ?
         <Accordion defaultActiveKey= '0' alwaysOpen>
           <Accordion.Item eventKey='0'>
             <Accordion.Header>JSON Format</Accordion.Header>
             <Accordion.Body>
-              <pre>{JSON.stringify(chainsDataJson, null, 2)}</pre>
-              <br />
-              <pre>{JSON.stringify(dataOnId, null, 2)}</pre>
+              <pre>{JSON.stringify(dataRelatedReq, null, 2)}</pre>
             </Accordion.Body>
           </Accordion.Item>
         </Accordion>

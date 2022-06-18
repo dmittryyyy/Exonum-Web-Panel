@@ -14,6 +14,7 @@ export const ActiveAPI = observer(() => {
     const readBaseAPI = (e) => {
         client.setActiveAPI(e.target.value);
         setInputValue('');
+        localStorage.setItem('url api', client.activeAPI);
     }
 
     const readCustomAPI = (e) => {
@@ -22,6 +23,7 @@ export const ActiveAPI = observer(() => {
 
     const onApplyURL = () => {
         client.setActiveAPI(inputValue);
+        localStorage.setItem('url api', inputValue);
     }
 
     return (

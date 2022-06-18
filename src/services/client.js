@@ -24,7 +24,7 @@ export class ClientNode {
             'https://metinvest-oemk.sveklapay.com',
             'https://metinvest-mgok.sveklapay.com',
         ];
-        this._activeAPI = 'https://angara.sveklapay.com';
+        this._activeAPI = '';
 
         this._sveklaServerV1 = 'https://angara-test.sveklapay.com/external/api/v1';
         this._sveklaServer = 'https://angara-test.sveklapay.com/api';

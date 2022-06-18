@@ -1,12 +1,13 @@
 import { React, useContext, useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router';
+import { observer } from 'mobx-react-lite';
 
 import { ThemeContext } from '../../../index';
 import { getUserCards, chainQueries, getDataOnId } from '../../../services/SapTestAPI';
 import { RequestContent } from '../../../components/requestContent/RequestContent';
 import { RelatedContentQueries } from '../../../components/requestContent/RelatedContentQueries';
 
-export const UserCard = () => {
+export const UserCard = observer(() => {
 
     const { client } = useContext(ThemeContext);
 
@@ -21,8 +22,7 @@ export const UserCard = () => {
     const [classInput, setClassInput] = useState('search');
     const [isError, setIsError] = useState('');
 
-    const [chainsDataJson, setChainsDataJson] = useState([]);
-    const [dataOnId, setDataOnId] = useState();
+    const [dataRelatedReq, setDataRelatedReq] = useState();
 
     const columnsUserCard = [
         {
@@ -66,22 +66,25 @@ export const UserCard = () => {
     }
 
     useEffect(() => {
+        client.setActiveAPI(localStorage.getItem('url api'));
         if (isValueSearch) {
             usersCard();
         }
-    }, []);
+    }, [isValueSearch]);
 
     const readValueInput = (e) => {
         setIsValueSearch(e.target.value);
     }
 
     const onChainQueries = async () => {
-        await chainQueries(client.activeAPI + `/${'external/api/v1'}`, 'users', dataJsonFormat[0].cardHolderId, 'cards')
-            .then(resp => setDataOnId(resp));
+        const array = [];
         await getDataOnId(dataJsonFormat, client.sveklaServerV1, '/cards/')
-            .then(resp => {
-                setChainsDataJson([...chainsDataJson, resp]);
-            });
+        .then(res => {
+            array.push(...res);
+        });
+        await chainQueries(client._activeAPI + `/${'external/api/v1'}`, 'users', dataJsonFormat[0].cardHolderId)
+            .then(resp => array.push(resp));
+            setDataRelatedReq(array);
     }
 
     return (
@@ -104,10 +107,10 @@ export const UserCard = () => {
                 <div className='btnRelatedQueries'>
                     <button className='btn' onClick={onChainQueries}>Related queries</button>
 
-                    <RelatedContentQueries chainsDataJson={chainsDataJson} dataOnId={dataOnId}/>
+                    <RelatedContentQueries dataRelatedReq={dataRelatedReq}/>
                 </div>
                 : ''}
         </>
 
     )
-}
+});

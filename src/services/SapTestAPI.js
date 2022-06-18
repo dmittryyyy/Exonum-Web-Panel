@@ -147,8 +147,8 @@ export const getUserCards = async (root, id) => {
 // }
 
 //For a chain of related queries
-export const chainQueries = async (root, startParam, userId) => {
-    return axios.get(root + `/${startParam}/${userId}`).then((resp) =>  { return resp.data });
+export const chainQueries = async (root, path, userId) => {
+    return axios.get(root + `/${path}/${userId}`).then((resp) =>  { return resp.data });
 }
 
 export const getDataOnId = async (array, root, path) => {
