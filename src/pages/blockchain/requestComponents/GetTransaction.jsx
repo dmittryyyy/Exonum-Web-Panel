@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 
 
 import { ThemeContext } from '../../../index';
-import { searchTransaction } from '../../../services/NodeAPI';
+import { searchTransaction } from '../../../services/BlockhainAPI';
 import { columnsTransaction } from '../ColumnsTable';
 import { RequestContent } from '../../../components/requestContent/RequestContent';
 

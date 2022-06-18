@@ -49,7 +49,7 @@ export const UserCard = () => {
         setColumnsTable(columnsUserCard);
         if (isValueSearch) {
             try {
-                await getUserCards(client.sveklaServerV1, isValueSearch)
+                await getUserCards(client.activeAPI + `/${'external/api/v1'}`, isValueSearch)
                     .then(resp => {
                         setDataJsonFormat(resp);
                         setDataTableFormat(resp);
@@ -76,14 +76,12 @@ export const UserCard = () => {
     }
 
     const onChainQueries = async () => {
-        await chainQueries(client.sveklaServerV1, 'users', dataJsonFormat[0].cardHolderId, 'cards')
+        await chainQueries(client._activeAPI + `/${'external/api/v1'}`, 'users', dataJsonFormat[0].cardHolderId, 'cards')
             .then(resp => setDataOnId(resp));
-            await getDataOnId(dataJsonFormat, client.sveklaServerV1, '/cards/')
+        await getDataOnId(dataJsonFormat, client.sveklaServerV1, '/cards/')
             .then(resp => {
                 setChainsDataJson([...chainsDataJson, resp]);
             });
-
-            console.log(chainsDataJson)
     }
 
     return (
@@ -104,7 +102,7 @@ export const UserCard = () => {
 
             {dataJsonFormat ?
                 <div className='btnRelatedQueries'>
-                    <button className='btn' onClick={onChainQueries}>Chain of related queries</button>
+                    <button className='btn' onClick={onChainQueries}>Related queries</button>
 
                     <RelatedContentQueries chainsDataJson={chainsDataJson} dataOnId={dataOnId}/>
                 </div>

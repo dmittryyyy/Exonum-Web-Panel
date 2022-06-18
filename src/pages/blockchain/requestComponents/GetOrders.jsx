@@ -2,7 +2,7 @@ import { React, useContext, useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { ThemeContext } from '../../../index';
-import { searchOrders } from '../../../services/NodeAPI';
+import { searchOrders } from '../../../services/BlockhainAPI';
 import { columnsOrders } from '../ColumnsTable';
 import { RequestContent } from '../../../components/requestContent/RequestContent';
 

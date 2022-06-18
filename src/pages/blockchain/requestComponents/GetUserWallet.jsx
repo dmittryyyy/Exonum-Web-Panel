@@ -2,7 +2,7 @@ import { React, useContext, useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { ThemeContext } from '../../../index';
-import { searchUserWallet } from '../../../services/NodeAPI';
+import { searchUserWallet } from '../../../services/BlockhainAPI';
 import { columnsUserWallet } from '../ColumnsTable';
 import { RequestContent } from '../../../components/requestContent/RequestContent';
 

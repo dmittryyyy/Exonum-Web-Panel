@@ -2,7 +2,7 @@ import { React, useContext, useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { ThemeContext } from '../../../index';
-import { searchOrder } from '../../../services/NodeAPI';
+import { searchOrder } from '../../../services/BlockhainAPI';
 import { RequestContent } from '../../../components/requestContent/RequestContent';
 
 export const GetOrder = ({ testHash }) => {

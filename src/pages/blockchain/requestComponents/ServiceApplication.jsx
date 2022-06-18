@@ -2,7 +2,7 @@ import { React, useContext, useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { ThemeContext } from '../../../index';
-import { searchService } from '../../../services/NodeAPI';
+import { searchService } from '../../../services/BlockhainAPI';
 import { RequestContent } from '../../../components/requestContent/RequestContent';
 
 export const ServiceApplication = ({ testHash }) => {

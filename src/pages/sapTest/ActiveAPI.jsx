@@ -7,13 +7,11 @@ export const ActiveAPI = () => {
     const { client } = useContext(ThemeContext);
 
     const [inputValue, setInputValue] = useState('');
-    const [baseURL, setBaseURL] = useState('');
 
     const [showInput, setShowInput] = useState(false);
 
     const readBaseAPI = (e) => {
-        setBaseURL(e.target.value);
-        client.setActiveAPI(baseURL);
+        client.setActiveAPI(e.target.value);
     }
 
     const readCustomAPI = (e) => {
@@ -25,7 +23,7 @@ export const ActiveAPI = () => {
         <div className='nodeWrapper'>
             <div className="activeNode">
                 <div className="nodeTitle">
-                    <h3>Base url API</h3>
+                    <h3>Choose base url API</h3>
                 </div>
                 <select onChange={readBaseAPI}>
                     {client.sapServers.map((node, index) =>

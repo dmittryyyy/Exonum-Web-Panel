@@ -1,7 +1,7 @@
 import { React, useContext, useEffect, useState } from 'react';
 
 import { ThemeContext } from '../..';
-import { expolorerBlocks } from '../../services/NodeAPI';
+import { expolorerBlocks } from '../../services/BlockhainAPI';
 
 export const Node = () => {
 

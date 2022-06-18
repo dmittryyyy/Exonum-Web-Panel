@@ -2,7 +2,7 @@ import { React, useContext, useEffect } from 'react';
 
 import { ThemeContext } from '../../../index';
 import { columnsCatalog } from '../ColumnsTable';
-import { getCatalog } from '../../../services/NodeAPI';
+import { getCatalog } from '../../../services/BlockhainAPI';
 import { useNavigate } from 'react-router-dom';
 
 export const ShowCatalog = ({ setDataJsonFormat, setDataTableFormat, setColumnsTable }) => {
