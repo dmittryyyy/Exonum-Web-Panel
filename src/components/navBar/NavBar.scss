@@ -7,34 +7,22 @@
     padding-bottom: 15px;
     animation-name: open;
     animation-duration: .2s;
-  
+
     @keyframes open {
       from {
         margin-left: -200px;
       }
-  
+
       to {
         margin-left: 0;
       }
     }
   }
-  
-  .closeNavBar {
-    margin-left: -400px;
-    animation-name: close;
-    animation-duration: .2s;
 
-    @keyframes close {
-      from {
-        margin-left: 0px;
-      }
-  
-      to {
-        margin-left: -400px;
-      }
-    }
+  .closeNavBar {
+    display: none;
   }
-  
+
   h3 {
     font-size: 20px;
     font-weight: 700;
@@ -42,7 +30,7 @@
     color: #fff;
     padding: 15px;
   }
-  
+
   .list-group-item {
     cursor: pointer;
     border: none;
@@ -55,18 +43,18 @@
     margin-right: 80px;
     transition: .2s;
   }
-  
+
   .active {
     transition: .2s;
     transform: scale(1.1);
     border-radius: 5px;
     color: #FFF;
   }
-  
+
   .buttonListGroup {
     display: flex;
     justify-content: center;
-  
+
     button {
       text-align: center;
       color: #fff;
@@ -75,7 +63,7 @@
       padding: 8px;
       margin-right: 5px;
     }
-  
+
     button:hover {
       background-color: rgb(241, 131, 28);
     }

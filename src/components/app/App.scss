@@ -108,6 +108,7 @@ main {
       select {
         font-weight: 600;
         font-size: 20px;
+        margin-bottom: 15px;
       }
     }
 
@@ -118,6 +119,10 @@ main {
         font-size: 20px;
         background-color: rgb(241, 131, 28);
         margin-bottom: 10px;
+        margin-right: 10px;
+      }
+      button:hover {
+        background-color: rgb(219, 116, 20);
       }
 
       .clearInput {
@@ -145,7 +150,6 @@ main {
         align-items: center;
         border: 2px solid #000;
         border-radius: 5px;
-        padding: 5px;
         margin-left: 20px;
         background-color: #FFF;
         animation-name: showInput;
@@ -164,6 +168,14 @@ main {
         to {
           margin-left: 20px;
         }
+      }
+    }
+
+    .activeURL {
+      margin-top: 10px;
+
+      span {
+        color: green;
       }
     }
 

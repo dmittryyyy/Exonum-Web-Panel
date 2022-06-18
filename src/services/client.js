@@ -1,3 +1,5 @@
+import { makeAutoObservable } from "mobx";
+
 export class ClientNode {
     constructor() {
         this._nodeServers = [
@@ -17,16 +19,18 @@ export class ClientNode {
             'https://oms-nkz.sveklapay.com',
             'https://oms-osk.sveklapay.com',
             'https://oms-ural.sveklapay.com',
-            'http://roteks.sveklapay.com/',
-            'http://angara-test.sveklapay.com',
+            'https://roteks.sveklapay.com',
+            'https://angara-test.sveklapay.com',
             'https://metinvest-oemk.sveklapay.com',
             'https://metinvest-mgok.sveklapay.com',
         ];
         this._activeAPI = 'https://angara.sveklapay.com';
 
         this._sveklaServerV1 = 'https://angara-test.sveklapay.com/external/api/v1';
-        this._sveklaServer = 'https://angara-test.sveklapay.com/api'
+        this._sveklaServer = 'https://angara-test.sveklapay.com/api';
         this._venidngMachine = 'https://roteks.sveklapay.com/api/';
+        
+        makeAutoObservable(this);
     }  
     
     setNodesServers(nodes) {

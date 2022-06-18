@@ -76,7 +76,7 @@ export const UserCard = () => {
     }
 
     const onChainQueries = async () => {
-        await chainQueries(client._activeAPI + `/${'external/api/v1'}`, 'users', dataJsonFormat[0].cardHolderId, 'cards')
+        await chainQueries(client.activeAPI + `/${'external/api/v1'}`, 'users', dataJsonFormat[0].cardHolderId, 'cards')
             .then(resp => setDataOnId(resp));
         await getDataOnId(dataJsonFormat, client.sveklaServerV1, '/cards/')
             .then(resp => {

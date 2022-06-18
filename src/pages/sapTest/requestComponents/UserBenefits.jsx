@@ -55,15 +55,6 @@ export const UserBenefits = () => {
         setIsValueSearch(e.target.value);
     }
 
-    const onChainQueries = async () => {
-        await chainQueries(client.sveklaServerV1, 'users', dataJsonFormat[0].cardHolderId, 'cards')
-            .then(resp => setDataOnId(resp));
-        await getDataOnId(dataJsonFormat, client.sveklaServerV1, '/cards/')
-            .then(resp => {
-                setChainsDataJson([...chainsDataJson, resp]);
-            });
-    }
-
     return (
 
         <>
@@ -80,13 +71,13 @@ export const UserBenefits = () => {
 
             <RequestContent dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} setDataTableFormat={setDataTableFormat} />
 
-            {dataJsonFormat ?
+            {/* {dataJsonFormat ?
                 <div className='btnRelatedQueries'>
                     <button className='btn' onClick={onChainQueries}>Chain of related queries</button>
 
                     <RelatedContentQueries chainsDataJson={chainsDataJson} dataOnId={dataOnId}/>
                 </div>
-                : ''}
+                : ''} */}
         </>
     )
 }
