@@ -70,7 +70,7 @@ export const UserCard = observer(() => {
         if (isValueSearch) {
             usersCard();
         }
-    }, [isValueSearch]);
+    }, []);
 
     const readValueInput = (e) => {
         setIsValueSearch(e.target.value);
@@ -78,7 +78,7 @@ export const UserCard = observer(() => {
 
     const onChainQueries = async () => {
         const array = [];
-        await getDataOnId(dataJsonFormat, client.sveklaServerV1, '/cards/')
+        await getDataOnId(dataJsonFormat, client.activeAPI + `/${'api/'}`, 'cards/')
         .then(res => {
             array.push(...res);
         });
