@@ -1,15 +1,17 @@
-import { React, useContext, useEffect } from 'react';
+import { React, useContext, useEffect, useState } from 'react';
 
 import { ThemeContext } from '../../../index';
 import { columnsCatalog } from '../ColumnsTable';
 import { getCatalog } from '../../../services/BlockhainAPI';
-import { useNavigate } from 'react-router-dom';
+import { RequestContent } from '../../../components/requestContent/RequestContent';
 
-export const ShowCatalog = ({ setDataJsonFormat, setDataTableFormat, setColumnsTable }) => {
+export const ShowCatalog = () => {
 
   const { client } = useContext(ThemeContext);
 
-  const navigate = useNavigate();
+  const [dataJsonFormat, setDataJsonFormat] = useState();
+  const [dataTableFormat, setDataTableFormat] = useState();
+  const [columnsTable, setColumnsTable] = useState();
 
   const showCatalog = async () => {
     setColumnsTable(columnsCatalog);
@@ -18,13 +20,11 @@ export const ShowCatalog = ({ setDataJsonFormat, setDataTableFormat, setColumnsT
         .then(items => {
           setDataJsonFormat(items.data);
           setDataTableFormat(items.data);
-          navigate('catalog');
         });
     } catch (error) {
       console.log(error);
       setDataJsonFormat('Catalog undefined or server error');
     }
-
   }
 
   useEffect(() => {
@@ -35,9 +35,9 @@ export const ShowCatalog = ({ setDataJsonFormat, setDataTableFormat, setColumnsT
 
   return (
 
-    <div>
-      <button onClick={showCatalog}>Show Catalog</button>
-    </div>
+    <>
+      <RequestContent dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} setDataTableFormat={setDataTableFormat} />
+    </>
 
   )
 }

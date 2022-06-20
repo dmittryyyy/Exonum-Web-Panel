@@ -108,10 +108,7 @@ main {
 
       select {
         display: block;
-        font-size: 16px;
-        font-family: sans-serif;
         font-weight: 700;
-        color: #444;
         line-height: 1.3;
         padding: 6px 30px 5px 8px;
         width: 100%;
@@ -156,8 +153,22 @@ main {
       }
     }
 
+    .activeURL {
+      background-color: #fff;
+      border-bottom: 1px solid rgb(243, 144, 51);
+
+      h3 {
+        font-weight: 600;
+      }
+
+      span {
+        font-weight: 500;
+        color: green;
+      }
+    }
+
     .wrapperCustomAPI {
-      width: 70%;
+      width: 50%;
 
       button {
         font-size: 20px;
@@ -183,7 +194,7 @@ main {
         border: 0;
         font-size: 20px;
         font-weight: 500;
-        padding: 5px;
+        padding: 3px;
         padding-right: 20px;
         width: 100%;
         outline: none;
@@ -199,35 +210,6 @@ main {
         background-color: #FFF;
         animation-name: showInput;
         animation-duration: .3s;
-      }
-
-      .hiddenNewAPI {
-        display: none;
-      }
-
-      @keyframes showInput {
-        from {
-          margin-left: 100%;
-        }
-
-        to {
-          margin-left: 20px;
-        }
-      }
-    }
-
-    .activeURL {
-      padding-top: 10px;
-      background-color: #fff;
-      border-bottom: 1px solid rgb(243, 144, 51);
-
-      h3 {
-        font-weight: 600;
-      }
-
-      span {
-        font-weight: 500;
-        color: green;
       }
     }
 

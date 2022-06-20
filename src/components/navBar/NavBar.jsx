@@ -20,10 +20,7 @@ export const NavBar = ({ setDataJsonFormat, setDataTableFormat, setColumnsTable,
                         <NavLink className='list-group-item' to='search/user-wallet'>User wallet</NavLink>
                         <NavLink className='list-group-item' to='search/device-key'>Device key</NavLink>
                         <NavLink className='list-group-item' to='search/orders'>Orders</NavLink>
-
-                        <div className="buttonListGroup">
-                            <ShowCatalog setDataJsonFormat={setDataJsonFormat} setDataTableFormat={setDataTableFormat} setColumnsTable={setColumnsTable} />
-                        </div>
+                        <NavLink className="list-group-item" to='search/catalog'>Show Catalog</NavLink>
                     </>
 
                 ) : (
@@ -36,11 +33,7 @@ export const NavBar = ({ setDataJsonFormat, setDataTableFormat, setColumnsTable,
                         <NavLink className='list-group-item' to='search/user-benefits'>Benefits</NavLink>
                         <NavLink className='list-group-item' to='search/user-sapInfo'>User SapInfo</NavLink>
                         <NavLink className='list-group-item' to='search/user-card'>User Cards</NavLink>
-
-                        <div className="buttonListGroup">
-                            <ShowVendingMachines setDataJsonFormat={setDataJsonFormat} setDataTableFormat={setDataTableFormat} setColumnsTable={setColumnsTable} />
-                        </div>
-
+                        <NavLink className='list-group-item' to='search/vending-machines'>Show Vending Machines</NavLink>
                     </>
                 )}
 

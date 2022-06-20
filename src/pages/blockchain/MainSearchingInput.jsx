@@ -7,6 +7,7 @@ import { ServiceApplication } from './requestComponents/ServiceApplication';
 import { GetUserWallet } from './requestComponents/GetUserWallet';
 import { GetDeviceKey } from './requestComponents/GetDeviceKey';
 import { GetOrders } from './requestComponents/GetOrders';
+import { ShowCatalog } from './requestComponents/ShowCatalog';
 
 export const MainSearchingInput = () => {
 
@@ -42,6 +43,8 @@ export const MainSearchingInput = () => {
                 <Route path='orders/*' element={<GetOrders testHash={testHash} />} >
                     <Route path=':orders' element={<GetOrders />} />
                 </Route>
+
+                <Route path='catalog/*' element={<ShowCatalog />}/>
 
             </Routes>
 

@@ -1,16 +1,12 @@
 import { React, useState } from 'react';
-import { Routes, Route, Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 
 import { Node } from './Node';
 import { NavBar } from '../../components/navBar/NavBar';
-import { RequestContent } from '../../components/requestContent/RequestContent'
-
 
 export const Blockchain = ({ isMenu }) => {
 
     const [dataJsonFormat, setDataJsonFormat] = useState();
-    const [dataTableFormat, setDataTableFormat] = useState();
-    const [columnsTable, setColumnsTable] = useState();
 
     const [navBarItem, setNavBarItem] = useState([]);
 
@@ -22,8 +18,6 @@ export const Blockchain = ({ isMenu }) => {
                     setNavBarItem={setNavBarItem}
                     setDataJsonFormat={setDataJsonFormat}
                     dataJsonFormat={dataJsonFormat}
-                    setDataTableFormat={setDataTableFormat}
-                    setColumnsTable={setColumnsTable}
                     isMenu={isMenu}
                 />
 
@@ -31,10 +25,6 @@ export const Blockchain = ({ isMenu }) => {
                     <Node />
 
                     <Outlet />
-
-                    <Routes>
-                        <Route path='catalog' element={<RequestContent dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} />} />
-                    </Routes>
 
                 </div>
             </div>

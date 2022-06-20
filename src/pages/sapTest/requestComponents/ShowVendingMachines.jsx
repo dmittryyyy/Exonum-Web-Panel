@@ -1,14 +1,17 @@
-import { React, useContext, useEffect } from 'react';
-import { useNavigate } from 'react-router';
+import { React, useContext, useEffect, useState } from 'react';
 
 import { ThemeContext } from '../../../index';
 import { getVendingMachines } from '../../../services/SapTestAPI';
 import { columnsVendingMachines } from '../ColumnsTable';
+import { RequestContent } from '../../../components/requestContent/RequestContent';
 
-export const ShowVendingMachines = ({ setDataJsonFormat, setDataTableFormat, setColumnsTable }) => {
+export const ShowVendingMachines = () => {
 
     const { client } = useContext(ThemeContext);
-    const navigate = useNavigate();
+
+    const [dataJsonFormat, setDataJsonFormat] = useState();
+    const [dataTableFormat, setDataTableFormat] = useState();
+    const [columnsTable, setColumnsTable] = useState();
 
     const showVendingMachines = async () => {
         setColumnsTable(columnsVendingMachines);
@@ -17,7 +20,6 @@ export const ShowVendingMachines = ({ setDataJsonFormat, setDataTableFormat, set
                 setDataTableFormat(resp);
                 setDataJsonFormat(resp);
             });
-            navigate('vending-machines')
         } catch (err) {
             console.log(err);
         }
@@ -31,9 +33,9 @@ export const ShowVendingMachines = ({ setDataJsonFormat, setDataTableFormat, set
 
     return (
 
-        <div>
-            <button onClick={showVendingMachines}>Show VendingMachines</button>
-        </div>
+        <>
+      <RequestContent dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} setDataTableFormat={setDataTableFormat} />
+    </>
 
     )
 }

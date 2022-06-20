@@ -6,12 +6,11 @@ import { MainSearchingInput } from '../../pages/blockchain/MainSearchingInput';
 import { SapTestSearchingInput } from '../../pages/sapTest/SapTestSearchingInput';
 import { Blockchain } from '../../pages/blockchain/Blockchain';
 import { SapTest } from '../../pages/sapTest/SapTest';
-import { SapBasic } from '../../pages/sapBasic/SapBasic';
 import { Home } from '../../pages/home/Home';
 
 export const Layout = () => {
 
-  const [isMenu, setIsMenu] = useState(false);
+  const [isMenu, setIsMenu] = useState(true);
 
   return (
     <>
@@ -29,7 +28,6 @@ export const Layout = () => {
             <Route path='search/*' element={<SapTestSearchingInput />} />
           </Route>
 
-          <Route path='sapBasic' element={<SapBasic />} />
         </Routes>
       </main>
 

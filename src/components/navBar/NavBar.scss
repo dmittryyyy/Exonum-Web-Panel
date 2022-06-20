@@ -7,16 +7,6 @@
     padding-bottom: 15px;
     animation-name: open;
     animation-duration: .2s;
-
-    @keyframes open {
-      from {
-        margin-left: -200px;
-      }
-
-      to {
-        margin-left: 0;
-      }
-    }
   }
 
   .closeNavBar {

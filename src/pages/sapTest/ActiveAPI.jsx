@@ -12,7 +12,11 @@ export const ActiveAPI = observer(() => {
     const [showInput, setShowInput] = useState(false);
 
     const readBaseAPI = (e) => {
-        client.setActiveAPI(e.target.value);
+        client.sapServers.map(item => {
+            if (e.target.value === item.name) {
+                client.setActiveAPI(item.url);
+            }
+        })
         setInputValue('');
         localStorage.setItem('url api', client.activeAPI);
     }
@@ -32,33 +36,32 @@ export const ActiveAPI = observer(() => {
 
                 <div className="activeNode">
                     <div className="nodeTitle">
-                        <h3>Choose base url API</h3>
+                        <h3>Choose base URL API</h3>
                     </div>
                     <select onChange={readBaseAPI}>
-                        {client.sapServers.map((node, index) =>
+                        {client.sapServers.map((nameApi, index) =>
                             <option
                                 key={index}>
-                                {node}
+                                {nameApi.name}
                             </option>
                         )}
                     </select>
                 </div>
 
                 <div className='wrapperCustomAPI'>
-                    <button onClick={() => setShowInput(true)}>Enter Custom URL API</button>
                     <button onClick={() => onApplyURL()}>Apply URL</button>
-                    <div className={showInput ? 'newAPI' : 'hiddenNewAPI'}>
+                    <div className='newAPI'>
 
                         {inputValue ? <span className='clearInput' onClick={() => setInputValue('')}>X</span> : ''}
-                        <input type="text" onChange={readCustomAPI} value={inputValue} />
+                        <input type="text" placeholder='Enter custom URL API' onChange={readCustomAPI} value={inputValue} />
 
                     </div>
-
                 </div>
             </div>
             <div className='activeURL'>
-                <h3>Active url API: <span>{client.activeAPI}</span></h3>
+                <h3>Active URL API: <span>{client.activeAPI}</span></h3>
             </div>
+
         </>
     )
 });
