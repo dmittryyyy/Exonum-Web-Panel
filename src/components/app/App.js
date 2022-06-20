@@ -10,7 +10,7 @@ export const App = () => {
     <div className="App">
 
       <Routes>
-        <Route path='/web-panel/*' element={<Layout />}/>
+        <Route path='/*' element={<Layout />}/>
       </Routes>
 
     </div>
