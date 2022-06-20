@@ -3,14 +3,14 @@ import { makeAutoObservable } from "mobx";
 export class ClientNode {
     constructor() {
         this._nodeServers = [
-            'https://node1.unotex.ru/auditor1/api',
-            'https://node1.unotex.ru/auditor2/api',
-            'https://node1.unotex.ru/auditor3/api',
-            'https://node1.unotex.ru/auditor4/api',
-            'https://node1.unotex.ru/validator1/api',
-            'https://node1.unotex.ru/validator2/api',
-            'https://node1.unotex.ru/validator3/api',
-            'https://node1.unotex.ru/validator4/api',
+            {url :'https://node1.unotex.ru/auditor1/api', name: 'Auditor1'},
+            {url :'https://node1.unotex.ru/auditor2/api', name: 'Auditor2'},
+            {url :'https://node1.unotex.ru/auditor3/api', name: 'Auditor3'},
+            {url :'https://node1.unotex.ru/auditor4/api', name: 'Auditor4'},
+            {url :'https://node1.unotex.ru/validator1/api', name: 'Validator1'},
+            {url :'https://node1.unotex.ru/validator2/api', name: 'Validator2'},
+            {url :'https://node1.unotex.ru/validator3/api', name: 'Validator3'},
+            {url :'https://node1.unotex.ru/validator4/api', name: 'Validator4'},
         ];
         this._activeNode = 'https://node1.unotex.ru/auditor1/api';
 

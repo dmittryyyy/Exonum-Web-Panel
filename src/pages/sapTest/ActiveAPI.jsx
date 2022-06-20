@@ -9,8 +9,6 @@ export const ActiveAPI = observer(() => {
 
     const [inputValue, setInputValue] = useState('');
 
-    const [showInput, setShowInput] = useState(false);
-
     const readBaseAPI = (e) => {
         client.sapServers.map(item => {
             if (e.target.value === item.name) {

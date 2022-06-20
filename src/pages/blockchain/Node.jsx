@@ -34,9 +34,13 @@ export const Node = () => {
         }, 2000);
       }, []);
 
-    const readActiveNode = (e) => {
-        client.setActiveNode(e.target.value)
-    }
+  const readActiveNode = (e) => {
+    client.nodesServers.map(item => {
+      if (e.target.value === item.name) {
+        client.setActiveNode(item.url);
+      }
+    })
+  }
 
     return (
         <div className='nodeWrapper'>
@@ -49,7 +53,7 @@ export const Node = () => {
                     {client.nodesServers.map((node, index) =>
                         <option
                             key={index}>
-                            {node}
+                            {node.name}
                         </option>
                     )}
                 </select>
