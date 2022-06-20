@@ -18,7 +18,7 @@ export const Header = ({ isMenu, setIsMenu }) => {
       </div>
       <Navbar>
         <div className='logo'>
-          <img src="images/logo.svg" alt="" />
+          <img src="/images/logo.svg" alt="" />
           <Link to='/web-panel'><Navbar.Brand>WebPanel</Navbar.Brand></Link>
         </div>
         <Nav className="me-auto">
@@ -31,7 +31,7 @@ export const Header = ({ isMenu, setIsMenu }) => {
         <button className='buttonUser'>
           <span>
             <div>
-              <img src="images/defaultUserIcon.svg" alt="user img" />
+              <img src="/images/defaultUserIcon.svg" alt="user img" />
             </div>
           </span>
           User Name or Admin</button>
