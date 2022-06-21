@@ -22,7 +22,7 @@ export const Header = ({ isMenu, setIsMenu }) => {
       <Navbar>
         <div className='logo'>
           <img src="images/logo.svg" alt="" />
-          <Link to='/web-panel'><Navbar.Brand>WebPanel</Navbar.Brand></Link>
+          <Link to='home'><Navbar.Brand>WebPanel</Navbar.Brand></Link>
         </div>
         <Nav className="me-auto">
           <NavLink className='NavItem' to='blockchain'>Blockchain</NavLink>

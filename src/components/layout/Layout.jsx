@@ -18,7 +18,7 @@ export const Layout = () => {
 
       <main>
         <Routes>
-          <Route index element={<Home />} />
+          <Route path='home' element={<Home />} />
 
           <Route path='blockchain/*' element={<Blockchain isMenu={isMenu}/>}>
             <Route path='search/*' element={<MainSearchingInput />} />
