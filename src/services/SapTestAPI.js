@@ -129,6 +129,22 @@ export const getUserCards = async (root, id) => {
         })
 }
 
+export const getCards = async (root, id) => {
+    const url = root + '/api/cards/';
+    return axios.get(url + `${id}`)
+        .then((resp) => { return resp.data })
+        .catch((err) => {
+            if (err) {
+                console.log(err.response.data);
+                console.log(err.response.status);
+            } else if (err.request) {
+                console.log(err.request);
+            } else {
+                console.log('Error', err.message);
+            }
+        })
+}
+
 //Не Проходит запрос
 // export const getShopItemsUpdate = async (root) => {
 //     const url = root + '/shopitems/update';
@@ -147,10 +163,6 @@ export const getUserCards = async (root, id) => {
 // }
 
 //For a chain of related queries
-export const chainQueries = async (root, path, userId) => {
-    return axios.get(root + `/${path}/${userId}`).then((resp) =>  { return resp.data });
-}
-
 export const getDataOnId = async (array, root, path) => {
     const res = [];
     const resp = [];

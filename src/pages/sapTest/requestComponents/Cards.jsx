@@ -3,18 +3,17 @@ import { useParams, useNavigate } from 'react-router';
 import { observer } from 'mobx-react-lite';
 
 import { ThemeContext } from '../../../index';
-import { getUserCards, getUserSapInfo, getDataOnId } from '../../../services/SapTestAPI';
+import { getCards } from '../../../services/SapTestAPI';
 import { RequestContent } from '../../../components/requestContent/RequestContent';
-import { RelatedContentQueries } from '../../../components/requestContent/RelatedContentQueries';
 
-export const UserCard = observer(() => {
+export const Cards = observer(() => {
 
     const { client } = useContext(ThemeContext);
 
-    let { user_card } = useParams();
+    let { cards } = useParams();
     const navigate = useNavigate();
 
-    const [isValueSearch, setIsValueSearch] = useState(user_card ? user_card : '');
+    const [isValueSearch, setIsValueSearch] = useState(cards ? cards : '');
     const [dataJsonFormat, setDataJsonFormat] = useState();
     const [dataTableFormat, setDataTableFormat] = useState();
     const [columnsTable, setColumnsTable] = useState();
@@ -22,12 +21,22 @@ export const UserCard = observer(() => {
     const [classInput, setClassInput] = useState('search');
     const [isError, setIsError] = useState('');
 
-    const [dataRelatedReq, setDataRelatedReq] = useState();
-
-    const columnsUserCard = [
+    const columnsCards = [
         {
             name: 'id',
             selector: (row) => row.id,
+            sortable: true,
+            wrap: true
+        },
+        {
+            name: 'userId',
+            selector: (row) => row.userId,
+            sortable: true,
+            wrap: true
+        },
+        {
+            name: 'type',
+            selector: (row) => row.type,
             sortable: true,
             wrap: true
         },
@@ -38,21 +47,27 @@ export const UserCard = observer(() => {
             wrap: true
         },
         {
-            name: 'cardHolderId',
-            selector: (row) => row.cardHolderId,
+            name: 'createdOn',
+            selector: (row) => row.createdOn,
+            sortable: true,
+            wrap: true
+        },
+        {
+            name: 'modifiedOn',
+            selector: (row) => row.modifiedOn,
             sortable: true,
             wrap: true
         },
     ]
 
-    const usersCard = async () => {
-        setColumnsTable(columnsUserCard);
+    const Cards = async () => {
+        setColumnsTable(columnsCards);
         if (isValueSearch) {
             try {
-                await getUserCards(client.activeAPI + `/${'external/api/v1'}`, isValueSearch)
+                await getCards(client.activeAPI, isValueSearch)
                     .then(resp => {
                         setDataJsonFormat(resp);
-                        setDataTableFormat(resp);
+                        setDataTableFormat([resp]);
                     });
                 setIsError('');
                 navigate(isValueSearch);
@@ -68,23 +83,12 @@ export const UserCard = observer(() => {
     useEffect(() => {
         client.setActiveAPI(localStorage.getItem('url api'));
         if (isValueSearch) {
-            usersCard();
+            Cards();
         }
     }, []);
 
     const readValueInput = (e) => {
         setIsValueSearch(e.target.value);
-    }
-
-    const onChainQueries = async () => {
-        const array = [];
-        await getDataOnId(dataJsonFormat, client.activeAPI + `/${'api/'}`, 'cards/')
-        .then(res => {
-            array.push(...res);
-        });
-        await getUserSapInfo(client._activeAPI + `/${'external/api/v1'}`, dataJsonFormat[0].cardHolderId)
-            .then(resp => array.push(resp));
-            setDataRelatedReq(array);
     }
 
     return (
@@ -93,23 +97,15 @@ export const UserCard = observer(() => {
             <div className="searchWrapper">
                 <div className={classInput}>
                     {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
-                    <input placeholder='Enter user id'
+                    <input placeholder='Enter card id'
                         value={isValueSearch}
                         onChange={readValueInput} />
                 </div>
-                <button onClick={usersCard}>Search</button>
+                <button onClick={Cards}>Search</button>
                 <p>{isError}</p>
             </div>
 
             <RequestContent dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} setDataTableFormat={setDataTableFormat} />
-
-            {dataJsonFormat ?
-                <div className='btnRelatedQueries'>
-                    <button className='btn' onClick={onChainQueries}>Related queries</button>
-
-                    <RelatedContentQueries dataRelatedReq={dataRelatedReq}/>
-                </div>
-                : ''}
         </>
 
     )

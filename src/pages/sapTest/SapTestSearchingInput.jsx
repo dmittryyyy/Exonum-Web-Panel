@@ -8,6 +8,7 @@ import { BenefitRules } from './requestComponents/BenefitRules';
 import { UserBenefits } from './requestComponents/UserBenefits';
 import { UserSapInfo } from './requestComponents/UserSapInfo';
 import { UserCard } from './requestComponents/UserCard';
+import { Cards } from './requestComponents/Cards';
 import { ShowVendingMachines } from './requestComponents/ShowVendingMachines';
 
 export const SapTestSearchingInput = () => {
@@ -43,6 +44,10 @@ export const SapTestSearchingInput = () => {
 
                <Route path='user-card/*' element={<UserCard />}>
                    <Route path=':user_card' element={ <UserCard />}/>
+               </Route>
+
+               <Route path='cards/*' element={<Cards />}>
+                   <Route path=':cards' element={ <Cards />}/>
                </Route>
                
                <Route path='vending-machines/*' element={<ShowVendingMachines />}/>

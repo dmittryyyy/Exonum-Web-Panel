@@ -33,6 +33,7 @@ export const NavBar = ({ setDataJsonFormat, setDataTableFormat, setColumnsTable,
                         <NavLink className='list-group-item' to='search/user-benefits'>Benefits</NavLink>
                         <NavLink className='list-group-item' to='search/user-sapInfo'>User SapInfo</NavLink>
                         <NavLink className='list-group-item' to='search/user-card'>User Cards</NavLink>
+                        <NavLink className='list-group-item' to='search/cards'>Cards</NavLink>
                         <NavLink className='list-group-item' to='search/vending-machines'>Show Vending Machines</NavLink>
                     </>
                 )}
