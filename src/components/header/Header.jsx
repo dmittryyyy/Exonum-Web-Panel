@@ -1,6 +1,7 @@
 import { React } from 'react';
 import { Navbar, Nav } from 'react-bootstrap';
 import { NavLink, Link } from 'react-router-dom';
+import { getUserSapFullInfo } from '../../services/SapExplorer';
 
 import './Header.scss';
 
@@ -20,6 +21,7 @@ export const Header = ({ isMenu, setIsMenu }) => {
     : 
     ''}
       <Navbar>
+        {/* <button onClick={() => getUserSapFullInfo()}>fdsfdsf</button> */}
         <div className='logo'>
           <img src="images/logo.svg" alt="" />
           <Link to='/'><Navbar.Brand>WebPanel</Navbar.Brand></Link>

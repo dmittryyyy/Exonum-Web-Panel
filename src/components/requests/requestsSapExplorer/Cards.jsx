@@ -3,71 +3,28 @@ import { useParams, useNavigate } from 'react-router';
 import { observer } from 'mobx-react-lite';
 
 import { ThemeContext } from '../../../index';
-import { getCards } from '../../../services/SapTestAPI';
+import { getCards } from '../../../services/SapExplorer';
 import { RequestContent } from '../../../components/requestContent/RequestContent';
 
 export const Cards = observer(() => {
 
-    const { client } = useContext(ThemeContext);
+    const { client, columnsSapExplorer } = useContext(ThemeContext);
 
     let { cards } = useParams();
     const navigate = useNavigate();
 
     const [isValueSearch, setIsValueSearch] = useState(cards ? cards : '');
-    const [dataJsonFormat, setDataJsonFormat] = useState();
-    const [dataTableFormat, setDataTableFormat] = useState();
-    const [columnsTable, setColumnsTable] = useState();
+    const [isDataCards, setIsDataCards] = useState();
 
     const [classInput, setClassInput] = useState('search');
     const [isError, setIsError] = useState('');
 
-    const columnsCards = [
-        {
-            name: 'id',
-            selector: (row) => row.id,
-            sortable: true,
-            wrap: true
-        },
-        {
-            name: 'userId',
-            selector: (row) => row.userId,
-            sortable: true,
-            wrap: true
-        },
-        {
-            name: 'type',
-            selector: (row) => row.type,
-            sortable: true,
-            wrap: true
-        },
-        {
-            name: 'number',
-            selector: (row) => row.number,
-            sortable: true,
-            wrap: true
-        },
-        {
-            name: 'createdOn',
-            selector: (row) => row.createdOn,
-            sortable: true,
-            wrap: true
-        },
-        {
-            name: 'modifiedOn',
-            selector: (row) => row.modifiedOn,
-            sortable: true,
-            wrap: true
-        },
-    ]
-
     const Cards = async () => {
-        setColumnsTable(columnsCards);
         if (isValueSearch) {
             try {
                 await getCards(client.activeAPI, isValueSearch)
                     .then(resp => {
-                        setDataJsonFormat(resp);
-                        setDataTableFormat([resp]);
+                        setIsDataCards([resp]);
                     });
                 setIsError('');
                 navigate(isValueSearch);
@@ -105,7 +62,9 @@ export const Cards = observer(() => {
                 <p>{isError}</p>
             </div>
 
-            <RequestContent dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} setDataTableFormat={setDataTableFormat} />
+            <RequestContent 
+            data={isDataCards} 
+            columnsTable={columnsSapExplorer.columnsCards} />
         </>
 
     )

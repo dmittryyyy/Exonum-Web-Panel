@@ -2,28 +2,28 @@ import { React, useContext, useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router';
 
 import { ThemeContext } from '../../../index';
-import { getUserSapInfo } from '../../../services/SapTestAPI';
+import { getUsersBenefits } from '../../../services/SapExplorer';
 import { RequestContent } from '../../../components/requestContent/RequestContent';
 
-export const UserSapInfo = () => {
+export const UserBenefits = () => {
 
-    const { client } = useContext(ThemeContext);
+    const { client, columnsSapExplorer } = useContext(ThemeContext);
 
-    let { user_infoId } = useParams();
+    let { user_benefitsId } = useParams();
     const navigate = useNavigate();
 
-    const [isValueSearch, setIsValueSearch] = useState(user_infoId ? user_infoId : '');
-    const [dataJsonFormat, setDataJsonFormat] = useState();
+    const [isValueSearch, setIsValueSearch] = useState(user_benefitsId ? user_benefitsId : '');
+    const [isDataBenefits, setIsDataBenefits] = useState();
 
     const [classInput, setClassInput] = useState('search');
     const [isError, setIsError] = useState('');
 
-    const userSapInfo = async () => {
+    const usersBenefits = async () => {
         if (isValueSearch) {
             try {
-                await getUserSapInfo(client.sveklaServerV1, isValueSearch)
+                await getUsersBenefits(client.activeAPI + `/${'external/api/v1'}`, isValueSearch)
                     .then(resp => {
-                        setDataJsonFormat(resp, null, 2);
+                        setIsDataBenefits(resp);
                     });
                 setIsError('');
                 navigate(isValueSearch);
@@ -38,7 +38,7 @@ export const UserSapInfo = () => {
 
     useEffect(() => {
         if (isValueSearch) {
-            userSapInfo();
+            usersBenefits();
         }
     }, []);
 
@@ -56,11 +56,13 @@ export const UserSapInfo = () => {
                         value={isValueSearch}
                         onChange={readValueInput} />
                 </div>
-                <button onClick={userSapInfo}>Search</button>
+                <button onClick={usersBenefits}>Search</button>
                 <p>{isError}</p>
             </div>
 
-            <RequestContent dataJsonFormat={dataJsonFormat} />
+            <RequestContent 
+            data={isDataBenefits} 
+            columnsTable={columnsSapExplorer.benefits} />
         </>
     )
 }

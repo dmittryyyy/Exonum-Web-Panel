@@ -3,21 +3,18 @@ import { useParams, useNavigate } from 'react-router';
 import DateTimePicker from 'react-datetime-picker';
 
 import { ThemeContext } from '../../../index';
-import { getEvents } from '../../../services/SapTestAPI';
-import { columnsEvents } from '../ColumnsTable';
+import { getEvents } from '../../../services/SapExplorer';
 import { RequestContent } from '../../../components/requestContent/RequestContent';
 
 export const Events = () => {
 
-    const { client } = useContext(ThemeContext);
+    const { client, columnsSapExplorer } = useContext(ThemeContext);
 
     let { createdOn_gt, limit } = useParams();
     const navigate = useNavigate();
 
     const [countInput, setCountInput] = useState(limit ? limit : '');
-    const [dataJsonFormat, setDataJsonFormat] = useState();
-    const [dataTableFormat, setDataTableFormat] = useState();
-    const [columnsTable, setColumnsTable] = useState();
+    const [isDataEvents, setisDataEvents] = useState();
 
     const [valueCalendar, setValueCalendar] = useState(createdOn_gt ? new Date(createdOn_gt) : null);
     const [classInput, setClassInput] = useState('search');
@@ -45,13 +42,11 @@ export const Events = () => {
     };
 
     const onEvents = async () => {
-        setColumnsTable(columnsEvents);
         if (validationCalendar(valueCalendar) && validationLimit(countInput)) {
             try {
-                await getEvents(client.sveklaServerV1, valueCalendar.toISOString(), countInput)
+                await getEvents(client.activeAPI + `/${'external/api/v1'}`, valueCalendar.toISOString(), countInput)
                     .then(resp => {
-                        setDataTableFormat(resp);
-                        setDataJsonFormat(resp, null, 2);
+                        setisDataEvents(resp);
                     });
                 navigate(valueCalendar + `/${countInput}`);
                 setClassInput('search');
@@ -91,7 +86,9 @@ export const Events = () => {
                 </div>
             </div>
 
-            <RequestContent dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} />
+            <RequestContent 
+            data={isDataEvents}
+            columnsTable={columnsSapExplorer.events} />
         </>
 
     )

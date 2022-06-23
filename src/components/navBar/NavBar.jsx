@@ -1,17 +1,16 @@
 import { React } from 'react';
 import { NavLink, Link } from 'react-router-dom';
-
-import { ShowCatalog } from '../../pages/blockchain/requestComponents/ShowCatalog';
-import { ShowVendingMachines } from '../../pages/sapTest/requestComponents/ShowVendingMachines';
-
 import './NavBar.scss';
 
-export const NavBar = ({ setDataJsonFormat, setDataTableFormat, setColumnsTable, isMenu }) => {
+export const NavBar = ({ isMenu }) => {
 
     return (
         <div className="navBar">
             <ul className={isMenu ? 'list-group' : 'closeNavBar'}>
+            <div className='dashBoard'>
             <Link to=''><h3>Dashboard</h3></Link>
+            <Link to=''><img src="images/resetDashboard.png" alt="Cброс" title='Reset choose'/></Link>
+            </div>
                 {window.location.href.indexOf('blockchain') >= 0 ? (
                     <>
                         <NavLink className='list-group-item' to='search/transaction'>Transaction</NavLink>

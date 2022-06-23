@@ -4,7 +4,9 @@ import { Outlet } from 'react-router-dom';
 import { NavBar } from '../../components/navBar/NavBar';
 import { ActiveAPI } from './ActiveAPI';
 
-export const SapTest = ({ isMenu }) => {
+import './SapExplorer.scss';
+
+export const SapExplorer = ({ isMenu }) => {
 
     const [dataJsonFormat, setDataJsonFormat] = useState();
 
@@ -12,7 +14,7 @@ export const SapTest = ({ isMenu }) => {
 
     return (
         <>
-            <div className="navBlock">
+            <div className="mainContent">
 
                 <NavBar
                     setDataJsonFormat={setDataJsonFormat}
@@ -22,13 +24,13 @@ export const SapTest = ({ isMenu }) => {
                     isMenu={isMenu}
                 />
 
-                <div className='rightNavBlock'>
+                <div className='mainContentRight'>
+
                     <ActiveAPI/>
 
                     <Outlet />
 
                 </div>
-
             </div>
 
         </>

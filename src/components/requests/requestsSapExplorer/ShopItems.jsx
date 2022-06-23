@@ -2,25 +2,21 @@ import { React, useContext, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
 
 import { ThemeContext } from '../../../index';
-import { getShopItems } from '../../../services/SapTestAPI';
-import { columnsShop } from '../ColumnsTable';
+import { getShopItems } from '../../../services/SapExplorer';
 import { RequestContent } from '../../../components/requestContent/RequestContent';
 
 export const ShopItems = () => {
 
-    const { client } = useContext(ThemeContext);
+    const { client, columnsSapExplorer } = useContext(ThemeContext);
 
     let { limit } = useParams();
     const navigate = useNavigate();
 
     const [countInput, setCountInput] = useState(limit ? limit : '');
-    const [dataJsonFormat, setDataJsonFormat] = useState();
-    const [dataTableFormat, setDataTableFormat] = useState();
-    const [columnsTable, setColumnsTable] = useState();
+    const [isDataShopItems, setisDataShopItems] = useState();
 
     const [classInput, setClassInput] = useState('search');
     const [isError, setIsError] = useState('');
-
 
     const validationLimit = (str) => {
         if (countInput) {
@@ -31,13 +27,11 @@ export const ShopItems = () => {
     };
 
     const shopItems = async () => {
-        setColumnsTable(columnsShop);
         if (validationLimit(countInput)) {
             try {
-                await getShopItems(client.sveklaServerV1, countInput)
+                await getShopItems(client.activeAPI + `/${'external/api/v1'}`, countInput)
                     .then(resp => {
-                        setDataTableFormat(resp);
-                        setDataJsonFormat(resp, null, 2);
+                        setisDataShopItems(resp);
                     });
                 navigate(countInput);
                 setIsError('');
@@ -71,7 +65,9 @@ export const ShopItems = () => {
                 <p>{isError}</p>
             </div>
 
-            <RequestContent dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} />
+            <RequestContent 
+            data={isDataShopItems} 
+            columnsTable={columnsSapExplorer.shopItems} />
         </>
 
     )

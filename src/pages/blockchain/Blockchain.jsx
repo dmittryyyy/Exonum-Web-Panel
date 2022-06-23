@@ -4,6 +4,8 @@ import { Outlet } from 'react-router-dom';
 import { Node } from './Node';
 import { NavBar } from '../../components/navBar/NavBar';
 
+import './Blockchain.scss';
+
 export const Blockchain = ({ isMenu }) => {
 
     const [dataJsonFormat, setDataJsonFormat] = useState();
@@ -12,7 +14,8 @@ export const Blockchain = ({ isMenu }) => {
 
     return (
         <>
-            <div className="navBlock">
+            <div className="mainContent">
+
                 <NavBar
                     navBarItem={navBarItem}
                     setNavBarItem={setNavBarItem}
@@ -21,7 +24,8 @@ export const Blockchain = ({ isMenu }) => {
                     isMenu={isMenu}
                 />
 
-                <div className='rightNavBlock'>
+                <div className='mainContentRight'>
+                    
                     <Node />
 
                     <Outlet />

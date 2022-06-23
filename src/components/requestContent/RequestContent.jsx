@@ -2,34 +2,34 @@ import { React, useState } from 'react';
 import { Accordion } from 'react-bootstrap';
 import DataTable from 'react-data-table-component';
 import CustomLoader from 'react-data-table-component';
+import { observer } from 'mobx-react-lite';
 
 import './RequestContent.scss';
 
-export const RequestContent = ({ dataJsonFormat, dataTableFormat, columnsTable, setDataTableFormat }) => {
+export const RequestContent = observer(({ data, columnsTable }) => {
 
   const [isValueSearch, setIsValueSearch] = useState('');
 
-  const ExpandedComponent = (dataTableFormat) => {
-    return <pre>{JSON.stringify(dataTableFormat, null, 2)}</pre>;
+  const ExpandedComponent = (data) => {
+    return <pre>{JSON.stringify(data, null, 2)}</pre>;
   }
 
   return (
-
     <div className='resultWrapper'>
-      {dataJsonFormat ?
+      {data ?
         <Accordion default-key="0">
           <Accordion.Item eventKey='0'>
             <Accordion.Header>JSON Format</Accordion.Header>
             <Accordion.Body>
-              <pre>{JSON.stringify(dataJsonFormat, null, 2)}</pre>
+              <pre>{JSON.stringify(data, null, 2)}</pre>
             </Accordion.Body>
           </Accordion.Item>
-          {dataTableFormat ? <Accordion.Item eventKey='1'>
+          {columnsTable ? <Accordion.Item eventKey='1'>
             <Accordion.Header>Table Format</Accordion.Header>
             <Accordion.Body>
               <DataTable
                 columns={columnsTable}
-                data={dataTableFormat}
+                data={data}
                 expandableRows
                 expandableRowsComponent={ExpandedComponent}
                 pagination
@@ -54,7 +54,6 @@ export const RequestContent = ({ dataJsonFormat, dataTableFormat, columnsTable, 
         </Accordion>
         : ''}
     </div>
-
   )
-}
+});
 

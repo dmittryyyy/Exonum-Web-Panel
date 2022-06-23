@@ -2,33 +2,28 @@ import { React, useContext, useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router';
 
 import { ThemeContext } from '../../../index';
-import { getVendingProfilesBenefits } from '../../../services/SapTestAPI';
-import { columnsBenefitsRules } from '../ColumnsTable';
+import { getVendingProfilesBenefits } from '../../../services/SapExplorer';
 import { RequestContent } from '../../../components/requestContent/RequestContent';
 
 export const BenefitRules = () => {
 
-    const { client } = useContext(ThemeContext);
+    const { client, columnsSapExplorer } = useContext(ThemeContext);
 
     let { benefit_rulesId } = useParams();
     const navigate = useNavigate();
 
     const [isValueSearch, setIsValueSearch] = useState(benefit_rulesId ? benefit_rulesId : '');
-    const [dataJsonFormat, setDataJsonFormat] = useState();
-    const [dataTableFormat, setDataTableFormat] = useState();
-    const [columnsTable, setColumnsTable] = useState();
+    const [isDataBenefits, setIsDataBenefits] = useState();
 
     const [classInput, setClassInput] = useState('search');
     const [isError, setIsError] = useState('');
 
     const benefitRules = () => {
-        setColumnsTable(columnsBenefitsRules);
         if (isValueSearch) {
             try {
-                getVendingProfilesBenefits(client.sveklaServer, isValueSearch)
+                getVendingProfilesBenefits(client.activeAPI + '/api/', isValueSearch)
                     .then(resp => {
-                        setDataJsonFormat(resp, null, 2);
-                        setDataTableFormat(resp);
+                        setIsDataBenefits(resp);
                     });
                 setIsError('');
                 navigate(isValueSearch);
@@ -65,7 +60,9 @@ export const BenefitRules = () => {
                 <p>{isError}</p>
             </div>
 
-            <RequestContent dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTable} setDataTableFormat={setDataTableFormat} />
+            <RequestContent 
+            data={isDataBenefits} 
+            columnsTable={columnsSapExplorer.benefitsRules} />
         </>
 
     )

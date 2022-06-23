@@ -1,17 +1,19 @@
 import { React } from 'react';
 import { Routes, Route } from 'react-router-dom';
 
-import { ShopItems } from './requestComponents/ShopItems';
-import { Events } from './requestComponents/Events';
-import { ItemsLoaded } from './requestComponents/ItemsLoaded';
-import { BenefitRules } from './requestComponents/BenefitRules';
-import { UserBenefits } from './requestComponents/UserBenefits';
-import { UserSapInfo } from './requestComponents/UserSapInfo';
-import { UserCard } from './requestComponents/UserCard';
-import { Cards } from './requestComponents/Cards';
-import { ShowVendingMachines } from './requestComponents/ShowVendingMachines';
+import { ShopItems } from '../requests/requestsSapExplorer/ShopItems';
+import { Events } from '../requests/requestsSapExplorer/Events';
+import { ItemsLoaded } from '../requests/requestsSapExplorer/ItemsLoaded';
+import { BenefitRules } from '../requests/requestsSapExplorer/BenefitRules';
+import { UserBenefits } from '../requests/requestsSapExplorer/UserBenefits';
+import { UserSapInfo } from '../requests/requestsSapExplorer/UserSapInfo';
+import { UserCards } from '../requests/requestsSapExplorer/UserCards';
+import { Cards } from '../requests/requestsSapExplorer/Cards';
+import { ShowVendingMachines } from '../requests/requestsSapExplorer/ShowVendingMachines';
 
-export const SapTestSearchingInput = () => {
+import './Inputs.scss';
+
+export const SapExplorerInputs = () => {
 
     return (
         <div>
@@ -42,8 +44,8 @@ export const SapTestSearchingInput = () => {
                    <Route path=':user_infoId' element={ <UserSapInfo />}/>
                </Route>
 
-               <Route path='user-card/*' element={<UserCard />}>
-                   <Route path=':user_card' element={ <UserCard />}/>
+               <Route path='user-card/*' element={<UserCards />}>
+                   <Route path=':user_card' element={ <UserCards />}/>
                </Route>
 
                <Route path='cards/*' element={<Cards />}>

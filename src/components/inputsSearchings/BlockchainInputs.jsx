@@ -1,15 +1,18 @@
 import { React } from 'react';
 import { Routes, Route } from 'react-router-dom';
 
-import { GetTransaction } from './requestComponents/GetTransaction';
-import { GetOrder } from './requestComponents/GetOrder';
-import { ServiceApplication } from './requestComponents/ServiceApplication';
-import { GetUserWallet } from './requestComponents/GetUserWallet';
-import { GetDeviceKey } from './requestComponents/GetDeviceKey';
-import { GetOrders } from './requestComponents/GetOrders';
-import { ShowCatalog } from './requestComponents/ShowCatalog';
+import { GetTransaction } from '../requests/requestsBlockchain/GetTransaction';
+import { GetOrder } from '../requests/requestsBlockchain/GetOrder';
+import { ServiceApplication } from '../requests/requestsBlockchain/ServiceApplication';
+import { GetUserWallet } from '../requests/requestsBlockchain/GetUserWallet';
+import { GetDeviceKey } from '../requests/requestsBlockchain/GetDeviceKey';
+import { GetOrders } from '../requests/requestsBlockchain/GetOrders';
+import { ShowCatalog } from '../requests/requestsBlockchain/ShowCatalog';
 
-export const MainSearchingInput = () => {
+
+import './Inputs.scss';
+
+export const BlockchainInputs = () => {
 
     const testHash = (str) => {
         return /^[A-F0-9]+$/i.test(str);

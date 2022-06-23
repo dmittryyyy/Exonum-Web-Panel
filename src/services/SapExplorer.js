@@ -145,25 +145,9 @@ export const getCards = async (root, id) => {
         })
 }
 
-//Не Проходит запрос
-// export const getShopItemsUpdate = async (root) => {
-//     const url = root + '/shopitems/update';
-//     return axios.get(url)
-//         .then((resp) => { return resp.data })
-//         .catch((err) => {
-//             if (err) {
-//                 console.log(err.response.data);
-//                 console.log(err.response.status);
-//             } else if (err.request) {
-//                 console.log(err.request);
-//             } else {
-//                 console.log('Error', err.message);
-//             }
-//         })
-// }
 
-//For a chain of related queries
-export const getDataOnId = async (array, root, path) => {
+//For related queries
+export const getDataForEachCard = async (array, root, path) => {
     const res = [];
     const resp = [];
     array.map(async item => { res.push(item.id) });
@@ -173,6 +157,11 @@ export const getDataOnId = async (array, root, path) => {
     }
     return resp;
 }
+
+export const getUserSapFullInfo = async (userName, password) => {
+    await axios.get('http://exonum.unotex.ru/private/validator/api/services/user/v1/user_full?public_key=daccf3039531e6c7298f3f60be5f22e992b29b9e277fcbc60aa79e15eba92a08');
+}
+
 
 
 

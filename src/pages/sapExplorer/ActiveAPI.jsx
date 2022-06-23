@@ -30,10 +30,10 @@ export const ActiveAPI = observer(() => {
 
     return (
         <>
-            <div className='nodeWrapper'>
+            <div className='sapURL'>
 
-                <div className="activeNode">
-                    <div className="nodeTitle">
+                <div className="selectUrl">
+                    <div className="selectTitle">
                         <h3>Choose base URL API</h3>
                     </div>
                     <select onChange={readBaseAPI}>
@@ -56,6 +56,7 @@ export const ActiveAPI = observer(() => {
                     </div>
                 </div>
             </div>
+
             <div className='activeURL'>
                 <h3>Active URL API: <span>{client.activeAPI}</span></h3>
             </div>
