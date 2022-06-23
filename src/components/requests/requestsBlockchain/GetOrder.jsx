@@ -73,7 +73,7 @@ export const GetOrder = ({ testHash }) => {
                 <p>{isError}</p>
             </div>
 
-            <RequestContent dataJsonFormat={dataJsonFormat} />
+            <RequestContent data={dataJsonFormat} />
         </>
 
     )

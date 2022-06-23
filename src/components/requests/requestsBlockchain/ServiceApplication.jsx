@@ -7,56 +7,16 @@ import { RequestContent } from '../../../components/requestContent/RequestConten
 
 export const ServiceApplication = ({ testHash }) => {
 
-    const { client } = useContext(ThemeContext);
+    const { client, columnsBlockchain } = useContext(ThemeContext);
 
     let { service_applicationId } = useParams();
     const navigate = useNavigate();
 
     const [isValueSearch, setIsValueSearch] = useState(service_applicationId ? service_applicationId : '');
-    const [dataJsonFormat, setDataJsonFormat] = useState();
-    const [dataTableFormat, setDataTableFormat] = useState();
+    const [isDataSAP, setIsDataSAP] = useState();
 
     const [isError, setIsError] = useState('');
     const [classInput, setClassInput] = useState('search');
-
-    const columnsServiceApplication = [
-        {
-            name: 'window_hash',
-            selector: (row) => row.window_hash,
-            sortable: true,
-            wrap: true,
-        },
-        {
-            name: 'url',
-            selector: (row) => row.url,
-            sortable: true,
-            wrap: true,
-        },
-        {
-            name: 'successful_url',
-            selector: (row) => row.successful_url,
-            sortable: true,
-            wrap: true,
-        },
-        {
-            name: 'fail_url',
-            selector: (row) => row.fail_url,
-            sortable: true,
-            wrap: true,
-        },
-        {
-            name: 'name',
-            selector: (row) => row.name,
-            sortable: true,
-            wrap: true,
-        },
-        {
-            name: 'tags',
-            selector: (row) => row.tags,
-            sortable: true,
-            wrap: true,
-        },
-    ]
 
     const getService = async () => {
         if (isValueSearch) {
@@ -64,15 +24,14 @@ export const ServiceApplication = ({ testHash }) => {
                 try {
                     await searchService(client.activeNode, isValueSearch)
                         .then((service) => {
-                            setDataJsonFormat(service.application_service_proof.to_application_service.entries[0].value);
-                            setDataTableFormat('');
+                            setIsDataSAP([service.application_service_proof.to_application_service.entries[0].value]);
                         });
                     setIsError('');
                     setClassInput('search');
                     navigate(isValueSearch);
                 } catch (error) {
                     console.log(error);
-                    setDataJsonFormat('Key uncorrect or empty input field!');
+                    setIsDataSAP('Key uncorrect or empty input field!');
                 }
             } else {
                 setIsError('Not a HEX string');
@@ -108,7 +67,8 @@ export const ServiceApplication = ({ testHash }) => {
                 <p>{isError}</p>
             </div>
 
-            <RequestContent dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} setDataTableFormat={setDataTableFormat} />
+            <RequestContent 
+            data={isDataSAP}  />
         </>
 
     )

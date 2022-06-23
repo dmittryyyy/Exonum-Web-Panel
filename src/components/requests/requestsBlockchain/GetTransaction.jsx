@@ -7,74 +7,16 @@ import { RequestContent } from '../../../components/requestContent/RequestConten
 
 export const GetTransaction = ({ testHash }) => {
 
-  const { client } = useContext(ThemeContext);
+  const { client, columnsBlockchain } = useContext(ThemeContext);
 
   let { transactionId } = useParams();
   const navigate = useNavigate();
 
   const [isValueSearch, setIsValueSearch] = useState(transactionId ? transactionId : '');
-  const [dataJsonFormat, setDataJsonFormat] = useState();
-  const [dataTableFormat, setDataTableFormat] = useState();
+  const [isDataTransaction, setIsDataTransaction] = useState();
 
   const [isError, setIsError] = useState('');
   const [classInput, setClassInput] = useState('search');
-
-  const columnsTransaction = [
-    {
-      name: 'type',
-      selector: (row) => row.type,
-      sortable: true,
-      wrap: true,
-    },
-    {
-      name: 'device_key_id',
-      selector: (row) => row.content.debug.device_key_id,
-      sortable: true,
-      wrap: true,
-    },
-    {
-      name: 'wearout',
-      selector: (row) => row.content.debug.wearout,
-      sortable: true,
-      wrap: true,
-    },
-    {
-      name: 'time',
-      selector: (row) => row.content.debug.time,
-      sortable: true,
-      wrap: true,
-    },
-    {
-      name: 'info',
-      selector: (row) => JSON.stringify(row.content.debug.info[0], null, 2),
-      sortable: true,
-      wrap: true,
-    },
-    {
-      name: 'message',
-      selector: (row) => row.content.message,
-      sortable: true,
-      wrap: true,
-    },
-    {
-      name: 'location-height',
-      selector: (row) => JSON.stringify(row.location.block_height),
-      sortable: true,
-      wrap: true,
-    },
-    {
-      name: 'location-position',
-      selector: (row) => JSON.stringify(row.location.position_in_block),
-      sortable: true,
-      wrap: true,
-    },
-    {
-      name: 'status',
-      selector: (row) => JSON.stringify(row.status),
-      sortable: true,
-      wrap: true,
-    },
-  ]
 
   const getTransaction = async () => {
     if (isValueSearch) {
@@ -82,17 +24,16 @@ export const GetTransaction = ({ testHash }) => {
         try {
           const resp = await searchTransaction(client.activeNode, isValueSearch);
           if (!resp) {
-            setDataJsonFormat('type: unknown')
+            setIsDataTransaction('type: unknown')
           } else if (resp.type === 'committed') {
             delete resp.location_proof
-            setDataJsonFormat(resp);
-            setDataTableFormat([resp]);
+            setIsDataTransaction([resp]);
           } else if (resp.type === 'in-pool') {
             delete resp.status
             delete resp.content.debug
             delete resp.location
             delete resp.location_proof
-            setDataJsonFormat(resp);
+            setIsDataTransaction([resp]);
           };
           setIsError('');
           setClassInput('search');
@@ -134,7 +75,9 @@ export const GetTransaction = ({ testHash }) => {
         <p>{isError}</p>
       </div>
 
-      <RequestContent dataJsonFormat={dataJsonFormat} dataTableFormat={dataTableFormat} columnsTable={columnsTransaction} setDataTableFormat={setDataTableFormat} />
+      <RequestContent 
+      data={isDataTransaction} 
+      columnsTable={columnsBlockchain.transaction} />
 
     </>
 
