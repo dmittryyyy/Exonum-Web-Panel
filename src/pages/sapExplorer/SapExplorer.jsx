@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import { NavBar } from '../../components/navBar/NavBar';
+import { NavBarForRelatedQueries } from '../../components/navBar/NavBarForRelatedQueries';
 import { ActiveAPI } from './ActiveAPI';
 
 import './SapExplorer.scss';
@@ -28,9 +29,12 @@ export const SapExplorer = ({ isMenu }) => {
 
                     <ActiveAPI/>
 
+                    <div>
                     <Outlet />
 
+                    </div>
                 </div>
+
             </div>
 
         </>

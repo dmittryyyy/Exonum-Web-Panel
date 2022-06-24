@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { ThemeContext } from '../../../index';
 import { getVendingMachines, getItemsLoaded, getShopItems } from '../../../services/SapExplorer';
 import { RequestContent } from '../../../components/requestContent/RequestContent';
+import { NavBarForRelatedQueries } from '../../navBar/NavBarForRelatedQueries';
 
 export const ShowVendingMachines = () => {
 
@@ -154,17 +155,15 @@ export const ShowVendingMachines = () => {
     return (
 
         <>
-            <>
+        <NavBarForRelatedQueries/>
+
                 <RequestContent
                     data={dataVendingmachine}
                     columnsTable={columnsVendingMachines} />
-            </>
 
-            <>
                 <RequestContent
                     data={dataRelatedQueries}
                     columnsTable={columnsSapExplorer.itemsLoaded} />
-            </>
         </>
 
     )

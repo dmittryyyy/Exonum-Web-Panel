@@ -145,7 +145,6 @@ export const getCards = async (root, id) => {
         })
 }
 
-
 //For related queries
 export const getDataForEachCard = async (array, root, path) => {
     const res = [];
@@ -158,8 +157,9 @@ export const getDataForEachCard = async (array, root, path) => {
     return resp;
 }
 
-export const getUserSapFullInfo = async (userName, password) => {
-    await axios.get('http://exonum.unotex.ru/private/validator/api/services/user/v1/user_full?public_key=daccf3039531e6c7298f3f60be5f22e992b29b9e277fcbc60aa79e15eba92a08');
+export const blockchainProfile = async (userName, password) => {
+    const url = 'http://exonum.unotex.ru/private/validator/api/services/user/v1/user_full'
+    return axios.get(url, { params: { public_key: `${userName + password}` }})
 }
 
 

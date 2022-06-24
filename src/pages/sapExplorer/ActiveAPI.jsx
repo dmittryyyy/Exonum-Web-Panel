@@ -34,7 +34,7 @@ export const ActiveAPI = observer(() => {
 
                 <div className="selectUrl">
                     <div className="selectTitle">
-                        <h3>Choose base URL API</h3>
+                        <h3>Base URL API</h3>
                     </div>
                     <select onChange={readBaseAPI}>
                         {client.sapServers.map((nameApi, index) =>

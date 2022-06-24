@@ -4,6 +4,7 @@ import { useParams, useNavigate } from 'react-router';
 import { ThemeContext } from '../../../index';
 import { getUserSapInfo, getVendingProfilesBenefits, getDataForEachCard, getUsersBenefits, getUserCards } from '../../../services/SapExplorer';
 import { RequestContent } from '../../../components/requestContent/RequestContent';
+import { NavBarForRelatedQueries } from '../../navBar/NavBarForRelatedQueries';
 
 export const UserSapInfo = () => {
 
@@ -72,6 +73,8 @@ export const UserSapInfo = () => {
     return (
 
         <>
+            <NavBarForRelatedQueries />
+
             <div className="searchWrapper">
                 <div className={classInput}>
                     {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}

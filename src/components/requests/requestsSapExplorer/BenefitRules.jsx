@@ -4,6 +4,7 @@ import { useParams, useNavigate } from 'react-router';
 import { ThemeContext } from '../../../index';
 import { getVendingProfilesBenefits } from '../../../services/SapExplorer';
 import { RequestContent } from '../../../components/requestContent/RequestContent';
+import { NavBarForRelatedQueries } from '../../navBar/NavBarForRelatedQueries';
 
 export const BenefitRules = () => {
 

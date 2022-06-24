@@ -4,6 +4,7 @@ import { useParams, useNavigate } from 'react-router';
 import { ThemeContext } from '../../../index';
 import { getItemsLoaded } from '../../../services/SapExplorer';
 import { RequestContent } from '../../../components/requestContent/RequestContent';
+import { NavBarForRelatedQueries } from '../../navBar/NavBarForRelatedQueries';
 
 export const ItemsLoaded = () => {
 
@@ -50,6 +51,8 @@ export const ItemsLoaded = () => {
     return (
 
         <>
+            <NavBarForRelatedQueries/>
+
             <div className="searchWrapper">
                 <div className={classInput}>
                     {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}

@@ -59,22 +59,60 @@
     border-radius: 5px;
     color: #FFF;
   }
+}
 
-  .buttonListGroup {
+.navBarRelatedQueries {
+  background-color: rgb(70, 145, 216);
+
+  .dashBoard {
+    display: flex;
+    justify-content: center;
+    padding: 20px 0px 10px 0px;
+
+    h3 {
+      font-size: 25px;
+      font-weight: 700;
+      color: #fff;
+      text-shadow: 1px 1px #000;
+    }
+
+    img {
+      cursor: pointer;
+      width: 30px;
+      transition: 1s;
+      margin-left: 20px;
+    }
+
+    img:active {
+      transform: rotate(-3turn);
+      transition: 0.001s;
+    }
+  }
+
+  .listQueries {
     display: flex;
     justify-content: center;
 
-    button {
-      text-align: center;
-      color: #fff;
-      background-color: rgb(247, 156, 71);
-      border-radius: 5px;
-      padding: 8px;
-      margin-right: 5px;
+    .list-queries-item {
+      color: #FFF;
+      font-size: 20px;
+      font-weight: 500;
+      padding: 0 5px;
+      margin: 0 5px 10px 5px;
+      padding-bottom: 7px;
+      transition: 0.1s;
     }
 
-    button:hover {
-      background-color: rgb(241, 131, 28);
+    .list-queries-item:hover {
+      color: rgb(201, 201, 201);
+    }
+
+    .active {
+      color: #000;
+      font-weight: 700;
+      padding-bottom: 5px;
+      border-bottom: 2px solid #000;
+      transition: .3s;
     }
   }
 }
