@@ -224,6 +224,50 @@ export class ColumnsSapExplorer {
                 wrap: true
             },
         ];
+        this.columnsRequestsForAllMachines = [
+            {
+                name: 'name',
+                selector: (row) => row.name,
+                sortable: true,
+                wrap: true
+            },
+            {
+                name: 'shopItemId',
+                selector: (row) => row.shopItemId,
+                sortable: true,
+                wrap: true
+            },
+            {
+                name: 'requiredAmount',
+                selector: (row) => row.requiredAmount,
+                sortable: true,
+                wrap: true
+            },
+            {
+                name: 'capacity',
+                selector: (row) => row.capacity,
+                sortable: true,
+                wrap: true
+            },
+            {
+                name: 'currentAmount',
+                selector: (row) => row.currentAmount,
+                sortable: true,
+                wrap: true
+            },
+            {
+                name: 'price',
+                selector: (row) => row.price,
+                sortable: true,
+                wrap: true
+            },
+            {
+                name: 'category',
+                selector: (row) => row.category,
+                sortable: true,
+                wrap: true
+            },
+        ]
     }
 
     get benefitsRules() {
@@ -252,5 +296,9 @@ export class ColumnsSapExplorer {
 
     get userCards() {
         return this.columnsUserCards;
+    }
+
+    get reqForAllMachines() {
+        return this.columnsRequestsForAllMachines;
     }
 }

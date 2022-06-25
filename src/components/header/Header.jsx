@@ -8,7 +8,7 @@ export const Header = ({ isMenu, setIsMenu }) => {
 
   return (
     <header>
-      {window.innerWidth < 769 ? 
+      {window.innerWidth < 1024.98 ? 
     <div className='btnDashboard'>
     {isMenu ? (
       <a className='closeDashboard' onClick={() => setIsMenu(false)} title='Close Dashboard'><span></span></a>

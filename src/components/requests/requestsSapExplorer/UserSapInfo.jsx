@@ -1,8 +1,8 @@
 import { React, useContext, useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router';
+import { useParams, useNavigate, Routes, Route } from 'react-router';
 
 import { ThemeContext } from '../../../index';
-import { getUserSapInfo, getVendingProfilesBenefits, getDataForEachCard, getUsersBenefits, getUserCards } from '../../../services/SapExplorer';
+import { getUserSapInfo, getVendingProfilesBenefits, getDataForEachCard, getUsersBenefits, getUserCards, blockchainProfile } from '../../../services/SapExplorer';
 import { RequestContent } from '../../../components/requestContent/RequestContent';
 import { NavBarForRelatedQueries } from '../../navBar/NavBarForRelatedQueries';
 
@@ -11,10 +11,13 @@ export const UserSapInfo = () => {
     const { client } = useContext(ThemeContext);
 
     let { user_infoId } = useParams();
+    let { relatedReq } = useParams();
     const navigate = useNavigate();
 
     const [isValueSearch, setIsValueSearch] = useState(user_infoId ? user_infoId : '');
-    const [isDataSapInfo, setIsDataSapInfo] = useState();
+    const [isRelatedReq, setIsRelatedReq] = useState(relatedReq ? relatedReq : '');
+
+    const [isDataSapInfo, setIsDataSapInfo] = useState('');
     const [isDataRelatedReq, setDataRelatedReq] = useState();
 
     const [classInput, setClassInput] = useState('search');
@@ -26,7 +29,8 @@ export const UserSapInfo = () => {
                 await getUserSapInfo(client.activeAPI + `/${'external/api/v1'}`, isValueSearch)
                     .then(resp => {
                         setIsDataSapInfo(resp);
-                    });
+                        setIsRelatedReq(resp.blockchainId)
+                    });    
                 setIsError('');
                 navigate(isValueSearch);
             } catch (err) {
@@ -38,42 +42,62 @@ export const UserSapInfo = () => {
         }
     }
 
-    useEffect(() => {
-        if (isValueSearch) {
-            userSapInfo();
-        }
-    }, []);
-
     const readValueInput = (e) => {
         setIsValueSearch(e.target.value);
     }
 
     const onChainQueries = async () => {
         const array = [];
-        let id = isDataSapInfo.id;
+        let id;
+        await getUserSapInfo(client.activeAPI + `/${'external/api/v1'}`, isValueSearch)
+        .then(resp => {
+            id = resp.id;
+        }); 
+        navigate(`${isValueSearch}/` + isRelatedReq);
         await getUserCards(client.activeAPI + `/${'external/api/v1'}`, id)
             .then(resp => {
                 array.push(resp);
             });
         await getDataForEachCard(array[0], client.activeAPI + `/${'api/'}`, 'cards/')
             .then(res => {
-                array.push(...res);
+                array.push([...res]);
             });
         await getVendingProfilesBenefits(client.activeAPI + '/api/', id)
             .then(resp => {
-                array.push(resp);
+                array.push([resp]);
             });
         await getUsersBenefits(client.activeAPI + `/${'external/api/v1'}`, isValueSearch)
             .then(resp => {
                 array.push(resp);
             });
-        setDataRelatedReq(array)
+        setDataRelatedReq(array);
     }
+
+    // const onBlockchainProfile = async () => {
+    //     navigate('blockchain-profile');
+    //     let idBlockchian;
+    //     await getUserSapInfo(client.activeAPI + `/${'external/api/v1'}`, isValueSearch)
+    //         .then(resp => {
+    //             idBlockchian = resp;
+    //         });
+    //     await blockchainProfile(idBlockchian.blockchainId).then(data => {
+    //         setIsBlockProfile([data]);
+    //     })
+    // }
+
+    useEffect(() => {
+        if (isValueSearch && isRelatedReq) {
+            userSapInfo();
+            onChainQueries();
+        } else if (isValueSearch) {
+            userSapInfo();
+        }
+    }, []);
 
     return (
 
         <>
-            <NavBarForRelatedQueries />
+            <NavBarForRelatedQueries onChainQueries={onChainQueries} isValueSearch={isValueSearch} />
 
             <div className="searchWrapper">
                 <div className={classInput}>
@@ -88,15 +112,12 @@ export const UserSapInfo = () => {
 
             <RequestContent data={isDataSapInfo} />
 
-            {isDataSapInfo ?
 
-                <div>
-                    <button onClick={onChainQueries}>Related queries</button>
-
-                    <RequestContent data={isDataRelatedReq} />
-
-                </div>
-                : ''}
+            <Routes>
+                <Route path='' element={<RequestContent data={isDataRelatedReq} />}>
+                    <Route path=':user_infoId/:relatedReq' element={<RequestContent data={isDataRelatedReq} />} />
+                </Route>
+            </Routes>
         </>
     )
-}
+};

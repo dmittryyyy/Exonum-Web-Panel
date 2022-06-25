@@ -24,7 +24,7 @@ export const Blockchain = ({ isMenu }) => {
                     isMenu={isMenu}
                 />
 
-                <div className='mainContentRight'>
+                <div className={isMenu ? 'mainContentRight' : 'mainContentRightCloseMenu'}>
                     
                     <Node />
 

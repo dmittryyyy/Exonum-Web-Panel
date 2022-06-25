@@ -4,7 +4,6 @@ import { useParams, useNavigate } from 'react-router';
 import { ThemeContext } from '../../../index';
 import { getItemsLoaded } from '../../../services/SapExplorer';
 import { RequestContent } from '../../../components/requestContent/RequestContent';
-import { NavBarForRelatedQueries } from '../../navBar/NavBarForRelatedQueries';
 
 export const ItemsLoaded = () => {
 
@@ -38,21 +37,19 @@ export const ItemsLoaded = () => {
         }
     }
 
+    const readValueInput = (e) => {
+        setIsValueSearch(e.target.value);
+    }
+
     useEffect(() => {
         if (isValueSearch) {
             itemsLoaded();
         }
     }, []);
 
-    const readValueInput = (e) => {
-        setIsValueSearch(e.target.value);
-    }
-
     return (
 
         <>
-            <NavBarForRelatedQueries/>
-
             <div className="searchWrapper">
                 <div className={classInput}>
                     {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
@@ -67,6 +64,7 @@ export const ItemsLoaded = () => {
             <RequestContent 
             data={isDataItemsLoaded} 
             columnsTable={columnsSapExplorer.itemsLoaded} />
+
         </>
 
     )

@@ -32,7 +32,7 @@ export const SapExplorerInputs = () => {
                    <Route path=':items_loadedId' element={ <ItemsLoaded />}/>
                </Route>
 
-               <Route path='benefit-rules/*' element={<BenefitRules />}>
+               <Route path='benefit-rules/*' element={ <BenefitRules />}>
                    <Route path=':benefit_rulesId' element={ <BenefitRules />}/>
                </Route>
 
@@ -42,6 +42,7 @@ export const SapExplorerInputs = () => {
 
                <Route path='user-sapInfo/*' element={<UserSapInfo />}>
                    <Route path=':user_infoId' element={ <UserSapInfo />}/>
+                   <Route path=':user_infoId/:relatedReq' element={ <UserSapInfo />}/>
                </Route>
 
                <Route path='user-card/*' element={<UserCards />}>
@@ -52,7 +53,10 @@ export const SapExplorerInputs = () => {
                    <Route path=':cards' element={ <Cards />}/>
                </Route>
                
-               <Route path='vending-machines/*' element={<ShowVendingMachines />}/>
+               <Route path='vending-machines/*' element={<ShowVendingMachines />}>
+                <Route path='item-loaded/:idMachines' element={<ShowVendingMachines />}/>
+                <Route path=':allMachines' element={<ShowVendingMachines />}/>
+               </Route>
 
             </Routes>
 

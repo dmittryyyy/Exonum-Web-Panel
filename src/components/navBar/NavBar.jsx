@@ -1,12 +1,13 @@
 import { React } from 'react';
 import { NavLink, Link } from 'react-router-dom';
+
 import './NavBar.scss';
 
 export const NavBar = ({ isMenu }) => {
 
     return (
-        <div className="navBar">
-            <ul className={isMenu ? 'list-group' : 'closeNavBar'}>
+        <div className={isMenu ? "navBar" : 'closeNavBar'}>
+            <ul className='list-group'>
             <div className='dashBoard'>
             <Link to=''><h3>Dashboard</h3></Link>
             <Link to=''><img src="images/resetDashboard.png" alt="Cброс" title='Reset choose'/></Link>

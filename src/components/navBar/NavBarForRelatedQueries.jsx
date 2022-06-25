@@ -1,9 +1,9 @@
 import { React } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import './NavBar.scss';
 
-export const NavBarForRelatedQueries = () => {
+export const NavBarForRelatedQueries = ({ onBlockchainProfile, onChainQueries, requestsForAllMachines }) => {
 
   return (
 
@@ -17,14 +17,14 @@ export const NavBarForRelatedQueries = () => {
 
           {window.location.href.indexOf('vending-machines') >= 0 ?
 
-            <NavLink className='list-queries-item' to='itemloaded-price'>Item loaded and price</NavLink>
+            <button className='list-queries-item' to='itemloaded-price'  onClick={requestsForAllMachines}>Requests for all machines</button>
             : ''}
 
           {window.location.href.indexOf('user-sapInfo') >= 0 ?
-            <NavLink className='list-queries-item' to='realted-queries-userInfo'>Realted queries</NavLink>
+            <button className='list-queries-item' onClick={onChainQueries}>Realted queries</button>
             : ''}
 
-          <NavLink className='list-queries-item' to='blockchain-profile'>Blockchain profile</NavLink>
+          <button className='list-queries-item' to='blockchain-profile' onClick={onBlockchainProfile}>Blockchain profile</button>
         </div>
       </ul>
     </div>

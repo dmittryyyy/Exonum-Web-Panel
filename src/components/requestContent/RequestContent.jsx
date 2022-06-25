@@ -21,7 +21,7 @@ export const RequestContent = observer(({ data, columnsTable }) => {
           <Accordion.Item eventKey='0'>
             <Accordion.Header>JSON Format</Accordion.Header>
             <Accordion.Body>
-              <pre>{JSON.stringify(data, null, 2)}</pre>
+              <pre>{JSON.stringify(data, null, 1)}</pre>
             </Accordion.Body>
           </Accordion.Item>
           {columnsTable ? <Accordion.Item eventKey='1'>

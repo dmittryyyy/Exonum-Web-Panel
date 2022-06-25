@@ -1,5 +1,5 @@
 import { React, useContext, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams, Routes, Route, useNavigate } from 'react-router-dom';
 
 import { ThemeContext } from '../../../index';
 import { getVendingMachines, getItemsLoaded, getShopItems } from '../../../services/SapExplorer';
@@ -10,99 +10,83 @@ export const ShowVendingMachines = () => {
 
     const { client, columnsSapExplorer } = useContext(ThemeContext);
 
+    let { idMachines } = useParams();
+    const navigate = useNavigate();
+
+    const [isIdMachine, setIsIdMachine] = useState(idMachines ? idMachines : '');
+
     const [dataVendingmachine, setDataVendingMachine] = useState();
-    const [dataRelatedQueries, setDataRelatedQueries] = useState();
+    const [isLoadedAndPrice, setIsLoadedAndPrice] = useState();
+    const [isRequestsForAllMachines, setRequestsForAllMachines] = useState();
 
     const columnsVendingMachines = [
         {
             name: 'id',
-            selector: (row) => <Link to='items-loaded' onClick={itemsLoaded}>{row.id}</Link>,
-            sortable: true,
+            selector: (row) => <Link to={'item-loaded/' + isIdMachine} onClick={loadedAndPrice}>{row.id}</Link>,
             wrap: true,
-            omit: false
+            omit: false,
+            compact: true,
         },
         {
             name: 'name',
             selector: (row) => row.name,
-            sortable: true,
             wrap: true,
         },
         {
             name: 'description',
-            selector: (row) => <Link to='items-loaded' onClick={itemsLoaded}>{row.description}</Link>,
-            sortable: true,
+            selector: (row) => <Link to={'item-loaded/' + isIdMachine} onClick={loadedAndPrice}>{row.description}</Link>,
             wrap: true,
-        },
-        {
-            name: 'serialNumber',
-            selector: (row) => row.serialNumber,
-            sortable: true,
-            wrap: true,
+            compact: true,
         },
         {
             name: 'serialVendingNumber',
             selector: (row) => row.serialVendingNumber,
-            sortable: true,
             wrap: true,
         },
         {
             name: 'blockchainKey',
             selector: (row) => row.blockchainKey,
-            sortable: true,
             wrap: true,
+            compact: true,
         },
         {
             name: 'type',
             selector: (row) => row.type,
-            sortable: true,
             wrap: true,
+            compact: true,
         },
         {
             name: 'condition',
             selector: (row) => row.condition,
-            sortable: true,
             wrap: true,
-        },
-        {
-            name: 'vendAnaliticaId',
-            selector: (row) => row.vendAnaliticaId,
-            sortable: true,
-            wrap: true,
+            compact: true,
         },
         {
             name: 'lastConnectionTime',
             selector: (row) => row.lastConnectionTime,
-            sortable: true,
             wrap: true,
-        },
-        {
-            name: 'lastConnectionTimeout',
-            selector: (row) => row.lastConnectionTimeout,
-            sortable: true,
-            wrap: true,
+            compact: true,
         },
         {
             name: 'lastEventDate',
             selector: (row) => row.lastEventDate,
-            sortable: true,
             wrap: true,
+            compact: true,
         },
         {
             name: 'userPublicKey',
             selector: (row) => row.userPublicKey,
-            sortable: true,
             wrap: true,
         },
         {
             name: 'userPrivateKey',
             selector: (row) => row.userPrivateKey,
-            sortable: true,
             wrap: true,
+            compact: true,
         },
         {
             name: 'placeId',
             selector: (row) => row.placeId,
-            sortable: true,
             wrap: true,
         },
     ];
@@ -117,54 +101,111 @@ export const ShowVendingMachines = () => {
         }
     }
 
-    useEffect(() => {
-        if (window.location.href.indexOf('vending-machines') >= 0) {
-            showVendingMachines();
-        }
-    }, []);
-
-    const itemsLoaded = async (e) => {
-        let value = e.target.innerHTML;
-        let id = '';
+    const loadedAndPrice = async (e) => {
+        let id;
         let data;
-        dataVendingmachine.some(item => {
-            if (item.description === value) {
-                id = item.id;
-            } else if (item.id === value) {
-                id = item.id;
-            }
-        })
+        if (isIdMachine) {
+            id = isIdMachine;
+        } else {
+            let value = e.target.innerHTML;
+            dataVendingmachine.some(item => {
+                if (item.description === value) {
+                    id = item.id;
+                } else if (item.id === value) {
+                    id = item.id;
+                }
+            });
+        }
+
+        setIsIdMachine(id);
         await getItemsLoaded(client.activeAPI + `/${'api'}`, id)
             .then(resp => {
                 data = resp;
             });
-            console.log(data)
-           const shopItems = await getShopItems(client.activeAPI + `/${'external/api/v1'}`, '100');
 
-           shopItems.forEach((shopItem) => {
-            for(let i = 0; i < data.length; i++) {
-                if(data[i].name === shopItem.name) {
+        const shopItems = await getShopItems(client.activeAPI + `/${'external/api/v1'}`, '100');
+
+        shopItems.forEach((shopItem) => {
+            for (let i = 0; i < data.length; i++) {
+                if (data[i].name === shopItem.name) {
                     data[i].price = shopItem.price;
                     data[i].category = shopItem.category;
                 }
-                setDataRelatedQueries(data)
             }
-           })  
+        });
+        setIsIdMachine(id)
+        navigate('item-loaded/' + id);
+        setIsLoadedAndPrice(data);
     }
+
+    const requestsForAllMachines = async () => {
+        const dataMachine = await getVendingMachines(client.activeAPI + `/${'api'}`);
+        let data = [];
+        let fullData = [];
+        
+        dataMachine.map(async item => {
+            await getItemsLoaded(client.activeAPI + `/${'api'}`, item.id)
+                .then(resp => {
+                    data.push(resp);
+                    console.log(resp)
+                });
+        });
+
+        const shopItems = await getShopItems(client.activeAPI + `/${'external/api/v1'}`, '100');
+
+        shopItems.forEach((shopItem) => {
+            for (let i = 0; i < data.length; i++) {
+                for (let j = 0; j < data[i].length; j++) {
+                    if (data[i][j].name === shopItem.name) {
+                        data[i][j].price = shopItem.price;
+                        data[i][j].category = shopItem.category;
+                    }
+                }
+            }
+        })
+        data.some(item => {
+            item.map(item => {
+                fullData.push(item);
+            })
+        })
+        navigate('allMachines');
+        setRequestsForAllMachines(fullData);
+    }
+
+    useEffect(() => {
+        if (window.location.href.indexOf('vending-machines') >= 0) {
+            showVendingMachines();
+        }
+        if (isIdMachine) {
+            loadedAndPrice();
+        }
+        if (window.location.href.indexOf('allMachines') >= 0) {
+            requestsForAllMachines();
+        }
+    }, []);
 
     return (
 
         <>
-        <NavBarForRelatedQueries/>
+            <NavBarForRelatedQueries requestsForAllMachines={requestsForAllMachines} />
 
-                <RequestContent
-                    data={dataVendingmachine}
-                    columnsTable={columnsVendingMachines} />
+            <RequestContent
+                data={dataVendingmachine}
+                columnsTable={columnsVendingMachines} />
 
-                <RequestContent
-                    data={dataRelatedQueries}
-                    columnsTable={columnsSapExplorer.itemsLoaded} />
+            <Routes>
+                <Route path='/' element={<RequestContent data={isLoadedAndPrice}
+                    columnsTable={columnsSapExplorer.columnsItemsLoaded} />}>
+                    <Route path='item-loaded/:idMachines' element={<RequestContent />} />
+                </Route>
+
+                <Route path='/' element={<RequestContent data={isRequestsForAllMachines}
+                    columnsTable={columnsSapExplorer.columnsRequestsForAllMachines} />}>
+                    <Route path=':allMachines' element={<RequestContent />} />
+                </Route>
+
+            </Routes>
         </>
 
     )
-}
+};

@@ -98,8 +98,8 @@ export const getUserSapInfo = async (root, id) => {
 }
 
 export const getItemsLoaded = async (root, id) => {
-    const url = root + '/vendingmachines/'
-    return axios.get(url + `${id}/items/loaded`)
+    const url = root + '/vendingmachines'
+    return axios.get(url + `/${id}/items/loaded`)
         .then((resp) => { return resp.data })
         .catch((err) => {
             if (err) {
@@ -157,9 +157,9 @@ export const getDataForEachCard = async (array, root, path) => {
     return resp;
 }
 
-export const blockchainProfile = async (userName, password) => {
+export const blockchainProfile = async (idBlockchain) => {
     const url = 'http://exonum.unotex.ru/private/validator/api/services/user/v1/user_full'
-    return axios.get(url, { params: { public_key: `${userName + password}` }})
+    return axios.get(url, { params: { public_key: `${idBlockchain}` }});
 }
 
 

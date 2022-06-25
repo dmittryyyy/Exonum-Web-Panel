@@ -8,6 +8,11 @@ main {
     display: flex;
 
     .mainContentRight {
+      width: 75%;
+      transition: 3s;
+    }
+
+    .mainContentRightCloseMenu {
       width: 100%;
     }
   }
