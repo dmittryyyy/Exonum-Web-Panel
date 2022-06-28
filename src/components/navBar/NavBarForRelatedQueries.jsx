@@ -17,14 +17,15 @@ export const NavBarForRelatedQueries = ({ onBlockchainProfile, onChainQueries, r
 
           {window.location.href.indexOf('vending-machines') >= 0 ?
 
-            <button className='list-queries-item' to='itemloaded-price'  onClick={requestsForAllMachines}>Requests for all machines</button>
+            <button className='list-queries-item' onClick={requestsForAllMachines}>Requests for all machines</button>
             : ''}
 
           {window.location.href.indexOf('user-sapInfo') >= 0 ?
             <button className='list-queries-item' onClick={onChainQueries}>Realted queries</button>
             : ''}
 
-          <button className='list-queries-item' to='blockchain-profile' onClick={onBlockchainProfile}>Blockchain profile</button>
+          <button className='list-queries-item' onClick={onBlockchainProfile}>Blockchain profile</button>
+
         </div>
       </ul>
     </div>

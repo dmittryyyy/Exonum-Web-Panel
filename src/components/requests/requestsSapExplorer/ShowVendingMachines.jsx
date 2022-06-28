@@ -108,7 +108,7 @@ export const ShowVendingMachines = () => {
             id = isIdMachine;
         } else {
             let value = e.target.innerHTML;
-            dataVendingmachine.some(item => {
+            dataVendingmachine.forEach((item) => {
                 if (item.description === value) {
                     id = item.id;
                 } else if (item.id === value) {
@@ -147,7 +147,6 @@ export const ShowVendingMachines = () => {
             await getItemsLoaded(client.activeAPI + `/${'api'}`, item.id)
                 .then(resp => {
                     data.push(resp);
-                    console.log(resp)
                 });
         });
 
@@ -163,8 +162,8 @@ export const ShowVendingMachines = () => {
                 }
             }
         })
-        data.some(item => {
-            item.map(item => {
+        data.forEach(item => {
+            item.forEach(item => {
                 fullData.push(item);
             })
         })
@@ -182,7 +181,7 @@ export const ShowVendingMachines = () => {
         if (window.location.href.indexOf('allMachines') >= 0) {
             requestsForAllMachines();
         }
-    }, []);
+    }, [isIdMachine]);
 
     return (
 

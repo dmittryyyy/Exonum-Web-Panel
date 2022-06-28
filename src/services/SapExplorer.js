@@ -158,7 +158,7 @@ export const getDataForEachCard = async (array, root, path) => {
 }
 
 export const blockchainProfile = async (idBlockchain) => {
-    const url = 'http://exonum.unotex.ru/private/validator/api/services/user/v1/user_full'
+    const url = 'http://exonum.unotex.ru/private/auditor1/api/services/user/v1/user_full'
     return axios.get(url, { params: { public_key: `${idBlockchain}` }});
 }
 

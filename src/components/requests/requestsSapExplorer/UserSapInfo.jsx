@@ -73,17 +73,16 @@ export const UserSapInfo = () => {
         setDataRelatedReq(array);
     }
 
-    // const onBlockchainProfile = async () => {
-    //     navigate('blockchain-profile');
-    //     let idBlockchian;
-    //     await getUserSapInfo(client.activeAPI + `/${'external/api/v1'}`, isValueSearch)
-    //         .then(resp => {
-    //             idBlockchian = resp;
-    //         });
-    //     await blockchainProfile(idBlockchian.blockchainId).then(data => {
-    //         setIsBlockProfile([data]);
-    //     })
-    // }
+    const onBlockchainProfile = async () => {
+        let idBlockchian;
+        await getUserSapInfo(client.activeAPI + `/${'external/api/v1'}`, isValueSearch)
+            .then(resp => {
+                idBlockchian = resp.blockchainId;
+            });
+        await blockchainProfile(idBlockchian).then(data => {
+            setDataRelatedReq([data]);
+        })
+    }
 
     useEffect(() => {
         if (isValueSearch && isRelatedReq) {
@@ -97,7 +96,7 @@ export const UserSapInfo = () => {
     return (
 
         <>
-            <NavBarForRelatedQueries onChainQueries={onChainQueries} isValueSearch={isValueSearch} />
+            <NavBarForRelatedQueries onChainQueries={onChainQueries} isValueSearch={isValueSearch} onBlockchainProfile={onBlockchainProfile}/>
 
             <div className="searchWrapper">
                 <div className={classInput}>
