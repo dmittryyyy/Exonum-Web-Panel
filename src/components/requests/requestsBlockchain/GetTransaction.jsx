@@ -18,13 +18,17 @@ export const GetTransaction = ({ testHash }) => {
   const [isError, setIsError] = useState('');
   const [classInput, setClassInput] = useState('search');
 
-  const getTransaction = async () => {
+  const readValueInput = (e) => {
+    setIsValueSearch(e.target.value);
+  }
+
+  const onGetTransaction = async () => {
     if (isValueSearch) {
       if (testHash(isValueSearch)) {
         try {
           const resp = await searchTransaction(client.activeNode, isValueSearch);
-          if (!resp) {
-            setIsDataTransaction('type: unknown')
+          if (!resp || resp === undefined) {
+            setIsDataTransaction('type: unknown');
           } else if (resp.type === 'committed') {
             delete resp.location_proof
             setIsDataTransaction([resp]);
@@ -38,8 +42,13 @@ export const GetTransaction = ({ testHash }) => {
           setIsError('');
           setClassInput('search');
           navigate(isValueSearch);
-        } catch (error) {
-          console.log(error);
+        } catch (e) {
+          console.log(e);
+          setIsError(`The data you entered is incorrect! ${e.message}`);
+          setIsDataTransaction('');
+          if (e.response.status >= 500) {
+            setIsError('Unexpected error, please try again later...');
+          }
         }
       } else {
         setIsError('Not a HEX string');
@@ -51,15 +60,17 @@ export const GetTransaction = ({ testHash }) => {
     }
   }
 
+  const onKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      onGetTransaction();
+    }
+  }
+
   useEffect(() => {
     if (isValueSearch) {
-      getTransaction();
+      onGetTransaction();
     }
   }, []);
-
-  const readValueInput = (e) => {
-    setIsValueSearch(e.target.value);
-  }
 
   return (
 
@@ -68,16 +79,17 @@ export const GetTransaction = ({ testHash }) => {
         <div className={classInput}>
           {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
           <input placeholder='Enter transaction number'
+            onKeyDown={onKeyDown}
             value={isValueSearch}
             onChange={readValueInput} />
         </div>
-        <button onClick={getTransaction}>Search</button>
+        <button onClick={onGetTransaction}>Search</button>
         <p>{isError}</p>
       </div>
 
-      <RequestContent 
-      data={isDataTransaction} 
-      columnsTable={columnsBlockchain.transaction} />
+      <RequestContent
+        data={isDataTransaction}
+        columnsTable={columnsBlockchain.transaction} />
 
     </>
 

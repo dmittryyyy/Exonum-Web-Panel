@@ -22,17 +22,31 @@ export const UserCards = observer(() => {
 
     const [dataRelatedReq, setDataRelatedReq] = useState();
 
-    const usersCards = async () => {
+    const readValueInput = (e) => {
+        setIsValueSearch(e.target.value);
+    }
+
+    const onUsersCards = async () => {
         if (isValueSearch) {
             try {
                 await getUserCards(client.activeAPI + `/${'external/api/v1'}`, isValueSearch)
                     .then(resp => {
-                        setIsDataUserCards(resp);
+                        if (!resp || resp === []) {
+                            setIsError('Data undefined!');
+                        } else {
+                            setIsDataUserCards(resp);
+                            setIsError('');
+                            setClassInput('search');
+                        }
                     });
-                setIsError('');
                 navigate(isValueSearch);
-            } catch (err) {
-                console.log(err);
+            } catch (e) {
+                console.log(e);
+                setIsError(`The data you entered is incorrect! ${e.message}`);
+                setIsDataUserCards('');
+                if (e.response.status >= 500) {
+                    setIsError('Unexpected error, please try again later...');
+                }
             }
         } else {
             setIsError('Empty search string!')
@@ -40,25 +54,32 @@ export const UserCards = observer(() => {
         }
     }
 
-    const readValueInput = (e) => {
-        setIsValueSearch(e.target.value);
+    const onKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            onUsersCards();
+        }
     }
 
     const onChainQueries = async () => {
         const array = [];
-        await getDataForEachCard(isDataUserCards, client.activeAPI + `/${'api/'}`, 'cards/')
-            .then(res => {
-                array.push(...res);
-            });
-        await getUserSapInfo(client._activeAPI + `/${'external/api/v1'}`, isDataUserCards[0].cardHolderId)
-            .then(resp => array.push(resp));
-        setDataRelatedReq(array);
+        try {
+            await getDataForEachCard(isDataUserCards, client.activeAPI + `/${'api/'}`, 'cards/')
+                .then(res => {
+                    array.push(...res);
+                });
+            await getUserSapInfo(client._activeAPI + `/${'external/api/v1'}`, isDataUserCards[0].cardHolderId)
+                .then(resp => array.push(resp));
+            setDataRelatedReq(array);
+        } catch (e) {
+            console.log(e);
+            setIsError('Run the main query first!');
+        }
     }
 
     useEffect(() => {
         client.setActiveAPI(localStorage.getItem('url api'));
         if (isValueSearch) {
-            usersCards();
+            onUsersCards();
         }
     }, []);
 
@@ -75,10 +96,11 @@ export const UserCards = observer(() => {
                 <div className={classInput}>
                     {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
                     <input placeholder='Enter user id'
+                        onKeyDown={onKeyDown}
                         value={isValueSearch}
                         onChange={readValueInput} />
                 </div>
-                <button onClick={usersCards}>Search</button>
+                <button onClick={onUsersCards}>Search</button>
                 <p>{isError}</p>
             </div>
 
@@ -89,7 +111,7 @@ export const UserCards = observer(() => {
             {dataRelatedReq ? <h4>Data related queries</h4> : ''}
             <RequestContent
                 data={dataRelatedReq}
-                columnsTable={columnsSapExplorer.cards} />
+                columnsTable={columnsSapExplorer.userCardsRelQuer} />
         </>
 
     )

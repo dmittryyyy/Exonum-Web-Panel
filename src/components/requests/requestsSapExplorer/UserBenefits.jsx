@@ -20,17 +20,31 @@ export const UserBenefits = () => {
     const [classInput, setClassInput] = useState('search');
     const [isError, setIsError] = useState('');
 
-    const usersBenefits = async () => {
+    const readValueInput = (e) => {
+        setIsValueSearch(e.target.value);
+    };
+
+    const onUsersBenefits = async () => {
         if (isValueSearch) {
             try {
                 await getUsersBenefits(client.activeAPI + `/${'external/api/v1'}`, isValueSearch)
                     .then(resp => {
-                        setIsDataBenefits(resp);
+                        if(!resp || resp === []) {
+                            setIsError('Data undefined!');
+                        } else {
+                            setIsDataBenefits(resp);
+                            setIsError('');
+                            setClassInput('search');
+                        }
                     });
-                setIsError('');
                 navigate(isValueSearch);
-            } catch (err) {
-                console.log(err);
+            } catch (e) {
+                console.log(e);
+                setIsError(`The data you entered is incorrect! ${e.message}`);
+                setIsDataBenefits('');
+                if (e.response.status >= 500) {
+                    setIsError('Unexpected error, please try again later...');
+                }
             }
         } else {
             setIsError('Empty search string!')
@@ -38,24 +52,41 @@ export const UserBenefits = () => {
         }
     };
 
-    const readValueInput = (e) => {
-        setIsValueSearch(e.target.value);
-    };
+    const onKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            onUsersBenefits();
+        }
+    }
 
     const onBlockchainProfile = async () => {
         let idBlockchian;
-        await getUserSapInfo(client.activeAPI + `/${'external/api/v1'}`, isValueSearch)
-            .then(resp => {
-                idBlockchian = resp.blockchainId;
-            });
-        await getBlockchainProfile(idBlockchian).then(data => {
-            setIsDataBlockchain([data]);
-        })
+        try {
+            await getUserSapInfo(client.activeAPI + `/${'external/api/v1'}`, isValueSearch)
+                .then(resp => {
+                    if (!resp || resp === []) {
+                        setIsError('Data undefined!');
+                    }
+                    idBlockchian = resp.blockchainId;
+                });
+        } catch (e) {
+            console.log(e);
+            setIsError('Run the main query first!');
+        }
+        if (idBlockchian) {
+            try {
+                await getBlockchainProfile(idBlockchian).then(data => {
+                    setIsDataBlockchain([data]);
+                })
+            } catch (e) {
+                console.log(e);
+                setIsError(e.message);
+            }
+        }
     }
 
     useEffect(() => {
         if (isValueSearch) {
-            usersBenefits();
+            onUsersBenefits();
         }
     }, []);
 
@@ -70,10 +101,11 @@ export const UserBenefits = () => {
                 <div className={classInput}>
                     {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
                     <input placeholder='Enter user id'
+                        onKeyDown={onKeyDown}
                         value={isValueSearch}
                         onChange={readValueInput} />
                 </div>
-                <button onClick={usersBenefits}>Search</button>
+                <button onClick={onUsersBenefits}>Search</button>
                 <p>{isError}</p>
             </div>
 

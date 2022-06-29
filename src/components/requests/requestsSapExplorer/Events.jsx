@@ -23,6 +23,10 @@ export const Events = () => {
     const [nullCalendar, setNullCalendar] = useState(null);
     const [isError, setIsError] = useState('');
 
+    const readValueInput = (e) => {
+        setCountInput(e.target.value);
+    }
+
     const validationCalendar = (date) => {
         if (valueCalendar === undefined) {
             setNullCalendar('Enter Date and Time!');
@@ -48,26 +52,54 @@ export const Events = () => {
             try {
                 await getEvents(client.activeAPI + `/${'external/api/v1'}`, valueCalendar.toISOString(), countInput)
                     .then(resp => {
-                        setisDataEvents(resp);
+                        if (!resp || resp === []) {
+                            setIsError('Data undefined!');
+                        } else {
+                            setisDataEvents(resp);
+                            setClassInput('search');
+                            setIsError('');
+                            navigate(valueCalendar + `/${countInput}`);
+                        }
                     });
-                navigate(valueCalendar + `/${countInput}`);
-                setClassInput('search');
-                setIsError('');
-            } catch (err) {
-                console.log(err);
+            } catch (e) {
+                console.log(e);
+                if (e.response.status >= 500) {
+                    setIsError('Unexpected error, please try again later...');
+                }
             }
         }
     };
 
+    const onKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            onEvents();
+        }
+    }
+
     const onBlockchainProfile = async () => {
         let idBlockchian;
-        await getUserSapInfo(client.activeAPI + `/${'external/api/v1'}`, isDataEvents[0].data.userId)
-            .then(resp => {
-                idBlockchian = resp.blockchainId;
-            });
-        await getBlockchainProfile(idBlockchian).then(data => {
-            setIsDataBlockchain([data]);
-        })
+        try {
+            await getUserSapInfo(client.activeAPI + `/${'external/api/v1'}`, isDataEvents[0].data.userId)
+                .then(resp => {
+                    if (!resp || resp === []) {
+                        setIsError('Data undefined!');
+                    }
+                    idBlockchian = resp.blockchainId;
+                });
+        } catch (e) {
+            console.log(e);
+            setIsError('Run the main query first!');
+        }
+        if (idBlockchian) {
+            try {
+                await getBlockchainProfile(idBlockchian).then(data => {
+                    setIsDataBlockchain([data]);
+                })
+            } catch (e) {
+                console.log(e);
+                setIsError(e.message);
+            }
+        }
     }
 
     useEffect(() => {
@@ -75,10 +107,6 @@ export const Events = () => {
             onEvents();
         }
     }, []);
-
-    const readValueInput = (e) => {
-        setCountInput(e.target.value);
-    }
 
     return (
 
@@ -96,7 +124,7 @@ export const Events = () => {
 
                 <div className="searchWrapper">
                     <div className={classInput}>
-                        <input type="number" placeholder='Enter limit elements' max={100} onChange={readValueInput} value={countInput} />
+                        <input onKeyDown={onKeyDown} type="number" placeholder='Enter limit elements' max={100} onChange={readValueInput} value={countInput} />
                     </div>
                     <button onClick={onEvents}>Search</button>
                     <p>{isError}</p>

@@ -2,7 +2,7 @@ import { React, useContext, useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router';
 
 import { ThemeContext } from '../../../index';
-import { getVendingProfilesBenefits, getUserSapInfo, getBlockchainProfile } from '../../../services/SapExplorer';
+import { getBenefitRules, getUserSapInfo, getBlockchainProfile } from '../../../services/SapExplorer';
 import { RequestContent } from '../../../components/requestContent/RequestContent';
 import { NavBarForRelatedQueries } from '../../navBar/NavBarForRelatedQueries';
 
@@ -20,17 +20,31 @@ export const BenefitRules = () => {
     const [classInput, setClassInput] = useState('search');
     const [isError, setIsError] = useState('');
 
-    const benefitRules = () => {
+    const readValueInput = (e) => {
+        setIsValueSearch(e.target.value);
+    }
+
+    const onBenefitRules = async () => {
         if (isValueSearch) {
             try {
-                getVendingProfilesBenefits(client.activeAPI + '/api/', isValueSearch)
+                await getBenefitRules(client.activeAPI + '/api/', isValueSearch)
                     .then(resp => {
-                        setIsDataBenefits(resp);
+                        if (!resp || resp === []) {
+                            setIsError('Data undefined!');
+                        } else {
+                            setIsDataBenefits(resp);
+                            setIsError('');
+                            setClassInput('search');
+                            navigate(isValueSearch);
+                        }
                     });
-                setIsError('');
-                navigate(isValueSearch);
-            } catch (err) {
-                console.log(err);
+            } catch (e) {
+                console.log(e);
+                setIsError(`The data you entered is incorrect! ${e.message}`);
+                setIsDataBenefits('');
+                if (e.response.status >= 500) {
+                    setIsError('Unexpected error, please try again later...');
+                }
             }
         } else {
             setIsError('Empty search string!')
@@ -38,26 +52,43 @@ export const BenefitRules = () => {
         }
     }
 
-    useEffect(() => {
-        if (isValueSearch) {
-            benefitRules();
+    const onKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            onBenefitRules();
         }
-    }, []);
-
-    const readValueInput = (e) => {
-        setIsValueSearch(e.target.value);
     }
 
     const onBlockchainProfile = async () => {
         let idBlockchian;
-        await getUserSapInfo(client.activeAPI + `/${'external/api/v1'}`, isValueSearch)
-            .then(resp => {
-                idBlockchian = resp.blockchainId;
-            });
-        await getBlockchainProfile(idBlockchian).then(data => {
-            setIsDataBlockchain([data]);
-        })
+        try {
+            await getUserSapInfo(client.activeAPI + `/${'external/api/v1'}`, isValueSearch)
+                .then(resp => {
+                    if (!resp || resp === []) {
+                        setIsError('Data undefined!');
+                    }
+                    idBlockchian = resp.blockchainId;
+                });
+        } catch (e) {
+            console.log(e);
+            setIsError('Run the main query first!');
+        }
+        if (idBlockchian) {
+            try {
+                await getBlockchainProfile(idBlockchian).then(data => {
+                    setIsDataBlockchain([data]);
+                })
+            } catch (e) {
+                console.log(e);
+                setIsError(e.message);
+            }
+        }
     }
+
+    useEffect(() => {
+        if (isValueSearch) {
+            onBenefitRules();
+        }
+    }, []);
 
     return (
 
@@ -69,11 +100,11 @@ export const BenefitRules = () => {
             <div className="searchWrapper">
                 <div className={classInput}>
                     {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
-                    <input placeholder='Enter user id'
+                    <input onKeyDown={onKeyDown} placeholder='Enter user id'
                         value={isValueSearch}
                         onChange={readValueInput} />
                 </div>
-                <button onClick={benefitRules}>Search</button>
+                <button onClick={onBenefitRules}>Search</button>
                 <p>{isError}</p>
             </div>
 

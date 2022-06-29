@@ -18,19 +18,31 @@ export const GetUserWallet = ({ testHash }) => {
     const [classInput, setClassInput] = useState('search');
     const [isError, setIsError] = useState('');
 
-    const getUserWallet = async () => {
+    const readValueInput = (e) => {
+        setIsValueSearch(e.target.value);
+    }
+
+    const onGetUserWallet = async () => {
         if (isValueSearch) {
             if (testHash(isValueSearch)) {
                 try {
                     await searchUserWallet(client.activeNode, isValueSearch)
                         .then((wallet) => {
-                          setIsDataWallet([wallet.data]);
+                            if (!wallet || wallet === []) {
+                                setIsError('Data undefined!');
+                            }
+                            setIsDataWallet([wallet.data]);
                         });
                     setIsError('');
                     setClassInput('search');
                     navigate(isValueSearch);
-                } catch (error) {
-                    console.log(error);
+                } catch (e) {
+                    console.log(e);
+                    setIsError(`The data you entered is incorrect! ${e.message}`);
+                    setIsDataWallet('');
+                    if (e.response.status >= 500) {
+                        setIsError('Unexpected error, please try again later...');
+                    }
                 }
             } else {
                 setIsError('Not a HEX string');
@@ -42,15 +54,17 @@ export const GetUserWallet = ({ testHash }) => {
         }
     }
 
+    const onKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            onGetUserWallet();
+        }
+    }
+
     useEffect(() => {
         if (isValueSearch) {
-            getUserWallet();
+            onGetUserWallet();
         }
     }, []);
-
-    const readValueInput = (e) => {
-        setIsValueSearch(e.target.value);
-    }
 
     return (
 
@@ -59,16 +73,17 @@ export const GetUserWallet = ({ testHash }) => {
                 <div className={classInput}>
                     {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
                     <input placeholder='Enter user wallet'
+                        onKeyDown={onKeyDown}
                         value={isValueSearch}
                         onChange={readValueInput} />
                 </div>
-                <button onClick={getUserWallet}>Search</button>
+                <button onClick={onGetUserWallet}>Search</button>
                 <p>{isError}</p>
             </div>
 
-            <RequestContent 
-            data={isDataWallet} 
-            columnsTable={columnsBlockchain.userWallet} />
+            <RequestContent
+                data={isDataWallet}
+                columnsTable={columnsBlockchain.userWallet} />
         </>
 
     )

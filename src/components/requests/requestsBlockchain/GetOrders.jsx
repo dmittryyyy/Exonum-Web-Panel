@@ -18,12 +18,19 @@ export const GetOrders = ({ testHash }) => {
   const [isError, setIsError] = useState('');
   const [classInput, setClassInput] = useState('search');
 
-  const getOrders = async () => {
+  const readValueInput = (e) => {
+    setIsValueSearch(e.target.value);
+  }
+
+  const onGetOrders = async () => {
     if (isValueSearch) {
       if (testHash(isValueSearch)) {
         try {
           await searchOrders(client.activeNode, isValueSearch)
             .then((orders) => {
+              if (!orders || orders === []) {
+                setIsError('Data undefined!');
+              }
               orders.data.map((elements) => {
                 elements.status.splice(0, elements.status.length - 1);
                 setIsDataOrders(orders.data);
@@ -32,8 +39,13 @@ export const GetOrders = ({ testHash }) => {
           setIsError('');
           setClassInput('search');
           navigate(isValueSearch);
-        } catch (error) {
-          console.log(error);
+        } catch (e) {
+          console.log(e);
+          setIsError(`The data you entered is incorrect! ${e.message}`);
+          setIsDataOrders('');
+          if (e.response.status >= 500) {
+            setIsError('Unexpected error, please try again later...');
+          }
         }
       } else {
         setIsError('Not a HEX string');
@@ -45,15 +57,17 @@ export const GetOrders = ({ testHash }) => {
     }
   }
 
+  const onKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      onGetOrders();
+    }
+  }
+
   useEffect(() => {
     if (isValueSearch) {
-      getOrders();
+      onGetOrders();
     }
   }, []);
-
-  const readValueInput = (e) => {
-    setIsValueSearch(e.target.value);
-  }
 
   return (
 
@@ -62,13 +76,13 @@ export const GetOrders = ({ testHash }) => {
         <div className={classInput}>
           {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
           <input placeholder='Orders search'
+            onKeyDown={onKeyDown}
             value={isValueSearch}
             onChange={readValueInput} />
         </div>
-        <button onClick={getOrders}>Search</button>
+        <button onClick={onGetOrders}>Search</button>
         <p>{isError}</p>
       </div>
-
 
       <RequestContent
         data={isDataOrders}

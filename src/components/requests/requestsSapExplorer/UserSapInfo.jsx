@@ -2,7 +2,7 @@ import { React, useContext, useState, useEffect } from 'react';
 import { useParams, useNavigate, Routes, Route } from 'react-router';
 
 import { ThemeContext } from '../../../index';
-import { getUserSapInfo, getVendingProfilesBenefits, getDataForEachCard, getUsersBenefits, getUserCards, getBlockchainProfile } from '../../../services/SapExplorer';
+import { getUserSapInfo, getBenefitRules, getDataForEachCard, getUsersBenefits, getUserCards, getBlockchainProfile } from '../../../services/SapExplorer';
 import { RequestContent } from '../../../components/requestContent/RequestContent';
 import { NavBarForRelatedQueries } from '../../navBar/NavBarForRelatedQueries';
 
@@ -24,18 +24,32 @@ export const UserSapInfo = () => {
     const [classInput, setClassInput] = useState('search');
     const [isError, setIsError] = useState('');
 
-    const userSapInfo = async () => {
+    const readValueInput = (e) => {
+        setIsValueSearch(e.target.value);
+    }
+
+    const onUserSapInfo = async () => {
         if (isValueSearch) {
             try {
                 await getUserSapInfo(client.activeAPI + `/${'external/api/v1'}`, isValueSearch)
                     .then(resp => {
-                        setIsDataSapInfo(resp);
-                        setIsRelatedReq(resp.blockchainId)
-                    });    
-                setIsError('');
+                        if (!resp || resp === []) {
+                            setIsError('Data undefined!');
+                        } else {
+                            setIsDataSapInfo(resp);
+                            setIsRelatedReq(resp.blockchainId);
+                            setIsError('');
+                        }
+
+                    });
                 navigate(isValueSearch);
-            } catch (err) {
-                console.log(err);
+            } catch (e) {
+                console.log(e);
+                setIsError(`The data you entered is incorrect! ${e.message}`);
+                setIsDataSapInfo('');
+                if (e.response.status >= 500) {
+                    setIsError('Unexpected error, please try again later...');
+                }
             }
         } else {
             setIsError('Empty search string!')
@@ -43,73 +57,96 @@ export const UserSapInfo = () => {
         }
     }
 
-    const readValueInput = (e) => {
-        setIsValueSearch(e.target.value);
+    const onKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            onUserSapInfo();
+        }
     }
 
     const onChainQueries = async () => {
         const array = [];
         let id;
-        await getUserSapInfo(client.activeAPI + `/${'external/api/v1'}`, isValueSearch)
-        .then(resp => {
-            id = resp.id;
-        }); 
-        navigate(`${isValueSearch}/` + isRelatedReq);
-        await getUserCards(client.activeAPI + `/${'external/api/v1'}`, id)
-            .then(resp => {
-                array.push(resp);
-            });
-        await getDataForEachCard(array[0], client.activeAPI + `/${'api/'}`, 'cards/')
-            .then(res => {
-                array.push([...res]);
-            });
-        await getVendingProfilesBenefits(client.activeAPI + '/api/', id)
-            .then(resp => {
-                array.push([resp]);
-            });
-        await getUsersBenefits(client.activeAPI + `/${'external/api/v1'}`, isValueSearch)
-            .then(resp => {
-                array.push(resp);
-            });
-        setDataRelatedReq(array);
+        try {
+            await getUserSapInfo(client.activeAPI + `/${'external/api/v1'}`, isValueSearch)
+                .then(resp => {
+                    id = resp.id;
+                });
+            navigate(`${isValueSearch}/` + isRelatedReq);
+            await getUserCards(client.activeAPI + `/${'external/api/v1'}`, id)
+                .then(resp => {
+                    array.push(resp);
+                });
+            await getDataForEachCard(array[0], client.activeAPI + `/${'api/'}`, 'cards/')
+                .then(res => {
+                    array.push([...res]);
+                });
+            await getBenefitRules(client.activeAPI + '/api/', id)
+                .then(resp => {
+                    array.push([resp]);
+                });
+            await getUsersBenefits(client.activeAPI + `/${'external/api/v1'}`, isValueSearch)
+                .then(resp => {
+                    array.push(resp);
+                });
+            setDataRelatedReq(array);
+        } catch (e) {
+            console.log(e);
+            setIsError('Run the main query first!');
+        }
     }
 
     const onBlockchainProfile = async () => {
         let idBlockchian;
-        await getUserSapInfo(client.activeAPI + `/${'external/api/v1'}`, isValueSearch)
-            .then(resp => {
-                idBlockchian = resp.blockchainId;
-            });
-        await getBlockchainProfile(idBlockchian).then(data => {
-            setIsDataBlockchain([data]);
-        })
+        try {
+            await getUserSapInfo(client.activeAPI + `/${'external/api/v1'}`, isValueSearch)
+                .then(resp => {
+                    if (!resp || resp === []) {
+                        setIsError('Data undefined!');
+                    }
+                    idBlockchian = resp.blockchainId;
+                });
+        } catch (e) {
+            console.log(e);
+            setIsError('Run the main query first!');
+        }
+        if (idBlockchian) {
+            try {
+                await getBlockchainProfile(idBlockchian).then(data => {
+                    setIsDataBlockchain([data]);
+                })
+            } catch (e) {
+                console.log(e);
+                setIsError(e.message);
+            }
+        }
     }
 
     useEffect(() => {
         if (isValueSearch && isRelatedReq) {
-            userSapInfo();
+            onUserSapInfo();
             onChainQueries();
         } else if (isValueSearch) {
-            userSapInfo();
+            onUserSapInfo();
         }
     }, []);
 
     return (
 
         <>
-            <NavBarForRelatedQueries 
-             onChainQueriesUserInfo={<button className='list-queries-item' onClick={onChainQueries}>Chain queries</button>}
-             onBlockchainProfile={<button className='list-queries-item' onClick={onBlockchainProfile}>Blockchain profile</button>}
+            <NavBarForRelatedQueries
+                onChainQueriesUserInfo={<button className='list-queries-item' onClick={onChainQueries}>Chain queries</button>}
+                onBlockchainProfile={<button className='list-queries-item' onClick={onBlockchainProfile}>Blockchain profile</button>}
             />
 
             <div className="searchWrapper">
                 <div className={classInput}>
                     {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
                     <input placeholder='Enter user id'
+                        onKeyDown={onKeyDown}
                         value={isValueSearch}
                         onChange={readValueInput} />
                 </div>
-                <button onClick={userSapInfo}>Search</button>
+                <button onClick={onUserSapInfo}>Search</button>
                 <p>{isError}</p>
             </div>
 

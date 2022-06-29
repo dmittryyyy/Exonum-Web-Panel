@@ -76,14 +76,64 @@ export class ColumnsSapExplorer {
                 wrap: true
             },
             {
+                name: 'modifiedOn',
+                selector: (row) => row.modifiedOn,
+                sortable: true,
+                wrap: true
+            },
+            {
                 name: 'createdOn',
                 selector: (row) => row.createdOn,
+                sortable: true,
+                wrap: true
+            },
+        ];
+        this.columnsUserCardsRelQuer = [
+            {
+                name: 'id',
+                selector: (row) => row.id,
+                sortable: true,
+                wrap: true
+            },
+            {
+                name: 'userId',
+                selector: (row) => row.userId,
+                sortable: true,
+                wrap: true
+            },
+            {
+                name: 'type',
+                selector: (row) => row.type,
+                sortable: true,
+                wrap: true
+            },
+            {
+                name: 'number',
+                selector: (row) => row.number,
                 sortable: true,
                 wrap: true
             },
             {
                 name: 'modifiedOn',
                 selector: (row) => row.modifiedOn,
+                sortable: true,
+                wrap: true
+            },
+            {
+                name: 'blockchainId',
+                selector: (row) => row.blockchainId,
+                sortable: true,
+                wrap: true
+            },
+            {
+                name: 'nickname',
+                selector: (row) => row.nickname,
+                sortable: true,
+                wrap: true
+            },
+            {
+                name: 'createdOn',
+                selector: (row) => row.createdOn,
                 sortable: true,
                 wrap: true
             },
@@ -104,6 +154,66 @@ export class ColumnsSapExplorer {
             {
                 name: 'createdOn',
                 selector: (row) => row.createdOn,
+                sortable: true,
+                wrap: true,
+            },
+            {
+                name: 'userId',
+                selector: (row) => row.data.userId,
+                sortable: true,
+                wrap: true,
+            },
+            {
+                name: 'cardId',
+                selector: (row) => row.data.cardId,
+                sortable: true,
+                wrap: true,
+            },
+            {
+                name: 'sku',
+                selector: (row) => row.data.sku,
+                sortable: true,
+                wrap: true,
+            },
+            {
+                name: 'itemCount',
+                selector: (row) => row.data.itemCount,
+                sortable: true,
+                wrap: true,
+            },
+            {
+                name: 'amount',
+                selector: (row) => row.data.amount,
+                sortable: true,
+                wrap: true,
+            },
+            {
+                name: 'portionAmount',
+                selector: (row) => row.data.portionAmount,
+                sortable: true,
+                wrap: true,
+            },
+            {
+                name: 'subsidyAmount',
+                selector: (row) => row.data.subsidyAmount,
+                sortable: true,
+                wrap: true,
+            },
+            {
+                name: 'moneyAmount',
+                selector: (row) => row.data.moneyAmount,
+                sortable: true,
+                wrap: true,
+            },
+            {
+                name: 'deductionAmount',
+                selector: (row) => row.data.deductionAmount,
+                sortable: true,
+                wrap: true,
+            },
+            {
+                name: 'deviceId',
+                selector: (row) => row.deviceId,
                 sortable: true,
                 wrap: true,
             },
@@ -300,5 +410,9 @@ export class ColumnsSapExplorer {
 
     get reqForAllMachines() {
         return this.columnsRequestsForAllMachines;
+    }
+
+    get userCardsRelQuer() {
+        return this.columnsUserCardsRelQuer;
     }
 }

@@ -21,17 +21,31 @@ export const Cards = observer(() => {
     const [classInput, setClassInput] = useState('search');
     const [isError, setIsError] = useState('');
 
-    const Cards = async () => {
+    const readValueInput = (e) => {
+        setIsValueSearch(e.target.value);
+    }
+
+    const onCards = async () => {
         if (isValueSearch) {
             try {
                 await getCards(client.activeAPI, isValueSearch)
                     .then(resp => {
-                        setIsDataCards([resp]);
+                        if (!resp || resp === []) {
+                            setIsError('Data undefined!');
+                        } else {
+                            setIsDataCards([resp]);
+                            setIsError('');
+                            setClassInput('search');
+                            navigate(isValueSearch);
+                        }
                     });
-                setIsError('');
-                navigate(isValueSearch);
-            } catch (err) {
-                console.log(err);
+            } catch (e) {
+                console.log(e);
+                setIsError(`The data you entered is incorrect! ${e.message}`);
+                setIsDataCards('');
+                if (e.response.status >= 500) {
+                    setIsError('Unexpected error, please try again later...');
+                }
             }
         } else {
             setIsError('Empty search string!')
@@ -39,51 +53,68 @@ export const Cards = observer(() => {
         }
     }
 
+    const onKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            onCards();
+        }
+    }
+
     const onBlockchainProfile = async () => {
         let idBlockchian;
-        await getUserSapInfo(client.activeAPI + `/${'external/api/v1'}`, isDataCards[0].userId)
-            .then(resp => {
-                idBlockchian = resp.blockchainId;
-            });
-        await getBlockchainProfile(idBlockchian).then(data => {
-            setIsDataBlockchain([data]);
-        })
+        try {
+            await getUserSapInfo(client.activeAPI + `/${'external/api/v1'}`, isDataCards[0].userId)
+                .then(resp => {
+                    if (!resp || resp === []) {
+                        setIsError('Data undefined!');
+                    }
+                    idBlockchian = resp.blockchainId;
+                });
+        } catch (e) {
+            console.log(e);
+            setIsError('Run the main query first!');
+        }
+        if (idBlockchian) {
+            try {
+                await getBlockchainProfile(idBlockchian).then(data => {
+                    setIsDataBlockchain([data]);
+                })
+            } catch (e) {
+                console.log(e);
+                setIsError(e.message);
+            }
+        }
     }
 
     useEffect(() => {
         client.setActiveAPI(localStorage.getItem('url api'));
         if (isValueSearch) {
-            Cards();
+            onCards();
         }
     }, []);
-
-    const readValueInput = (e) => {
-        setIsValueSearch(e.target.value);
-    }
 
     return (
 
         <>
-<NavBarForRelatedQueries
+            <NavBarForRelatedQueries
                 onBlockchainProfile={<button className='list-queries-item' onClick={onBlockchainProfile}>Blockchain profile</button>}
             />
 
             <div className="searchWrapper">
                 <div className={classInput}>
                     {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
-                    <input placeholder='Enter card id'
+                    <input onKeyDown={onKeyDown} placeholder='Enter card id'
                         value={isValueSearch}
                         onChange={readValueInput} />
                 </div>
-                <button onClick={Cards}>Search</button>
+                <button onClick={onCards}>Search</button>
                 <p>{isError}</p>
             </div>
 
-            <RequestContent 
-            data={isDataCards} 
-            columnsTable={columnsSapExplorer.columnsCards} />
+            <RequestContent
+                data={isDataCards}
+                columnsTable={columnsSapExplorer.columnsCards} />
 
-{isDataBlockchain ? <h4>Blockchain profile</h4> : ''}
+            {isDataBlockchain ? <h4>Blockchain profile</h4> : ''}
             <RequestContent data={isDataBlockchain} />
         </>
 
