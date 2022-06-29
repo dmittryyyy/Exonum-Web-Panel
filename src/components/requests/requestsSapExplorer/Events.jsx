@@ -3,8 +3,9 @@ import { useParams, useNavigate } from 'react-router';
 import DateTimePicker from 'react-datetime-picker';
 
 import { ThemeContext } from '../../../index';
-import { getEvents } from '../../../services/SapExplorer';
+import { getEvents, getUserSapInfo, getBlockchainProfile } from '../../../services/SapExplorer';
 import { RequestContent } from '../../../components/requestContent/RequestContent';
+import { NavBarForRelatedQueries } from '../../navBar/NavBarForRelatedQueries';
 
 export const Events = () => {
 
@@ -15,6 +16,7 @@ export const Events = () => {
 
     const [countInput, setCountInput] = useState(limit ? limit : '');
     const [isDataEvents, setisDataEvents] = useState();
+    const [isDataBlockchain, setIsDataBlockchain] = useState();
 
     const [valueCalendar, setValueCalendar] = useState(createdOn_gt ? new Date(createdOn_gt) : null);
     const [classInput, setClassInput] = useState('search');
@@ -55,6 +57,17 @@ export const Events = () => {
                 console.log(err);
             }
         }
+    };
+
+    const onBlockchainProfile = async () => {
+        let idBlockchian;
+        await getUserSapInfo(client.activeAPI + `/${'external/api/v1'}`, isDataEvents[0].data.userId)
+            .then(resp => {
+                idBlockchian = resp.blockchainId;
+            });
+        await getBlockchainProfile(idBlockchian).then(data => {
+            setIsDataBlockchain([data]);
+        })
     }
 
     useEffect(() => {
@@ -70,6 +83,10 @@ export const Events = () => {
     return (
 
         <>
+            <NavBarForRelatedQueries
+                onBlockchainProfile={<button className='list-queries-item' onClick={onBlockchainProfile}>Blockchain profile</button>}
+            />
+
             <div className="searchBlock">
                 <div className='DataTime'>
                     <DateTimePicker onChange={setValueCalendar} value={valueCalendar}
@@ -86,9 +103,12 @@ export const Events = () => {
                 </div>
             </div>
 
-            <RequestContent 
-            data={isDataEvents}
-            columnsTable={columnsSapExplorer.events} />
+            <RequestContent
+                data={isDataEvents}
+                columnsTable={columnsSapExplorer.events} />
+
+            {isDataBlockchain ? <h4>Blockchain profile</h4> : ''}
+            <RequestContent data={isDataBlockchain} />
         </>
 
     )

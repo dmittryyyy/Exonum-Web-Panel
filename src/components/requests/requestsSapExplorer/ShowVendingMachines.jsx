@@ -142,7 +142,7 @@ export const ShowVendingMachines = () => {
         const dataMachine = await getVendingMachines(client.activeAPI + `/${'api'}`);
         let data = [];
         let fullData = [];
-        
+
         dataMachine.map(async item => {
             await getItemsLoaded(client.activeAPI + `/${'api'}`, item.id)
                 .then(resp => {
@@ -186,11 +186,19 @@ export const ShowVendingMachines = () => {
     return (
 
         <>
-            <NavBarForRelatedQueries requestsForAllMachines={requestsForAllMachines} />
+            <NavBarForRelatedQueries
+                requestsForAllMachines={<button className='list-queries-item'
+                    onClick={requestsForAllMachines}>Requests for all machines</button>}
+            />
 
             <RequestContent
                 data={dataVendingmachine}
                 columnsTable={columnsVendingMachines} />
+
+            {window.location.href.indexOf('allMachines') >= 0 ?
+                <h4>Data on all machines</h4>
+                : isIdMachine ?
+                    <h4>Data on chosen machine</h4> : ''}
 
             <Routes>
                 <Route path='/' element={<RequestContent data={isLoadedAndPrice}

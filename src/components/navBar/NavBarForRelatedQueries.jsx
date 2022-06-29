@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import './NavBar.scss';
 
-export const NavBarForRelatedQueries = ({ onBlockchainProfile, onChainQueries, requestsForAllMachines }) => {
+export const NavBarForRelatedQueries = ({ onBlockchainProfile, onChainQueriesUserInfo, requestsForAllMachines, onChainQueriesUserCards }) => {
 
   return (
 
@@ -11,20 +11,16 @@ export const NavBarForRelatedQueries = ({ onBlockchainProfile, onChainQueries, r
       <ul className='list-group'>
         <div className='dashBoard'>
           <Link to=''><h3>Related queries</h3></Link>
-          <Link to=''><img src="images/resetDashboard.png" alt="Cброс" title='Reset choose' /></Link>
         </div>
+
         <div className='listQueries'>
+        {requestsForAllMachines}
 
-          {window.location.href.indexOf('vending-machines') >= 0 ?
+        {onChainQueriesUserInfo}
 
-            <button className='list-queries-item' onClick={requestsForAllMachines}>Requests for all machines</button>
-            : ''}
+        {onChainQueriesUserCards}
 
-          {window.location.href.indexOf('user-sapInfo') >= 0 ?
-            <button className='list-queries-item' onClick={onChainQueries}>Realted queries</button>
-            : ''}
-
-          <button className='list-queries-item' onClick={onBlockchainProfile}>Blockchain profile</button>
+        {onBlockchainProfile}
 
         </div>
       </ul>

@@ -2,8 +2,9 @@ import { React, useContext, useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router';
 
 import { ThemeContext } from '../../../index';
-import { getUsersBenefits } from '../../../services/SapExplorer';
+import { getUsersBenefits, getUserSapInfo, getBlockchainProfile } from '../../../services/SapExplorer';
 import { RequestContent } from '../../../components/requestContent/RequestContent';
+import { NavBarForRelatedQueries } from '../../navBar/NavBarForRelatedQueries';
 
 export const UserBenefits = () => {
 
@@ -14,6 +15,7 @@ export const UserBenefits = () => {
 
     const [isValueSearch, setIsValueSearch] = useState(user_benefitsId ? user_benefitsId : '');
     const [isDataBenefits, setIsDataBenefits] = useState();
+    const [isDataBlockchain, setIsDataBlockchain] = useState();
 
     const [classInput, setClassInput] = useState('search');
     const [isError, setIsError] = useState('');
@@ -34,6 +36,21 @@ export const UserBenefits = () => {
             setIsError('Empty search string!')
             setClassInput('searchError');
         }
+    };
+
+    const readValueInput = (e) => {
+        setIsValueSearch(e.target.value);
+    };
+
+    const onBlockchainProfile = async () => {
+        let idBlockchian;
+        await getUserSapInfo(client.activeAPI + `/${'external/api/v1'}`, isValueSearch)
+            .then(resp => {
+                idBlockchian = resp.blockchainId;
+            });
+        await getBlockchainProfile(idBlockchian).then(data => {
+            setIsDataBlockchain([data]);
+        })
     }
 
     useEffect(() => {
@@ -42,13 +59,13 @@ export const UserBenefits = () => {
         }
     }, []);
 
-    const readValueInput = (e) => {
-        setIsValueSearch(e.target.value);
-    }
-
     return (
 
         <>
+            <NavBarForRelatedQueries
+                onBlockchainProfile={<button className='list-queries-item' onClick={onBlockchainProfile}>Blockchain profile</button>}
+            />
+
             <div className="searchWrapper">
                 <div className={classInput}>
                     {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
@@ -60,9 +77,12 @@ export const UserBenefits = () => {
                 <p>{isError}</p>
             </div>
 
-            <RequestContent 
-            data={isDataBenefits} 
-            columnsTable={columnsSapExplorer.benefits} />
+            <RequestContent
+                data={isDataBenefits}
+                columnsTable={columnsSapExplorer.benefits} />
+
+            {isDataBlockchain ? <h4>Blockchain profile</h4> : ''}
+            <RequestContent data={isDataBlockchain} />
         </>
     )
 }

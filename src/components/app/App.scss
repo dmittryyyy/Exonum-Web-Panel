@@ -10,6 +10,12 @@ main {
     .mainContentRight {
       width: 75%;
       transition: 3s;
+
+      h4 {
+        margin-top: 10px;
+        border-top: 2px solid rgb(70, 145, 216);
+        padding-top: 10px;
+      }
     }
 
     .mainContentRightCloseMenu {

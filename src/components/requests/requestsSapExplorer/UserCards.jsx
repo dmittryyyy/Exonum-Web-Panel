@@ -5,6 +5,7 @@ import { observer } from 'mobx-react-lite';
 import { ThemeContext } from '../../../index';
 import { getUserCards, getUserSapInfo, getDataForEachCard } from '../../../services/SapExplorer';
 import { RequestContent } from '../../../components/requestContent/RequestContent';
+import { NavBarForRelatedQueries } from '../../navBar/NavBarForRelatedQueries';
 
 export const UserCards = observer(() => {
 
@@ -39,13 +40,6 @@ export const UserCards = observer(() => {
         }
     }
 
-    useEffect(() => {
-        client.setActiveAPI(localStorage.getItem('url api'));
-        if (isValueSearch) {
-            usersCards();
-        }
-    }, []);
-
     const readValueInput = (e) => {
         setIsValueSearch(e.target.value);
     }
@@ -53,17 +47,30 @@ export const UserCards = observer(() => {
     const onChainQueries = async () => {
         const array = [];
         await getDataForEachCard(isDataUserCards, client.activeAPI + `/${'api/'}`, 'cards/')
-        .then(res => {
-            array.push(...res);
-        });
+            .then(res => {
+                array.push(...res);
+            });
         await getUserSapInfo(client._activeAPI + `/${'external/api/v1'}`, isDataUserCards[0].cardHolderId)
             .then(resp => array.push(resp));
-            setDataRelatedReq(array);
+        setDataRelatedReq(array);
     }
+
+    useEffect(() => {
+        client.setActiveAPI(localStorage.getItem('url api'));
+        if (isValueSearch) {
+            usersCards();
+        }
+    }, []);
 
     return (
 
         <>
+
+            <NavBarForRelatedQueries
+                onChainQueriesUserCards={<button className='list-queries-item'
+                    onClick={onChainQueries}>Chain queries</button>}
+            />
+
             <div className="searchWrapper">
                 <div className={classInput}>
                     {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
@@ -75,19 +82,14 @@ export const UserCards = observer(() => {
                 <p>{isError}</p>
             </div>
 
-            <RequestContent 
-            data={isDataUserCards} 
-            columnsTable={columnsSapExplorer.userCards} />
+            <RequestContent
+                data={isDataUserCards}
+                columnsTable={columnsSapExplorer.userCards} />
 
-            {isDataUserCards ?
-
-                <div>
-                    <button onClick={onChainQueries}>Related queries</button>
-
-                    <RequestContent data={dataRelatedReq}/>
-
-                </div>
-                : ''}
+            {dataRelatedReq ? <h4>Data related queries</h4> : ''}
+            <RequestContent
+                data={dataRelatedReq}
+                columnsTable={columnsSapExplorer.cards} />
         </>
 
     )

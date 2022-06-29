@@ -2,7 +2,7 @@ import { React, useContext, useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router';
 
 import { ThemeContext } from '../../../index';
-import { getVendingProfilesBenefits } from '../../../services/SapExplorer';
+import { getVendingProfilesBenefits, getUserSapInfo, getBlockchainProfile } from '../../../services/SapExplorer';
 import { RequestContent } from '../../../components/requestContent/RequestContent';
 import { NavBarForRelatedQueries } from '../../navBar/NavBarForRelatedQueries';
 
@@ -15,6 +15,7 @@ export const BenefitRules = () => {
 
     const [isValueSearch, setIsValueSearch] = useState(benefit_rulesId ? benefit_rulesId : '');
     const [isDataBenefits, setIsDataBenefits] = useState();
+    const [isDataBlockchain, setIsDataBlockchain] = useState();
 
     const [classInput, setClassInput] = useState('search');
     const [isError, setIsError] = useState('');
@@ -47,9 +48,24 @@ export const BenefitRules = () => {
         setIsValueSearch(e.target.value);
     }
 
+    const onBlockchainProfile = async () => {
+        let idBlockchian;
+        await getUserSapInfo(client.activeAPI + `/${'external/api/v1'}`, isValueSearch)
+            .then(resp => {
+                idBlockchian = resp.blockchainId;
+            });
+        await getBlockchainProfile(idBlockchian).then(data => {
+            setIsDataBlockchain([data]);
+        })
+    }
+
     return (
 
         <>
+            <NavBarForRelatedQueries
+                onBlockchainProfile={<button className='list-queries-item' onClick={onBlockchainProfile}>Blockchain profile</button>}
+            />
+
             <div className="searchWrapper">
                 <div className={classInput}>
                     {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
@@ -61,9 +77,12 @@ export const BenefitRules = () => {
                 <p>{isError}</p>
             </div>
 
-            <RequestContent 
-            data={isDataBenefits} 
-            columnsTable={columnsSapExplorer.benefitsRules} />
+            <RequestContent
+                data={isDataBenefits}
+                columnsTable={columnsSapExplorer.benefitsRules} />
+
+            {isDataBlockchain ? <h4>Blockchain profile</h4> : ''}
+            <RequestContent data={isDataBlockchain} />
         </>
 
     )

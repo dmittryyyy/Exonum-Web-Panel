@@ -2,7 +2,7 @@ import { React, useContext, useState, useEffect } from 'react';
 import { useParams, useNavigate, Routes, Route } from 'react-router';
 
 import { ThemeContext } from '../../../index';
-import { getUserSapInfo, getVendingProfilesBenefits, getDataForEachCard, getUsersBenefits, getUserCards, blockchainProfile } from '../../../services/SapExplorer';
+import { getUserSapInfo, getVendingProfilesBenefits, getDataForEachCard, getUsersBenefits, getUserCards, getBlockchainProfile } from '../../../services/SapExplorer';
 import { RequestContent } from '../../../components/requestContent/RequestContent';
 import { NavBarForRelatedQueries } from '../../navBar/NavBarForRelatedQueries';
 
@@ -19,6 +19,7 @@ export const UserSapInfo = () => {
 
     const [isDataSapInfo, setIsDataSapInfo] = useState('');
     const [isDataRelatedReq, setDataRelatedReq] = useState();
+    const [isDataBlockchain, setIsDataBlockchain] = useState();
 
     const [classInput, setClassInput] = useState('search');
     const [isError, setIsError] = useState('');
@@ -79,8 +80,8 @@ export const UserSapInfo = () => {
             .then(resp => {
                 idBlockchian = resp.blockchainId;
             });
-        await blockchainProfile(idBlockchian).then(data => {
-            setDataRelatedReq([data]);
+        await getBlockchainProfile(idBlockchian).then(data => {
+            setIsDataBlockchain([data]);
         })
     }
 
@@ -96,7 +97,10 @@ export const UserSapInfo = () => {
     return (
 
         <>
-            <NavBarForRelatedQueries onChainQueries={onChainQueries} isValueSearch={isValueSearch} onBlockchainProfile={onBlockchainProfile}/>
+            <NavBarForRelatedQueries 
+             onChainQueriesUserInfo={<button className='list-queries-item' onClick={onChainQueries}>Chain queries</button>}
+             onBlockchainProfile={<button className='list-queries-item' onClick={onBlockchainProfile}>Blockchain profile</button>}
+            />
 
             <div className="searchWrapper">
                 <div className={classInput}>
@@ -111,12 +115,15 @@ export const UserSapInfo = () => {
 
             <RequestContent data={isDataSapInfo} />
 
-
+            {isDataRelatedReq ? <h4>Data related queries</h4> : ''}
             <Routes>
                 <Route path='' element={<RequestContent data={isDataRelatedReq} />}>
                     <Route path=':user_infoId/:relatedReq' element={<RequestContent data={isDataRelatedReq} />} />
                 </Route>
             </Routes>
+
+            {isDataBlockchain ? <h4>Blockchain profile</h4> : ''}
+            <RequestContent data={isDataBlockchain} />
         </>
     )
 };
