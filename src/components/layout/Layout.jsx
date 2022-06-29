@@ -7,6 +7,7 @@ import { SapExplorerInputs } from '../inputsSearchings/SapExplorerInputs';
 import { Blockchain } from '../../pages/blockchain/Blockchain';
 import { SapExplorer } from '../../pages/sapExplorer/SapExplorer';
 import { Home } from '../../pages/home/Home';
+import { NotFound } from './NotFound';
 
 export const Layout = () => {
 
@@ -27,6 +28,8 @@ export const Layout = () => {
           <Route path='sapTest/*' element={<SapExplorer isMenu={isMenu}/>}>
             <Route path='search/*' element={<SapExplorerInputs />} />
           </Route>
+
+          <Route path='*' element={<NotFound />} />
 
         </Routes>
       </main>

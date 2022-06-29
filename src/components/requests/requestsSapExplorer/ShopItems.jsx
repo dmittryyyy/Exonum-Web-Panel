@@ -18,6 +18,10 @@ export const ShopItems = () => {
     const [classInput, setClassInput] = useState('search');
     const [isError, setIsError] = useState('');
 
+    const readValueInput = (e) => {
+        setCountInput(e.target.value);
+    }
+
     const validationLimit = (str) => {
         if (countInput) {
             return str > 0 && str < 1001;
@@ -26,48 +30,57 @@ export const ShopItems = () => {
         }
     };
 
-    const shopItems = async () => {
+    const onShopItems = async () => {
         if (validationLimit(countInput)) {
             try {
                 await getShopItems(client.activeAPI + `/${'external/api/v1'}`, countInput)
                     .then(resp => {
-                        setisDataShopItems(resp);
+                        if (!resp || resp === []) {
+                            setIsError('Data undefined!');
+                        } else {
+                            setisDataShopItems(resp);
+                            setIsError('');
+                            setClassInput('search');
+                            navigate(countInput);
+                        }
                     });
-                navigate(countInput);
-                setIsError('');
-                setClassInput('search');
-            } catch (err) {
-                console.log(err);
+            } catch (e) {
+                console.log(e);
+                setIsError(e.message);
+                setisDataShopItems('');
+                if (e.response.status >= 500) {
+                    setIsError('Unexpected error, please try again later...');
+                }
             }
-        } else {
+        }
+    }
 
+    const onKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            onShopItems();
         }
     }
 
     useEffect(() => {
         if (countInput) {
-            shopItems();
+            onShopItems();
         }
     }, []);
-
-    const readValueInput = (e) => {
-        setCountInput(e.target.value);
-    }
 
     return (
 
         <>
             <div className="searchWrapper">
                 <div className={classInput}>
-                    <input type="number" placeholder='Enter limit elements' max={100} onChange={readValueInput} value={countInput} />
+                    <input onKeyDown={onKeyDown} type="number" placeholder='Enter limit elements' max={100} onChange={readValueInput} value={countInput} />
                 </div>
-                <button onClick={shopItems}>Search</button>
+                <button onClick={onShopItems}>Search</button>
                 <p>{isError}</p>
             </div>
 
-            <RequestContent 
-            data={isDataShopItems} 
-            columnsTable={columnsSapExplorer.shopItems} />
+            <RequestContent
+                data={isDataShopItems}
+                columnsTable={columnsSapExplorer.shopItems} />
         </>
 
     )

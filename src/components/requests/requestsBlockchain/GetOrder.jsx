@@ -18,26 +18,37 @@ export const GetOrder = ({ testHash }) => {
     const [isError, setIsError] = useState('');
     const [classInput, setClassInput] = useState('search');
 
+    const readValueInput = (e) => {
+        setIsValueSearch(e.target.value);
+    }
+
     const hexadecimal = (byteArray) => {
         return Array.from(byteArray, function (byte) {
             return ('0' + (byte & 0xFF).toString(16)).slice(-2);
         }).join('')
     };
 
-    const getOrder = async () => {
+    const onGetOrder = async () => {
         if (isValueSearch) {
             if (testHash(isValueSearch)) {
                 try {
                     await searchOrder(client.activeNode, isValueSearch)
                         .then((orders) => {
+                            if (!orders || orders === []) {
+                                setIsError('Data undefined!');
+                            }
                             setDataJsonFormat(hexadecimal((orders.data.order_seller_part.items[0].application_data)));
                         });
                     setIsError('');
                     setClassInput('search');
                     navigate(isValueSearch);
-                } catch (error) {
-                    console.log(error);
-                    setIsError('Order number uncorrect!');
+                } catch (e) {
+                    console.log(e);
+                    setIsError(`Order number uncorrect! ${e.message}`);
+                    setDataJsonFormat('');
+                    if (e.response.status >= 500) {
+                        setIsError('Unexpected error, please try again later...');
+                    }
                 }
             } else {
                 setIsError('Not a HEX string');
@@ -49,15 +60,17 @@ export const GetOrder = ({ testHash }) => {
         }
     }
 
+    const onKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            onGetOrder();
+        }
+    }
+
     useEffect(() => {
         if (isValueSearch) {
-            getOrder();
+            onGetOrder();
         }
     }, []);
-
-    const readValueInput = (e) => {
-        setIsValueSearch(e.target.value);
-    }
 
     return (
 
@@ -66,10 +79,11 @@ export const GetOrder = ({ testHash }) => {
                 <div className={classInput}>
                     {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
                     <input placeholder='Order search'
+                        onKeyDown={onKeyDown}
                         value={isValueSearch}
                         onChange={readValueInput} />
                 </div>
-                <button onClick={getOrder}>Search</button>
+                <button onClick={onGetOrder}>Search</button>
                 <p>{isError}</p>
             </div>
 

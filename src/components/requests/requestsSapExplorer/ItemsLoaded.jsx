@@ -18,32 +18,48 @@ export const ItemsLoaded = () => {
     const [classInput, setClassInput] = useState('search');
     const [isError, setIsError] = useState('');
 
-    const itemsLoaded = async () => {
+    const readValueInput = (e) => {
+        setIsValueSearch(e.target.value);
+    }
+
+    const onItemsLoaded = async () => {
         if (isValueSearch) {
-                try {
-                    await getItemsLoaded(client.activeAPI + '/api/', isValueSearch)
-                        .then(resp => {
+            try {
+                await getItemsLoaded(client.activeAPI + '/api/', isValueSearch)
+                    .then(resp => {
+                        if (!resp || resp === []) {
+                            setIsError(`Data undefined!`);
+                        } else {
                             setisDataItemsLoaded(resp);
-                        });
-                        setIsError('');
-                        setClassInput('search');
-                        navigate(isValueSearch);
-                } catch (err) {
-                    console.log(err);
+                            setIsError('');
+                            setClassInput('search');
+                            navigate(isValueSearch);
+                        }
+                    });
+            } catch (e) {
+                console.log(e);
+                setIsError(`The data you entered is incorrect! ${e.message}`);
+                setClassInput('searchError');
+                setisDataItemsLoaded('');
+                if (e.response.status >= 500) {
+                    setIsError('Unexpected error, please try again later...');
                 }
+            }
         } else {
             setIsError('Empty search string!');
             setClassInput('searchError');
         }
     }
 
-    const readValueInput = (e) => {
-        setIsValueSearch(e.target.value);
+    const onKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            onItemsLoaded();
+        }
     }
 
     useEffect(() => {
         if (isValueSearch) {
-            itemsLoaded();
+            onItemsLoaded();
         }
     }, []);
 
@@ -54,16 +70,17 @@ export const ItemsLoaded = () => {
                 <div className={classInput}>
                     {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
                     <input placeholder='Enter id VendingMachines'
+                        onKeyDown={onKeyDown}
                         value={isValueSearch}
                         onChange={readValueInput} />
                 </div>
-                <button onClick={itemsLoaded}>Search</button>
+                <button onClick={onItemsLoaded}>Search</button>
                 <p>{isError}</p>
             </div>
 
-            <RequestContent 
-            data={isDataItemsLoaded} 
-            columnsTable={columnsSapExplorer.itemsLoaded} />
+            <RequestContent
+                data={isDataItemsLoaded}
+                columnsTable={columnsSapExplorer.itemsLoaded} />
 
         </>
 

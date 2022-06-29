@@ -9,31 +9,44 @@ export const ShowCatalog = () => {
   const { client, columnsBlockchain } = useContext(ThemeContext);
 
   const [isDataCatalog, setIsDataCatalog] = useState();
+  const [isError, setIsError] = useState('');
 
-  const showCatalog = async () => {
+  const onShowCatalog = async () => {
     try {
       await getCatalog(client.activeNode)
-        .then(items => {
-          setIsDataCatalog(items.data);
+        .then(data => {
+          if (!data || data === []) {
+            setIsError('Data undefined!')
+          }
+          setIsDataCatalog(data.data);
+          setIsError('');
         });
-    } catch (error) {
-      console.log(error);
-      setIsDataCatalog('Catalog undefined or server error');
+    } catch (e) {
+      console.log(e);
+      setIsError(e.message);
+      setIsDataCatalog('');
+      if (e.response.status >= 500) {
+        setIsError('Unexpected error, please try again later...');
+      }
     }
   }
 
   useEffect(() => {
     if (window.location.href.indexOf('catalog') >= 0) {
-      showCatalog();
+      onShowCatalog();
     }
   }, []);
 
   return (
 
     <>
-      <RequestContent 
-      data={isDataCatalog} 
-      columnsTable={columnsBlockchain.catalog} />
+      <div className="searchWrapper">
+        <p>{isError}</p>
+      </div>
+
+      <RequestContent
+        data={isDataCatalog}
+        columnsTable={columnsBlockchain.catalog} />
     </>
 
   )

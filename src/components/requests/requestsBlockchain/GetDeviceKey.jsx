@@ -20,19 +20,31 @@ export const GetDeviceKey = ({ testHash }) => {
 
     const [isHistory, seIsHistory] = useState();
 
-    const getDeviceKey = async () => {
+    const readValueInput = (e) => {
+        setIsValueSearch(e.target.value);
+    }
+
+    const onGetDeviceKey = async () => {
         if (isValueSearch) {
             if (testHash(isValueSearch)) {
                 try {
                     await searchDeviceKey(client.activeNode, isValueSearch, isHistory)
                         .then((key) => {
+                            if(!key || key === []) {
+                                setIsError('Data undefined!'); 
+                            }
                           setIsDeviceKey([key]);
                         });
                     setIsError('');
                     setClassInput('search');
                     navigate(isValueSearch);
-                } catch (error) {
-                    console.log(error);
+                } catch (e) {
+                    console.log(e);
+                    setIsError(`The data you entered is incorrect! ${e.message}`);
+                    setIsDeviceKey('');
+                    if(e.response.status >= 500) {
+                        setIsError('Unexpected error, please try again later...');
+                    }
                 }
             } else {
                 setIsError('Not a HEX string');
@@ -44,26 +56,30 @@ export const GetDeviceKey = ({ testHash }) => {
         }
     }
 
+    const onKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            onGetDeviceKey();
+        }
+    }
+
     useEffect(() => {
         if (isValueSearch) {
-            getDeviceKey();
+            onGetDeviceKey();
         }
     }, []);
 
-    const readValueInput = (e) => {
-        setIsValueSearch(e.target.value);
-    }
-
     return (
+        
         <>
             <div className="searchWrapper">
                 <div className={classInput}>
                     {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
                     <input placeholder='Enter device key'
+                        onKeyDown={onKeyDown}
                         value={isValueSearch}
                         onChange={readValueInput} />
                 </div>
-                <button onClick={getDeviceKey}>Search</button>
+                <button onClick={onGetDeviceKey}>Search</button>
                 <p>{isError}</p>
             </div>
 
@@ -75,13 +91,10 @@ export const GetDeviceKey = ({ testHash }) => {
                 <label>Show History</label>
             </div>
 
-            <p>{isError}</p>
-
             <RequestContent 
             data={isDataDeviceKey} 
             columnsTable={columnsBlockchain.deviceKey} />
         </>
-
 
     )
 }

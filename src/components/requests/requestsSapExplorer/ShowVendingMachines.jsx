@@ -19,10 +19,12 @@ export const ShowVendingMachines = () => {
     const [isLoadedAndPrice, setIsLoadedAndPrice] = useState();
     const [isRequestsForAllMachines, setRequestsForAllMachines] = useState();
 
+    const [isError, setIsError] = useState('');
+
     const columnsVendingMachines = [
         {
             name: 'id',
-            selector: (row) => <Link to={'item-loaded/' + isIdMachine} onClick={loadedAndPrice}>{row.id}</Link>,
+            selector: (row) => <Link to={'item-loaded/' + isIdMachine} onClick={onLoadedAndPrice}>{row.id}</Link>,
             wrap: true,
             omit: false,
             compact: true,
@@ -34,7 +36,7 @@ export const ShowVendingMachines = () => {
         },
         {
             name: 'description',
-            selector: (row) => <Link to={'item-loaded/' + isIdMachine} onClick={loadedAndPrice}>{row.description}</Link>,
+            selector: (row) => <Link to={'item-loaded/' + isIdMachine} onClick={onLoadedAndPrice}>{row.description}</Link>,
             wrap: true,
             compact: true,
         },
@@ -91,17 +93,27 @@ export const ShowVendingMachines = () => {
         },
     ];
 
-    const showVendingMachines = async () => {
+    const onShowVendingMachines = async () => {
         try {
             await getVendingMachines(client.activeAPI + `/${'api'}`).then(resp => {
-                setDataVendingMachine(resp);
+                if (!resp || resp === []) {
+                    setIsError('Data undefined!')
+                } else {
+                    setDataVendingMachine(resp);
+                    setIsError('');
+                }
             });
-        } catch (err) {
-            console.log(err);
+        } catch (e) {
+            console.log(e);
+            setIsError(e.message);
+            setDataVendingMachine('');
+            if (e.response.status >= 500) {
+                setIsError('Unexpected error, please try again later...');
+            }
         }
     }
 
-    const loadedAndPrice = async (e) => {
+    const onLoadedAndPrice = async (e) => {
         let id;
         let data;
         if (isIdMachine) {
@@ -134,11 +146,11 @@ export const ShowVendingMachines = () => {
             }
         });
         setIsIdMachine(id)
-        navigate('item-loaded/' + id);
         setIsLoadedAndPrice(data);
+        navigate('item-loaded/' + id);
     }
 
-    const requestsForAllMachines = async () => {
+    const onRequestsForAllMachines = async () => {
         const dataMachine = await getVendingMachines(client.activeAPI + `/${'api'}`);
         let data = [];
         let fullData = [];
@@ -173,13 +185,13 @@ export const ShowVendingMachines = () => {
 
     useEffect(() => {
         if (window.location.href.indexOf('vending-machines') >= 0) {
-            showVendingMachines();
+            onShowVendingMachines();
         }
         if (isIdMachine) {
-            loadedAndPrice();
+            onLoadedAndPrice();
         }
         if (window.location.href.indexOf('allMachines') >= 0) {
-            requestsForAllMachines();
+            onRequestsForAllMachines();
         }
     }, [isIdMachine]);
 
@@ -188,8 +200,12 @@ export const ShowVendingMachines = () => {
         <>
             <NavBarForRelatedQueries
                 requestsForAllMachines={<button className='list-queries-item'
-                    onClick={requestsForAllMachines}>Requests for all machines</button>}
+                    onClick={onRequestsForAllMachines}>Requests for all machines</button>}
             />
+
+            <div className="searchWrapper">
+                <p>{isError}</p>
+            </div>
 
             <RequestContent
                 data={dataVendingmachine}
