@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { ThemeContext } from '../../../index';
 import { searchDeviceKey } from '../../../services/BlockhainAPI';
 import { RequestContent } from '../../requestContent/RequestContent';
+import { InputForRequest } from '../../inputForRequest/InputForRequest';
 
 export const GetDeviceKey = ({ testHash }) => {
 
@@ -19,10 +20,6 @@ export const GetDeviceKey = ({ testHash }) => {
     const [classInput, setClassInput] = useState('search');
 
     const [isHistory, seIsHistory] = useState();
-
-    const readValueInput = (e) => {
-        setIsValueSearch(e.target.value);
-    }
 
     const onGetDeviceKey = async () => {
         if (isValueSearch) {
@@ -56,12 +53,6 @@ export const GetDeviceKey = ({ testHash }) => {
         }
     }
 
-    const onKeyDown = (e) => {
-        if (e.key === 'Enter') {
-            onGetDeviceKey();
-        }
-    }
-
     useEffect(() => {
         if (isValueSearch) {
             onGetDeviceKey();
@@ -71,17 +62,10 @@ export const GetDeviceKey = ({ testHash }) => {
     return (
         
         <>
-            <div className="searchWrapper">
-                <div className={classInput}>
-                    {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
-                    <input placeholder='Enter device key'
-                        onKeyDown={onKeyDown}
-                        value={isValueSearch}
-                        onChange={readValueInput} />
-                </div>
-                <button onClick={onGetDeviceKey}>Search</button>
-                <p>{isError}</p>
-            </div>
+            <InputForRequest classInput={classInput} placeholder={'Enter device key'}
+            isError={isError} 
+            isValueSearch={isValueSearch} setIsValueSearch={setIsValueSearch} 
+            request={onGetDeviceKey}/>
 
             <div className="checkbox">
                 <input type="checkbox"

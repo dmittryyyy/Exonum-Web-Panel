@@ -4,6 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { ThemeContext } from '../../../index';
 import { searchTransaction } from '../../../services/BlockhainAPI';
 import { RequestContent } from '../../../components/requestContent/RequestContent';
+import { InputForRequest } from '../../inputForRequest/InputForRequest';
 
 export const GetTransaction = ({ testHash }) => {
 
@@ -17,10 +18,6 @@ export const GetTransaction = ({ testHash }) => {
 
   const [isError, setIsError] = useState('');
   const [classInput, setClassInput] = useState('search');
-
-  const readValueInput = (e) => {
-    setIsValueSearch(e.target.value);
-  }
 
   const onGetTransaction = async () => {
     if (isValueSearch) {
@@ -60,12 +57,6 @@ export const GetTransaction = ({ testHash }) => {
     }
   }
 
-  const onKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      onGetTransaction();
-    }
-  }
-
   useEffect(() => {
     if (isValueSearch) {
       onGetTransaction();
@@ -75,22 +66,14 @@ export const GetTransaction = ({ testHash }) => {
   return (
 
     <>
-      <div className="searchWrapper">
-        <div className={classInput}>
-          {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
-          <input placeholder='Enter transaction number'
-            onKeyDown={onKeyDown}
-            value={isValueSearch}
-            onChange={readValueInput} />
-        </div>
-        <button onClick={onGetTransaction}>Search</button>
-        <p>{isError}</p>
-      </div>
+      <InputForRequest classInput={classInput} placeholder={'Enter transaction number'}
+      isValueSearch={isValueSearch} setIsValueSearch={setIsValueSearch} 
+      request={onGetTransaction} 
+      isError={isError} />
 
       <RequestContent
         data={isDataTransaction}
         columnsTable={columnsBlockchain.transaction} />
-
     </>
 
   )

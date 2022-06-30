@@ -6,6 +6,7 @@ import { ThemeContext } from '../../../index';
 import { getEvents, getUserSapInfo, getBlockchainProfile } from '../../../services/SapExplorer';
 import { RequestContent } from '../../../components/requestContent/RequestContent';
 import { NavBarForRelatedQueries } from '../../navBar/NavBarForRelatedQueries';
+import { InputForRequest } from '../../inputForRequest/InputForRequest';
 
 export const Events = () => {
 
@@ -14,7 +15,7 @@ export const Events = () => {
     let { createdOn_gt, limit } = useParams();
     const navigate = useNavigate();
 
-    const [countInput, setCountInput] = useState(limit ? limit : '');
+    const [isValueSearch, setIsValueSearch] = useState(limit ? limit : '');
     const [isDataEvents, setisDataEvents] = useState();
     const [isDataBlockchain, setIsDataBlockchain] = useState();
 
@@ -22,10 +23,6 @@ export const Events = () => {
     const [classInput, setClassInput] = useState('search');
     const [nullCalendar, setNullCalendar] = useState(null);
     const [isError, setIsError] = useState('');
-
-    const readValueInput = (e) => {
-        setCountInput(e.target.value);
-    }
 
     const validationCalendar = (date) => {
         if (valueCalendar === undefined) {
@@ -39,7 +36,7 @@ export const Events = () => {
     }
 
     const validationLimit = (str) => {
-        if (countInput) {
+        if (isValueSearch) {
             return str > 0 && str < 1001;
         } else {
             setClassInput('searchError');
@@ -48,9 +45,9 @@ export const Events = () => {
     };
 
     const onEvents = async () => {
-        if (validationCalendar(valueCalendar) && validationLimit(countInput)) {
+        if (validationCalendar(valueCalendar) && validationLimit(isValueSearch)) {
             try {
-                await getEvents(client.activeAPI + `/${'external/api/v1'}`, valueCalendar.toISOString(), countInput)
+                await getEvents(client.activeAPI + `/${'external/api/v1'}`, valueCalendar.toISOString(), isValueSearch)
                     .then(resp => {
                         if (!resp || resp === []) {
                             setIsError('Data undefined!');
@@ -58,7 +55,7 @@ export const Events = () => {
                             setisDataEvents(resp);
                             setClassInput('search');
                             setIsError('');
-                            navigate(valueCalendar + `/${countInput}`);
+                            navigate(valueCalendar + `/${isValueSearch}`);
                         }
                     });
             } catch (e) {
@@ -69,12 +66,6 @@ export const Events = () => {
             }
         }
     };
-
-    const onKeyDown = (e) => {
-        if (e.key === 'Enter') {
-            onEvents();
-        }
-    }
 
     const onBlockchainProfile = async () => {
         let idBlockchian;
@@ -103,7 +94,7 @@ export const Events = () => {
     }
 
     useEffect(() => {
-        if (countInput && valueCalendar) {
+        if (isValueSearch && valueCalendar) {
             onEvents();
         }
     }, []);
@@ -122,13 +113,10 @@ export const Events = () => {
                     <p>{nullCalendar}</p>
                 </div>
 
-                <div className="searchWrapper">
-                    <div className={classInput}>
-                        <input onKeyDown={onKeyDown} type="number" placeholder='Enter limit elements' max={100} onChange={readValueInput} value={countInput} />
-                    </div>
-                    <button onClick={onEvents}>Search</button>
-                    <p>{isError}</p>
-                </div>
+                <InputForRequest classInput={classInput} placeholder={'Enter limit elements'} type={'number'}
+                isError={isError}
+                isValueSearch={isValueSearch} setIsValueSearch={setIsValueSearch}
+                request={onEvents} />
             </div>
 
             <RequestContent

@@ -9,9 +9,6 @@ import { GetDeviceKey } from '../requests/requestsBlockchain/GetDeviceKey';
 import { GetOrders } from '../requests/requestsBlockchain/GetOrders';
 import { ShowCatalog } from '../requests/requestsBlockchain/ShowCatalog';
 
-
-import './Inputs.scss';
-
 export const BlockchainInputs = () => {
 
     const testHash = (str) => {

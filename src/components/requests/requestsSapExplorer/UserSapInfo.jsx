@@ -5,6 +5,7 @@ import { ThemeContext } from '../../../index';
 import { getUserSapInfo, getBenefitRules, getDataForEachCard, getUsersBenefits, getUserCards, getBlockchainProfile } from '../../../services/SapExplorer';
 import { RequestContent } from '../../../components/requestContent/RequestContent';
 import { NavBarForRelatedQueries } from '../../navBar/NavBarForRelatedQueries';
+import { InputForRequest } from '../../inputForRequest/InputForRequest';
 
 export const UserSapInfo = () => {
 
@@ -23,10 +24,6 @@ export const UserSapInfo = () => {
 
     const [classInput, setClassInput] = useState('search');
     const [isError, setIsError] = useState('');
-
-    const readValueInput = (e) => {
-        setIsValueSearch(e.target.value);
-    }
 
     const onUserSapInfo = async () => {
         if (isValueSearch) {
@@ -54,12 +51,6 @@ export const UserSapInfo = () => {
         } else {
             setIsError('Empty search string!')
             setClassInput('searchError');
-        }
-    }
-
-    const onKeyDown = (e) => {
-        if (e.key === 'Enter') {
-            onUserSapInfo();
         }
     }
 
@@ -138,17 +129,10 @@ export const UserSapInfo = () => {
                 onBlockchainProfile={<button className='list-queries-item' onClick={onBlockchainProfile}>Blockchain profile</button>}
             />
 
-            <div className="searchWrapper">
-                <div className={classInput}>
-                    {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
-                    <input placeholder='Enter user id'
-                        onKeyDown={onKeyDown}
-                        value={isValueSearch}
-                        onChange={readValueInput} />
-                </div>
-                <button onClick={onUserSapInfo}>Search</button>
-                <p>{isError}</p>
-            </div>
+            <InputForRequest classInput={classInput} placeholder={'Enter user id'}
+                isError={isError}
+                isValueSearch={isValueSearch} setIsValueSearch={setIsValueSearch}
+                request={onUserSapInfo} />
 
             <RequestContent data={isDataSapInfo} />
 

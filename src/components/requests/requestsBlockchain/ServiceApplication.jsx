@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { ThemeContext } from '../../../index';
 import { searchServApplic } from '../../../services/BlockhainAPI';
 import { RequestContent } from '../../../components/requestContent/RequestContent';
+import { InputForRequest } from '../../inputForRequest/InputForRequest';
 
 export const ServiceApplication = ({ testHash }) => {
 
@@ -17,10 +18,6 @@ export const ServiceApplication = ({ testHash }) => {
 
     const [isError, setIsError] = useState('');
     const [classInput, setClassInput] = useState('search');
-
-    const readValueInput = (e) => {
-        setIsValueSearch(e.target.value);
-    }
 
     const onGetService = async () => {
         if (isValueSearch) {
@@ -54,12 +51,6 @@ export const ServiceApplication = ({ testHash }) => {
         }
     }
 
-    const onKeyDown = (e) => {
-        if (e.key === 'Enter') {
-            onGetService();
-        }
-    }
-
     useEffect(() => {
         if (isValueSearch) {
             onGetService();
@@ -69,17 +60,11 @@ export const ServiceApplication = ({ testHash }) => {
     return (
 
         <>
-            <div className="searchWrapper">
-                <div className={classInput}>
-                    {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
-                    <input placeholder='Service Application'
-                        onKeyDown={onKeyDown}
-                        value={isValueSearch}
-                        onChange={readValueInput} />
-                </div>
-                <button onClick={onGetService}>Search</button>
-                <p>{isError}</p>
-            </div>
+            <InputForRequest 
+            classInput={classInput} placeholder={'Service Application'}
+            isError={isError} 
+            isValueSearch={isValueSearch} setIsValueSearch={setIsValueSearch} 
+            request={onGetService}/>
 
             <RequestContent
                 data={isDataSAP}

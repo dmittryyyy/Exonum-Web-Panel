@@ -5,6 +5,7 @@ import { ThemeContext } from '../../../index';
 import { getUsersBenefits, getUserSapInfo, getBlockchainProfile } from '../../../services/SapExplorer';
 import { RequestContent } from '../../../components/requestContent/RequestContent';
 import { NavBarForRelatedQueries } from '../../navBar/NavBarForRelatedQueries';
+import { InputForRequest } from '../../inputForRequest/InputForRequest';
 
 export const UserBenefits = () => {
 
@@ -20,16 +21,12 @@ export const UserBenefits = () => {
     const [classInput, setClassInput] = useState('search');
     const [isError, setIsError] = useState('');
 
-    const readValueInput = (e) => {
-        setIsValueSearch(e.target.value);
-    };
-
     const onUsersBenefits = async () => {
         if (isValueSearch) {
             try {
                 await getUsersBenefits(client.activeAPI + `/${'external/api/v1'}`, isValueSearch)
                     .then(resp => {
-                        if(!resp || resp === []) {
+                        if (!resp || resp === []) {
                             setIsError('Data undefined!');
                         } else {
                             setIsDataBenefits(resp);
@@ -51,12 +48,6 @@ export const UserBenefits = () => {
             setClassInput('searchError');
         }
     };
-
-    const onKeyDown = (e) => {
-        if (e.key === 'Enter') {
-            onUsersBenefits();
-        }
-    }
 
     const onBlockchainProfile = async () => {
         let idBlockchian;
@@ -91,23 +82,15 @@ export const UserBenefits = () => {
     }, []);
 
     return (
-
         <>
             <NavBarForRelatedQueries
                 onBlockchainProfile={<button className='list-queries-item' onClick={onBlockchainProfile}>Blockchain profile</button>}
             />
 
-            <div className="searchWrapper">
-                <div className={classInput}>
-                    {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
-                    <input placeholder='Enter user id'
-                        onKeyDown={onKeyDown}
-                        value={isValueSearch}
-                        onChange={readValueInput} />
-                </div>
-                <button onClick={onUsersBenefits}>Search</button>
-                <p>{isError}</p>
-            </div>
+            <InputForRequest classInput={classInput} placeholder={'Enter user id'}
+                isError={isError}
+                isValueSearch={isValueSearch} setIsValueSearch={setIsValueSearch}
+                request={onUsersBenefits} />
 
             <RequestContent
                 data={isDataBenefits}

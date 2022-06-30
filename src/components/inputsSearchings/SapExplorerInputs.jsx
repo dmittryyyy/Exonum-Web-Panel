@@ -11,8 +11,6 @@ import { UserCards } from '../requests/requestsSapExplorer/UserCards';
 import { Cards } from '../requests/requestsSapExplorer/Cards';
 import { ShowVendingMachines } from '../requests/requestsSapExplorer/ShowVendingMachines';
 
-import './Inputs.scss';
-
 export const SapExplorerInputs = () => {
 
     return (

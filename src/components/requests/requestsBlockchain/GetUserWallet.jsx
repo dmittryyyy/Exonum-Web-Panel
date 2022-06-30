@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { ThemeContext } from '../../../index';
 import { searchUserWallet } from '../../../services/BlockhainAPI';
 import { RequestContent } from '../../../components/requestContent/RequestContent';
+import { InputForRequest } from '../../inputForRequest/InputForRequest';
 
 export const GetUserWallet = ({ testHash }) => {
 
@@ -17,10 +18,6 @@ export const GetUserWallet = ({ testHash }) => {
 
     const [classInput, setClassInput] = useState('search');
     const [isError, setIsError] = useState('');
-
-    const readValueInput = (e) => {
-        setIsValueSearch(e.target.value);
-    }
 
     const onGetUserWallet = async () => {
         if (isValueSearch) {
@@ -54,12 +51,6 @@ export const GetUserWallet = ({ testHash }) => {
         }
     }
 
-    const onKeyDown = (e) => {
-        if (e.key === 'Enter') {
-            onGetUserWallet();
-        }
-    }
-
     useEffect(() => {
         if (isValueSearch) {
             onGetUserWallet();
@@ -69,17 +60,11 @@ export const GetUserWallet = ({ testHash }) => {
     return (
 
         <>
-            <div className="searchWrapper">
-                <div className={classInput}>
-                    {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
-                    <input placeholder='Enter user wallet'
-                        onKeyDown={onKeyDown}
-                        value={isValueSearch}
-                        onChange={readValueInput} />
-                </div>
-                <button onClick={onGetUserWallet}>Search</button>
-                <p>{isError}</p>
-            </div>
+            <InputForRequest 
+            classInput={classInput} placeholder={'Enter user wallet'}
+            isError={isError} 
+            isValueSearch={isValueSearch} setIsValueSearch={setIsValueSearch} 
+            request={onGetUserWallet}/>
 
             <RequestContent
                 data={isDataWallet}

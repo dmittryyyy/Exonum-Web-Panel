@@ -211,6 +211,7 @@ export class ColumnsBlockchain {
                 wrap: true,
             },
         ];
+        this.hideMessage = false;
         this.columnsTransaction = [
             {
                 name: 'type',
@@ -245,7 +246,7 @@ export class ColumnsBlockchain {
                 wrap: true,
             },
             {
-                name: 'message',
+                name: <button style={{display: 'none'}}>'message'</button>,
                 selector: (row) => row.content.message,
                 sortable: true,
                 wrap: true,

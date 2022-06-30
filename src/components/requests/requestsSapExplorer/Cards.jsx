@@ -6,6 +6,7 @@ import { ThemeContext } from '../../../index';
 import { getCards, getUserSapInfo, getBlockchainProfile } from '../../../services/SapExplorer';
 import { RequestContent } from '../../../components/requestContent/RequestContent';
 import { NavBarForRelatedQueries } from '../../navBar/NavBarForRelatedQueries';
+import { InputForRequest } from '../../inputForRequest/InputForRequest';
 
 export const Cards = observer(() => {
 
@@ -20,10 +21,6 @@ export const Cards = observer(() => {
 
     const [classInput, setClassInput] = useState('search');
     const [isError, setIsError] = useState('');
-
-    const readValueInput = (e) => {
-        setIsValueSearch(e.target.value);
-    }
 
     const onCards = async () => {
         if (isValueSearch) {
@@ -50,12 +47,6 @@ export const Cards = observer(() => {
         } else {
             setIsError('Empty search string!')
             setClassInput('searchError');
-        }
-    }
-
-    const onKeyDown = (e) => {
-        if (e.key === 'Enter') {
-            onCards();
         }
     }
 
@@ -93,22 +84,15 @@ export const Cards = observer(() => {
     }, []);
 
     return (
-
         <>
             <NavBarForRelatedQueries
                 onBlockchainProfile={<button className='list-queries-item' onClick={onBlockchainProfile}>Blockchain profile</button>}
             />
 
-            <div className="searchWrapper">
-                <div className={classInput}>
-                    {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
-                    <input onKeyDown={onKeyDown} placeholder='Enter card id'
-                        value={isValueSearch}
-                        onChange={readValueInput} />
-                </div>
-                <button onClick={onCards}>Search</button>
-                <p>{isError}</p>
-            </div>
+            <InputForRequest classInput={classInput} placeholder={'Enter card id'}
+                isError={isError}
+                isValueSearch={isValueSearch} setIsValueSearch={setIsValueSearch}
+                request={onCards} />
 
             <RequestContent
                 data={isDataCards}
@@ -117,6 +101,5 @@ export const Cards = observer(() => {
             {isDataBlockchain ? <h4>Blockchain profile</h4> : ''}
             <RequestContent data={isDataBlockchain} />
         </>
-
     )
 });

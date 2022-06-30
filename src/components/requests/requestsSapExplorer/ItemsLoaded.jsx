@@ -4,6 +4,7 @@ import { useParams, useNavigate } from 'react-router';
 import { ThemeContext } from '../../../index';
 import { getItemsLoaded } from '../../../services/SapExplorer';
 import { RequestContent } from '../../../components/requestContent/RequestContent';
+import { InputForRequest } from '../../inputForRequest/InputForRequest';
 
 export const ItemsLoaded = () => {
 
@@ -17,10 +18,6 @@ export const ItemsLoaded = () => {
 
     const [classInput, setClassInput] = useState('search');
     const [isError, setIsError] = useState('');
-
-    const readValueInput = (e) => {
-        setIsValueSearch(e.target.value);
-    }
 
     const onItemsLoaded = async () => {
         if (isValueSearch) {
@@ -51,12 +48,6 @@ export const ItemsLoaded = () => {
         }
     }
 
-    const onKeyDown = (e) => {
-        if (e.key === 'Enter') {
-            onItemsLoaded();
-        }
-    }
-
     useEffect(() => {
         if (isValueSearch) {
             onItemsLoaded();
@@ -66,17 +57,10 @@ export const ItemsLoaded = () => {
     return (
 
         <>
-            <div className="searchWrapper">
-                <div className={classInput}>
-                    {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
-                    <input placeholder='Enter id VendingMachines'
-                        onKeyDown={onKeyDown}
-                        value={isValueSearch}
-                        onChange={readValueInput} />
-                </div>
-                <button onClick={onItemsLoaded}>Search</button>
-                <p>{isError}</p>
-            </div>
+            <InputForRequest classInput={classInput} placeholder={'Enter id vending machine'}
+                isError={isError}
+                isValueSearch={isValueSearch} setIsValueSearch={setIsValueSearch}
+                request={onItemsLoaded} />
 
             <RequestContent
                 data={isDataItemsLoaded}

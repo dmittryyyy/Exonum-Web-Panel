@@ -4,6 +4,7 @@ import { useParams, useNavigate } from 'react-router';
 import { ThemeContext } from '../../../index';
 import { getShopItems } from '../../../services/SapExplorer';
 import { RequestContent } from '../../../components/requestContent/RequestContent';
+import { InputForRequest } from '../../inputForRequest/InputForRequest';
 
 export const ShopItems = () => {
 
@@ -12,18 +13,14 @@ export const ShopItems = () => {
     let { limit } = useParams();
     const navigate = useNavigate();
 
-    const [countInput, setCountInput] = useState(limit ? limit : '');
+    const [isValueSearch, setIsValueSearch] = useState(limit ? limit : '');
     const [isDataShopItems, setisDataShopItems] = useState();
 
     const [classInput, setClassInput] = useState('search');
     const [isError, setIsError] = useState('');
 
-    const readValueInput = (e) => {
-        setCountInput(e.target.value);
-    }
-
     const validationLimit = (str) => {
-        if (countInput) {
+        if (isValueSearch) {
             return str > 0 && str < 1001;
         } else {
             setClassInput('searchError');
@@ -31,9 +28,9 @@ export const ShopItems = () => {
     };
 
     const onShopItems = async () => {
-        if (validationLimit(countInput)) {
+        if (validationLimit(isValueSearch)) {
             try {
-                await getShopItems(client.activeAPI + `/${'external/api/v1'}`, countInput)
+                await getShopItems(client.activeAPI + `/${'external/api/v1'}`, isValueSearch)
                     .then(resp => {
                         if (!resp || resp === []) {
                             setIsError('Data undefined!');
@@ -41,7 +38,7 @@ export const ShopItems = () => {
                             setisDataShopItems(resp);
                             setIsError('');
                             setClassInput('search');
-                            navigate(countInput);
+                            navigate(isValueSearch);
                         }
                     });
             } catch (e) {
@@ -55,14 +52,8 @@ export const ShopItems = () => {
         }
     }
 
-    const onKeyDown = (e) => {
-        if (e.key === 'Enter') {
-            onShopItems();
-        }
-    }
-
     useEffect(() => {
-        if (countInput) {
+        if (isValueSearch) {
             onShopItems();
         }
     }, []);
@@ -70,13 +61,11 @@ export const ShopItems = () => {
     return (
 
         <>
-            <div className="searchWrapper">
-                <div className={classInput}>
-                    <input onKeyDown={onKeyDown} type="number" placeholder='Enter limit elements' max={100} onChange={readValueInput} value={countInput} />
-                </div>
-                <button onClick={onShopItems}>Search</button>
-                <p>{isError}</p>
-            </div>
+
+            <InputForRequest classInput={classInput} placeholder={'Enter limit elements'} type={'number'}
+                isError={isError}
+                isValueSearch={isValueSearch} setIsValueSearch={setIsValueSearch}
+                request={onShopItems} />
 
             <RequestContent
                 data={isDataShopItems}

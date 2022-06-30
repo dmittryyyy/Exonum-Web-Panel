@@ -6,6 +6,7 @@ import { ThemeContext } from '../../../index';
 import { getUserCards, getUserSapInfo, getDataForEachCard } from '../../../services/SapExplorer';
 import { RequestContent } from '../../../components/requestContent/RequestContent';
 import { NavBarForRelatedQueries } from '../../navBar/NavBarForRelatedQueries';
+import { InputForRequest } from '../../inputForRequest/InputForRequest';
 
 export const UserCards = observer(() => {
 
@@ -21,10 +22,6 @@ export const UserCards = observer(() => {
     const [isError, setIsError] = useState('');
 
     const [dataRelatedReq, setDataRelatedReq] = useState();
-
-    const readValueInput = (e) => {
-        setIsValueSearch(e.target.value);
-    }
 
     const onUsersCards = async () => {
         if (isValueSearch) {
@@ -54,12 +51,6 @@ export const UserCards = observer(() => {
         }
     }
 
-    const onKeyDown = (e) => {
-        if (e.key === 'Enter') {
-            onUsersCards();
-        }
-    }
-
     const onChainQueries = async () => {
         const array = [];
         try {
@@ -84,25 +75,15 @@ export const UserCards = observer(() => {
     }, []);
 
     return (
-
         <>
-
             <NavBarForRelatedQueries
                 onChainQueriesUserCards={<button className='list-queries-item'
-                    onClick={onChainQueries}>Chain queries</button>}
-            />
+                    onClick={onChainQueries}>Chain queries</button>} />
 
-            <div className="searchWrapper">
-                <div className={classInput}>
-                    {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
-                    <input placeholder='Enter user id'
-                        onKeyDown={onKeyDown}
-                        value={isValueSearch}
-                        onChange={readValueInput} />
-                </div>
-                <button onClick={onUsersCards}>Search</button>
-                <p>{isError}</p>
-            </div>
+            <InputForRequest classInput={classInput} placeholder={'Enter user id'}
+                isError={isError}
+                isValueSearch={isValueSearch} setIsValueSearch={setIsValueSearch}
+                request={onUsersCards} />
 
             <RequestContent
                 data={isDataUserCards}
@@ -113,6 +94,5 @@ export const UserCards = observer(() => {
                 data={dataRelatedReq}
                 columnsTable={columnsSapExplorer.userCardsRelQuer} />
         </>
-
     )
 });

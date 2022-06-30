@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { ThemeContext } from '../../../index';
 import { searchOrders } from '../../../services/BlockhainAPI';
 import { RequestContent } from '../../requestContent/RequestContent';
+import { InputForRequest } from '../../inputForRequest/InputForRequest';
 
 export const GetOrders = ({ testHash }) => {
 
@@ -17,10 +18,6 @@ export const GetOrders = ({ testHash }) => {
 
   const [isError, setIsError] = useState('');
   const [classInput, setClassInput] = useState('search');
-
-  const readValueInput = (e) => {
-    setIsValueSearch(e.target.value);
-  }
 
   const onGetOrders = async () => {
     if (isValueSearch) {
@@ -57,12 +54,6 @@ export const GetOrders = ({ testHash }) => {
     }
   }
 
-  const onKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      onGetOrders();
-    }
-  }
-
   useEffect(() => {
     if (isValueSearch) {
       onGetOrders();
@@ -72,17 +63,10 @@ export const GetOrders = ({ testHash }) => {
   return (
 
     <>
-      <div className="searchWrapper">
-        <div className={classInput}>
-          {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
-          <input placeholder='Orders search'
-            onKeyDown={onKeyDown}
-            value={isValueSearch}
-            onChange={readValueInput} />
-        </div>
-        <button onClick={onGetOrders}>Search</button>
-        <p>{isError}</p>
-      </div>
+      <InputForRequest classInput={classInput} placeholder={'Search orders'}
+      isError={isError} 
+      isValueSearch={isValueSearch} setIsValueSearch={setIsValueSearch} 
+      request={onGetOrders}/>
 
       <RequestContent
         data={isDataOrders}
