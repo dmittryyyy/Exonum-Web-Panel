@@ -114,17 +114,16 @@ export const Events = () => {
                 </div>
 
                 <InputForRequest classInput={classInput} placeholder={'Enter limit elements'} type={'number'}
-                isError={isError}
-                isValueSearch={isValueSearch} setIsValueSearch={setIsValueSearch}
-                request={onEvents} />
+                    isError={isError}
+                    isValueSearch={isValueSearch} setIsValueSearch={setIsValueSearch}
+                    request={onEvents} />
             </div>
 
             <RequestContent
                 data={isDataEvents}
                 columnsTable={columnsSapExplorer.events} />
 
-            {isDataBlockchain ? <h4>Blockchain profile</h4> : ''}
-            <RequestContent data={isDataBlockchain} />
+            <RequestContent data={isDataBlockchain} title={isDataBlockchain ? 'Blockchain profile' : ''}/>
         </>
 
     )

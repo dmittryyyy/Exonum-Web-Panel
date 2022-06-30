@@ -136,15 +136,13 @@ export const UserSapInfo = () => {
 
             <RequestContent data={isDataSapInfo} />
 
-            {isDataRelatedReq ? <h4>Data related queries</h4> : ''}
             <Routes>
-                <Route path='' element={<RequestContent data={isDataRelatedReq} />}>
+                <Route path='' element={<RequestContent data={isDataRelatedReq} title={'Data related queries'}/>}>
                     <Route path=':user_infoId/:relatedReq' element={<RequestContent data={isDataRelatedReq} />} />
                 </Route>
             </Routes>
 
-            {isDataBlockchain ? <h4>Blockchain profile</h4> : ''}
-            <RequestContent data={isDataBlockchain} />
+            <RequestContent data={isDataBlockchain} title={'Blockchain profile'}/>
         </>
     )
 };

@@ -89,8 +89,8 @@ export const UserCards = observer(() => {
                 data={isDataUserCards}
                 columnsTable={columnsSapExplorer.userCards} />
 
-            {dataRelatedReq ? <h4>Data related queries</h4> : ''}
             <RequestContent
+                title={'Data related queries'}
                 data={dataRelatedReq}
                 columnsTable={columnsSapExplorer.userCardsRelQuer} />
         </>

@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite';
 
 import './RequestContent.scss';
 
-export const RequestContent = observer(({ data, columnsTable }) => {
+export const RequestContent = observer(({ data, columnsTable, title }) => {
 
   const [isValueSearch, setIsValueSearch] = useState('');
   const [isShowData, setIsShowData] = useState(true);
@@ -16,19 +16,19 @@ export const RequestContent = observer(({ data, columnsTable }) => {
   }
 
   return (
-    <div className='resultWrapper' style={data && isShowData ? {backgroundColor: 'white'} : {backgrounColor: "none"}}>
+    <div className='resultWrapper' style={data && isShowData ? { backgroundColor: 'white' } : { backgrounColor: "none" }}>
 
-      {data ? 
-    <div>
-    {isShowData ?
-      <img className='hideData' src='images/hide.svg' onClick={() => setIsShowData(false)} />
-      :
-      <img className='showData' src='images/show.svg' onClick={() => setIsShowData(true)} />}
-  </div>  
-    : ''}
+      {data && isShowData ?
+        <img className='hideData' src='images/hide.svg' onClick={() => setIsShowData(false)} />
+
+        : data && !isShowData ?
+          <img className='showData' src='images/show.svg' onClick={() => setIsShowData(true)} />
+
+          : ''}
 
       {data ?
         <Accordion default-key="0" className={isShowData ? '' : 'hiddenAccordion'}>
+          {title ? <h4>{title}</h4> : ''}
           <Accordion.Item eventKey='0'>
             <Accordion.Header>JSON Format</Accordion.Header>
             <Accordion.Body>

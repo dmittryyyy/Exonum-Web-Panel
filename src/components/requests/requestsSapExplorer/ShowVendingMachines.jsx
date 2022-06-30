@@ -196,7 +196,6 @@ export const ShowVendingMachines = () => {
     }, [isIdMachine]);
 
     return (
-
         <>
             <NavBarForRelatedQueries
                 requestsForAllMachines={<button className='list-queries-item'
@@ -211,22 +210,17 @@ export const ShowVendingMachines = () => {
                 data={dataVendingmachine}
                 columnsTable={columnsVendingMachines} />
 
-            {window.location.href.indexOf('item-loaded/allMachines') >= 0 ?
-                <h4>Data on all machines</h4>
-                : isIdMachine ? <h4>Data on chosen machine</h4> : ''}
-
             <Routes>
                 <Route path='item-loaded/' element={<RequestContent data={isLoadedAndPrice}
-                    columnsTable={columnsSapExplorer.columnsItemsLoaded} />}>
+                    columnsTable={columnsSapExplorer.columnsItemsLoaded} title={'Data on chosen machine'}/>}>
                     <Route path=':idMachines' element={<RequestContent />} />
                 </Route>
 
                 <Route path='item-loaded/allMachines' element={<RequestContent data={isRequestsForAllMachines}
-                    columnsTable={columnsSapExplorer.columnsRequestsForAllMachines} />}>
+                    columnsTable={columnsSapExplorer.columnsRequestsForAllMachines} title={'Data on all machines'}/>}>
                     <Route path='' element={<RequestContent />} />
                 </Route>
             </Routes>
         </>
-
     )
 };

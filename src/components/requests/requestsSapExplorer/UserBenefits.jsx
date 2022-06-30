@@ -96,8 +96,8 @@ export const UserBenefits = () => {
                 data={isDataBenefits}
                 columnsTable={columnsSapExplorer.benefits} />
 
-            {isDataBlockchain ? <h4>Blockchain profile</h4> : ''}
-            <RequestContent data={isDataBlockchain} />
+            
+            <RequestContent data={isDataBlockchain} title={'Blockchain profile'}/>
         </>
     )
 }

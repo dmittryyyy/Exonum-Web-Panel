@@ -98,8 +98,7 @@ export const Cards = observer(() => {
                 data={isDataCards}
                 columnsTable={columnsSapExplorer.columnsCards} />
 
-            {isDataBlockchain ? <h4>Blockchain profile</h4> : ''}
-            <RequestContent data={isDataBlockchain} />
+            <RequestContent data={isDataBlockchain} title={'Blockchain profile'}/>
         </>
     )
 });
