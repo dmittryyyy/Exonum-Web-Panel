@@ -179,7 +179,7 @@ export const ShowVendingMachines = () => {
                 fullData.push(item);
             })
         })
-        navigate('allMachines');
+        navigate('item-loaded/allMachines');
         setRequestsForAllMachines(fullData);
     }
 
@@ -211,22 +211,20 @@ export const ShowVendingMachines = () => {
                 data={dataVendingmachine}
                 columnsTable={columnsVendingMachines} />
 
-            {window.location.href.indexOf('allMachines') >= 0 ?
+            {window.location.href.indexOf('item-loaded/allMachines') >= 0 ?
                 <h4>Data on all machines</h4>
-                : isIdMachine ?
-                    <h4>Data on chosen machine</h4> : ''}
+                : isIdMachine ? <h4>Data on chosen machine</h4> : ''}
 
             <Routes>
-                <Route path='/' element={<RequestContent data={isLoadedAndPrice}
+                <Route path='item-loaded/' element={<RequestContent data={isLoadedAndPrice}
                     columnsTable={columnsSapExplorer.columnsItemsLoaded} />}>
-                    <Route path='item-loaded/:idMachines' element={<RequestContent />} />
+                    <Route path=':idMachines' element={<RequestContent />} />
                 </Route>
 
-                <Route path='/' element={<RequestContent data={isRequestsForAllMachines}
+                <Route path='item-loaded/allMachines' element={<RequestContent data={isRequestsForAllMachines}
                     columnsTable={columnsSapExplorer.columnsRequestsForAllMachines} />}>
-                    <Route path=':allMachines' element={<RequestContent />} />
+                    <Route path='' element={<RequestContent />} />
                 </Route>
-
             </Routes>
         </>
 

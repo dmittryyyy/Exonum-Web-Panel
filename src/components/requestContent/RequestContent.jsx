@@ -9,15 +9,26 @@ import './RequestContent.scss';
 export const RequestContent = observer(({ data, columnsTable }) => {
 
   const [isValueSearch, setIsValueSearch] = useState('');
+  const [isShowData, setIsShowData] = useState(true);
 
   const ExpandedComponent = (data) => {
     return <pre>{JSON.stringify(data, null, 2)}</pre>;
   }
 
   return (
-    <div className='resultWrapper'>
+    <div className='resultWrapper' style={data && isShowData ? {backgroundColor: 'white'} : {backgrounColor: "none"}}>
+
+      {data ? 
+    <div>
+    {isShowData ?
+      <img className='hideData' src='images/hide.svg' onClick={() => setIsShowData(false)} />
+      :
+      <img className='showData' src='images/show.svg' onClick={() => setIsShowData(true)} />}
+  </div>  
+    : ''}
+
       {data ?
-        <Accordion default-key="0">
+        <Accordion default-key="0" className={isShowData ? '' : 'hiddenAccordion'}>
           <Accordion.Item eventKey='0'>
             <Accordion.Header>JSON Format</Accordion.Header>
             <Accordion.Body>

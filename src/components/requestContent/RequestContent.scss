@@ -1,11 +1,18 @@
 .resultWrapper {
-  margin: 15px 30px 15px 20px;
+  margin: 0 30px 20px 20px;
+  transition: .3s;
 
   pre {
     text-align: left;
     padding: 10px;
   }
 
+  .showData, .hideData {
+    max-width: 40px;
+    cursor: pointer;
+    display: block;
+  }
+  
   .tableHeader {
     .search {
       display: flex;
@@ -30,8 +37,26 @@
     }
   }
 
+
   .accordion {
     max-width: 100%;
+
+    .accordion-item {
+      border: none;
+      border-bottom: 1px solid rgba(0,0,0,.125);
+      animation-duration: .8s;
+      animation-name: showData;
+    }
+
+    @keyframes showData {
+      from {
+          margin-right: 700px;
+      }
+  
+      to {
+        margin-right: 0;
+      }
+  }
 
     .accordion-header {
       button {
@@ -44,4 +69,7 @@
     }
   }
 
+  .hiddenAccordion {
+    display: none;
+  }
 }
