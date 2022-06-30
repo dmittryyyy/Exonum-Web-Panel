@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite';
 
 import './RequestContent.scss';
 
-export const RequestContent = observer(({ data, columnsTable, title }) => {
+export const RequestContent = observer(({ data, columnsTable, title, isLoading }) => {
 
   const [isValueSearch, setIsValueSearch] = useState('');
   const [isShowData, setIsShowData] = useState(true);
@@ -25,6 +25,10 @@ export const RequestContent = observer(({ data, columnsTable, title }) => {
           <img className='showData' src='images/show.svg' onClick={() => setIsShowData(true)} />
 
           : ''}
+
+      {isLoading ?
+        <div><img src="images/loadingData.gif" alt="loading" /></div>
+        : ''}
 
       {data ?
         <Accordion default-key="0" className={isShowData ? '' : 'hiddenAccordion'}>

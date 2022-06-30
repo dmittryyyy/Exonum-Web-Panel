@@ -6,6 +6,7 @@ import { getBenefitRules, getUserSapInfo, getBlockchainProfile } from '../../../
 import { RequestContent } from '../../../components/requestContent/RequestContent';
 import { NavBarForRelatedQueries } from '../../navBar/NavBarForRelatedQueries';
 import { InputForRequest } from '../../inputForRequest/InputForRequest';
+import { ErrorMessage } from '../../errorMessage/ErrorMessage';
 
 export const BenefitRules = () => {
 
@@ -17,35 +18,38 @@ export const BenefitRules = () => {
     const [isValueSearch, setIsValueSearch] = useState(benefit_rulesId ? benefit_rulesId : '');
     const [isDataBenefits, setIsDataBenefits] = useState();
     const [isDataBlockchain, setIsDataBlockchain] = useState();
+    const [isErrorRelQuer, setIsisErrorRelQuer] = useState();
 
-    const [classInput, setClassInput] = useState('search');
-    const [isError, setIsError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
-    const onBenefitRules = async () => {
+    const onBenefitRules = async (setErrorInput, setIsErrorRequest) => {
         if (isValueSearch) {
             try {
+                setIsLoading(true);
                 await getBenefitRules(client.activeAPI + '/api/', isValueSearch)
                     .then(resp => {
                         if (!resp || resp === []) {
-                            setIsError('Data undefined!');
+                            setErrorInput('Data undefined!');
                         } else {
                             setIsDataBenefits(resp);
-                            setIsError('');
-                            setClassInput('search');
+                            setErrorInput('');
+                            setIsisErrorRelQuer('');
+                            setIsErrorRequest(false);
                             navigate(isValueSearch);
                         }
                     });
             } catch (e) {
                 console.log(e);
-                setIsError(`The data you entered is incorrect! ${e.message}`);
-                setIsDataBenefits('');
+                setErrorInput(`The data you entered is incorrect! ${e.message}`);
                 if (e.response.status >= 500) {
-                    setIsError('Unexpected error, please try again later...');
+                    setErrorInput('Unexpected error, please try again later...');
                 }
+                setIsErrorRequest(true);
+            } finally {
+                setIsLoading(false);
             }
         } else {
-            setIsError('Empty search string!')
-            setClassInput('searchError');
+            setErrorInput('Empty search string!')
         }
     }
 
@@ -55,13 +59,13 @@ export const BenefitRules = () => {
             await getUserSapInfo(client.activeAPI + `/${'external/api/v1'}`, isValueSearch)
                 .then(resp => {
                     if (!resp || resp === []) {
-                        setIsError('Data undefined!');
+                        setIsisErrorRelQuer('Data undefined!');
                     }
                     idBlockchian = resp.blockchainId;
                 });
         } catch (e) {
             console.log(e);
-            setIsError('Run the main query first!');
+            setIsisErrorRelQuer('Run the main query first!');
         }
         if (idBlockchian) {
             try {
@@ -70,7 +74,7 @@ export const BenefitRules = () => {
                 })
             } catch (e) {
                 console.log(e);
-                setIsError(e.message);
+                setIsisErrorRelQuer(e.message);
             }
         }
     }
@@ -84,21 +88,20 @@ export const BenefitRules = () => {
     return (
 
         <>
-            <NavBarForRelatedQueries
-                onBlockchainProfile={<button className='list-queries-item' onClick={onBlockchainProfile}>Blockchain profile</button>}
-            />
+            <NavBarForRelatedQueries 
+            onBlockchainProfile={<button className='list-queries-item' onClick={onBlockchainProfile}>Blockchain profile</button>} isErrorRelQuer={isErrorRelQuer}/>
 
-            <InputForRequest classInput={classInput} placeholder={'Enter user id'}
-                isError={isError}
+            <InputForRequest placeholder={'Enter user id'}
                 isValueSearch={isValueSearch} setIsValueSearch={setIsValueSearch}
-                request={onBenefitRules} />
+                request={onBenefitRules} onBlockchainProfile={onBlockchainProfile} />
+
 
             <RequestContent
                 data={isDataBenefits}
-                columnsTable={columnsSapExplorer.benefitsRules} />
+                columnsTable={columnsSapExplorer.benefitsRules} isLoading={isLoading} />
 
-            
-            <RequestContent data={isDataBlockchain} title={'Blockchain profile'}/>
+
+            <RequestContent data={isDataBlockchain} title={'Blockchain profile'} />
         </>
 
     )

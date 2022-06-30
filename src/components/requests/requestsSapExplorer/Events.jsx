@@ -20,9 +20,10 @@ export const Events = () => {
     const [isDataBlockchain, setIsDataBlockchain] = useState();
 
     const [valueCalendar, setValueCalendar] = useState(createdOn_gt ? new Date(createdOn_gt) : null);
-    const [classInput, setClassInput] = useState('search');
     const [nullCalendar, setNullCalendar] = useState(null);
-    const [isError, setIsError] = useState('');
+    const [isErrorRelQuer, setIsisErrorRelQuer] = useState('');
+
+    const [isLoading, setIsLoading] = useState(false);
 
     const validationCalendar = (date) => {
         if (valueCalendar === undefined) {
@@ -36,33 +37,39 @@ export const Events = () => {
     }
 
     const validationLimit = (str) => {
-        if (isValueSearch) {
-            return str > 0 && str < 1001;
-        } else {
-            setClassInput('searchError');
-            setIsError('Enter limit!');
-        }
+        return str > 0 && str < 1001;
     };
 
-    const onEvents = async () => {
+    const onEvents = async (setErrorInput, setIsErrorRequest) => {
         if (validationCalendar(valueCalendar) && validationLimit(isValueSearch)) {
             try {
+                setIsLoading(true);
                 await getEvents(client.activeAPI + `/${'external/api/v1'}`, valueCalendar.toISOString(), isValueSearch)
                     .then(resp => {
                         if (!resp || resp === []) {
-                            setIsError('Data undefined!');
+                            setErrorInput('Data undefined!');
                         } else {
                             setisDataEvents(resp);
-                            setClassInput('search');
-                            setIsError('');
+                            setErrorInput('');
+                            setIsisErrorRelQuer('');
+                            setIsErrorRequest(false);
                             navigate(valueCalendar + `/${isValueSearch}`);
                         }
                     });
             } catch (e) {
                 console.log(e);
                 if (e.response.status >= 500) {
-                    setIsError('Unexpected error, please try again later...');
+                    setErrorInput('Unexpected error, please try again later...');
                 }
+                setIsErrorRequest(true);
+            } finally {
+                setIsLoading(false);
+            }
+        } else {
+            if (!isValueSearch && !valueCalendar) {
+                setErrorInput('Specify a date and specify an item limit!')
+            } else if (!isValueSearch) {
+                setErrorInput('Empty search string!');
             }
         }
     };
@@ -73,13 +80,13 @@ export const Events = () => {
             await getUserSapInfo(client.activeAPI + `/${'external/api/v1'}`, isDataEvents[0].data.userId)
                 .then(resp => {
                     if (!resp || resp === []) {
-                        setIsError('Data undefined!');
+                        setIsisErrorRelQuer('Data undefined!');
                     }
                     idBlockchian = resp.blockchainId;
                 });
         } catch (e) {
             console.log(e);
-            setIsError('Run the main query first!');
+            setIsisErrorRelQuer('Run the main query first!');
         }
         if (idBlockchian) {
             try {
@@ -88,7 +95,7 @@ export const Events = () => {
                 })
             } catch (e) {
                 console.log(e);
-                setIsError(e.message);
+                setIsisErrorRelQuer(e.message);
             }
         }
     }
@@ -100,11 +107,10 @@ export const Events = () => {
     }, []);
 
     return (
-
         <>
             <NavBarForRelatedQueries
-                onBlockchainProfile={<button className='list-queries-item' onClick={onBlockchainProfile}>Blockchain profile</button>}
-            />
+                onBlockchainProfile={<button className='list-queries-item' onClick={onBlockchainProfile}>Blockchain profile</button>} 
+                isErrorRelQuer={isErrorRelQuer} />
 
             <div className="searchBlock">
                 <div className='DataTime'>
@@ -113,18 +119,16 @@ export const Events = () => {
                     <p>{nullCalendar}</p>
                 </div>
 
-                <InputForRequest classInput={classInput} placeholder={'Enter limit elements'} type={'number'}
-                    isError={isError}
+                <InputForRequest placeholder={'Enter limit elements'} type={'number'}
                     isValueSearch={isValueSearch} setIsValueSearch={setIsValueSearch}
-                    request={onEvents} />
+                    request={onEvents} onBlockchainProfile={onBlockchainProfile} />
             </div>
 
             <RequestContent
                 data={isDataEvents}
-                columnsTable={columnsSapExplorer.events} />
+                columnsTable={columnsSapExplorer.events} isLoading={isLoading}/>
 
-            <RequestContent data={isDataBlockchain} title={isDataBlockchain ? 'Blockchain profile' : ''}/>
+            <RequestContent data={isDataBlockchain} title={isDataBlockchain ? 'Blockchain profile' : ''} />
         </>
-
     )
 }

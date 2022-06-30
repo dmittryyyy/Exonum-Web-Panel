@@ -16,38 +16,38 @@ export const GetUserWallet = ({ testHash }) => {
     const [isValueSearch, setIsValueSearch] = useState(user_walletId ? user_walletId : '');
     const [isDataWallet, setIsDataWallet] = useState();
 
-    const [classInput, setClassInput] = useState('search');
-    const [isError, setIsError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
-    const onGetUserWallet = async () => {
+    const onGetUserWallet = async (setErrorInput, setIsErrorRequest) => {
         if (isValueSearch) {
             if (testHash(isValueSearch)) {
+                setIsLoading(true);
                 try {
                     await searchUserWallet(client.activeNode, isValueSearch)
                         .then((wallet) => {
                             if (!wallet || wallet === []) {
-                                setIsError('Data undefined!');
+                                setErrorInput('Data undefined!');
                             }
                             setIsDataWallet([wallet.data]);
+                            setErrorInput('');
+                            setIsErrorRequest(false);
                         });
-                    setIsError('');
-                    setClassInput('search');
                     navigate(isValueSearch);
                 } catch (e) {
                     console.log(e);
-                    setIsError(`The data you entered is incorrect! ${e.message}`);
-                    setIsDataWallet('');
+                    setErrorInput(`The data you entered is incorrect! ${e.message}`);
                     if (e.response.status >= 500) {
-                        setIsError('Unexpected error, please try again later...');
+                        setErrorInput('Unexpected error, please try again later...');
                     }
+                    setIsErrorRequest(true);
+                } finally {
+                    setIsLoading(false);
                 }
             } else {
-                setIsError('Not a HEX string');
-                setClassInput('searchError');
+                setErrorInput('Not a HEX string');
             }
         } else {
-            setIsError('Empty search string!');
-            setClassInput('searchError');
+            setErrorInput('Empty search string!');
         }
     }
 
@@ -61,14 +61,14 @@ export const GetUserWallet = ({ testHash }) => {
 
         <>
             <InputForRequest 
-            classInput={classInput} placeholder={'Enter user wallet'}
-            isError={isError} 
+            placeholder={'Enter user wallet'}
             isValueSearch={isValueSearch} setIsValueSearch={setIsValueSearch} 
             request={onGetUserWallet}/>
 
             <RequestContent
                 data={isDataWallet}
-                columnsTable={columnsBlockchain.userWallet} />
+                columnsTable={columnsBlockchain.userWallet} 
+                isLoading={isLoading} />
         </>
 
     )

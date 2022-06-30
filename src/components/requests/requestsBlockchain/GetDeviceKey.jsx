@@ -15,41 +15,41 @@ export const GetDeviceKey = ({ testHash }) => {
 
     const [isValueSearch, setIsValueSearch] = useState(device_Key ? device_Key : '');
     const [isDataDeviceKey, setIsDeviceKey] = useState();
-
-    const [isError, setIsError] = useState('');
-    const [classInput, setClassInput] = useState('search');
-
     const [isHistory, seIsHistory] = useState();
 
-    const onGetDeviceKey = async () => {
+    const [isLoading, setIsLoading] = useState(false);
+
+    const onGetDeviceKey = async (setErrorInput, setIsErrorRequest) => {
         if (isValueSearch) {
             if (testHash(isValueSearch)) {
                 try {
+                    setIsLoading(true);
                     await searchDeviceKey(client.activeNode, isValueSearch, isHistory)
                         .then((key) => {
                             if(!key || key === []) {
-                                setIsError('Data undefined!'); 
+                                setErrorInput('Data undefined!'); 
                             }
                           setIsDeviceKey([key]);
+                          setErrorInput('');
+                          setIsErrorRequest(false);
                         });
-                    setIsError('');
-                    setClassInput('search');
                     navigate(isValueSearch);
                 } catch (e) {
                     console.log(e);
-                    setIsError(`The data you entered is incorrect! ${e.message}`);
+                    setErrorInput(`The data you entered is incorrect! ${e.message}`);
                     setIsDeviceKey('');
                     if(e.response.status >= 500) {
-                        setIsError('Unexpected error, please try again later...');
+                        setErrorInput('Unexpected error, please try again later...');
                     }
+                    setIsErrorRequest(true);
+                } finally {
+                    setIsLoading(false);
                 }
             } else {
-                setIsError('Not a HEX string');
-                setClassInput('searchError')
+                setErrorInput('Not a HEX string');
             }
         } else {
-            setIsError('Empty search string!');
-            setClassInput('searchError')
+            setErrorInput('Empty search string!');
         }
     }
 
@@ -62,8 +62,7 @@ export const GetDeviceKey = ({ testHash }) => {
     return (
         
         <>
-            <InputForRequest classInput={classInput} placeholder={'Enter device key'}
-            isError={isError} 
+            <InputForRequest placeholder={'Enter device key'}
             isValueSearch={isValueSearch} setIsValueSearch={setIsValueSearch} 
             request={onGetDeviceKey}/>
 
@@ -77,7 +76,8 @@ export const GetDeviceKey = ({ testHash }) => {
 
             <RequestContent 
             data={isDataDeviceKey} 
-            columnsTable={columnsBlockchain.deviceKey} />
+            columnsTable={columnsBlockchain.deviceKey} 
+            isLoading={isLoading} />
         </>
 
     )

@@ -16,39 +16,39 @@ export const ShopItems = () => {
     const [isValueSearch, setIsValueSearch] = useState(limit ? limit : '');
     const [isDataShopItems, setisDataShopItems] = useState();
 
-    const [classInput, setClassInput] = useState('search');
-    const [isError, setIsError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const validationLimit = (str) => {
-        if (isValueSearch) {
-            return str > 0 && str < 1001;
-        } else {
-            setClassInput('searchError');
-        }
+        return str > 0 && str < 1001;
     };
 
-    const onShopItems = async () => {
+    const onShopItems = async (setErrorInput, setIsErrorRequest) => {
         if (validationLimit(isValueSearch)) {
             try {
+                setIsLoading(true);
                 await getShopItems(client.activeAPI + `/${'external/api/v1'}`, isValueSearch)
                     .then(resp => {
                         if (!resp || resp === []) {
-                            setIsError('Data undefined!');
+                            setErrorInput('Data undefined!');
                         } else {
                             setisDataShopItems(resp);
-                            setIsError('');
-                            setClassInput('search');
+                            setErrorInput('');
+                            setIsErrorRequest(false);
                             navigate(isValueSearch);
                         }
                     });
             } catch (e) {
                 console.log(e);
-                setIsError(e.message);
-                setisDataShopItems('');
+                setErrorInput(e.message);
                 if (e.response.status >= 500) {
-                    setIsError('Unexpected error, please try again later...');
+                    setErrorInput('Unexpected error, please try again later...');
                 }
+                setIsErrorRequest(true);
+            } finally {
+                setIsLoading(false);
             }
+        } else {
+            setErrorInput('Enter limit!');
         }
     }
 
@@ -61,15 +61,14 @@ export const ShopItems = () => {
     return (
 
         <>
-
-            <InputForRequest classInput={classInput} placeholder={'Enter limit elements'} type={'number'}
-                isError={isError}
+            <InputForRequest placeholder={'Enter limit elements'} type={'number'}
                 isValueSearch={isValueSearch} setIsValueSearch={setIsValueSearch}
                 request={onShopItems} />
 
             <RequestContent
                 data={isDataShopItems}
-                columnsTable={columnsSapExplorer.shopItems} />
+                columnsTable={columnsSapExplorer.shopItems} 
+                isLoading={isLoading} />
         </>
 
     )

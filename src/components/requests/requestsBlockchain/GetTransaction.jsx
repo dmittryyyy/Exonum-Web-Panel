@@ -16,13 +16,13 @@ export const GetTransaction = ({ testHash }) => {
   const [isValueSearch, setIsValueSearch] = useState(transactionId ? transactionId : '');
   const [isDataTransaction, setIsDataTransaction] = useState();
 
-  const [isError, setIsError] = useState('');
-  const [classInput, setClassInput] = useState('search');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const onGetTransaction = async () => {
+  const onGetTransaction = async (setErrorInput, setIsErrorRequest) => {
     if (isValueSearch) {
       if (testHash(isValueSearch)) {
         try {
+          setIsLoading(true);
           const resp = await searchTransaction(client.activeNode, isValueSearch);
           if (!resp || resp === undefined) {
             setIsDataTransaction('type: unknown');
@@ -36,24 +36,26 @@ export const GetTransaction = ({ testHash }) => {
             delete resp.location_proof
             setIsDataTransaction([resp]);
           };
-          setIsError('');
-          setClassInput('search');
+          setErrorInput('');
+          setIsErrorRequest(false);
           navigate(isValueSearch);
         } catch (e) {
           console.log(e);
-          setIsError(`The data you entered is incorrect! ${e.message}`);
-          setIsDataTransaction('');
+          setErrorInput(`The data you entered is incorrect! ${e.message}`);
           if (e.response.status >= 500) {
-            setIsError('Unexpected error, please try again later...');
+            setErrorInput('Unexpected error, please try again later...');
           }
+          setIsErrorRequest(true);
+        } finally {
+          setIsLoading(false);
         }
       } else {
-        setIsError('Not a HEX string');
-        setClassInput('searchError');
+        setErrorInput('Not a HEX string');
+        setIsErrorRequest(false);
       }
     } else {
-      setIsError('Empty search string!');
-      setClassInput('searchError');
+      setErrorInput('Empty search string!');
+      setIsErrorRequest(false);
     }
   }
 
@@ -64,17 +66,15 @@ export const GetTransaction = ({ testHash }) => {
   }, []);
 
   return (
-
     <>
-      <InputForRequest classInput={classInput} placeholder={'Enter transaction number'}
-      isValueSearch={isValueSearch} setIsValueSearch={setIsValueSearch} 
-      request={onGetTransaction} 
-      isError={isError} />
+      <InputForRequest placeholder={'Enter transaction number'}
+        isValueSearch={isValueSearch} setIsValueSearch={setIsValueSearch}
+        request={onGetTransaction}/>
 
       <RequestContent
+        isLoading={isLoading}
         data={isDataTransaction}
         columnsTable={columnsBlockchain.transaction} />
     </>
-
   )
 }

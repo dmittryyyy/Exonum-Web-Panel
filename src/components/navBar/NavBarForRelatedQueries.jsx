@@ -1,12 +1,13 @@
 import { React } from 'react';
 import { Link } from 'react-router-dom';
+import { ErrorMessage } from '../errorMessage/ErrorMessage';
 
 import './NavBar.scss';
 
-export const NavBarForRelatedQueries = ({ onBlockchainProfile, onChainQueriesUserInfo, requestsForAllMachines, onChainQueriesUserCards }) => {
+export const NavBarForRelatedQueries = ({ onBlockchainProfile, onChainQueriesUserInfo, requestsForAllMachines, onChainQueriesUserCards, isErrorRelQuer }) => {
 
   return (
-
+    <>
     <div className="navBarRelatedQueries">
       <ul className='list-group'>
         <div className='dashBoard'>
@@ -14,17 +15,21 @@ export const NavBarForRelatedQueries = ({ onBlockchainProfile, onChainQueriesUse
         </div>
 
         <div className='listQueries'>
+
+        {onBlockchainProfile}
+
         {requestsForAllMachines}
 
         {onChainQueriesUserInfo}
 
         {onChainQueriesUserCards}
 
-        {onBlockchainProfile}
-
         </div>
       </ul>
     </div>
+
+    <ErrorMessage errorInput={isErrorRelQuer}/>
+    </>
   )
 
 }

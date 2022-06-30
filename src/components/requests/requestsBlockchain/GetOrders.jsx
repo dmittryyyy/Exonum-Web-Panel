@@ -16,41 +16,41 @@ export const GetOrders = ({ testHash }) => {
   const [isValueSearch, setIsValueSearch] = useState(orders ? orders : '');
   const [isDataOrders, setIsDataOrders] = useState();
 
-  const [isError, setIsError] = useState('');
-  const [classInput, setClassInput] = useState('search');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const onGetOrders = async () => {
+  const onGetOrders = async (setErrorInput, setIsErrorRequest) => {
     if (isValueSearch) {
       if (testHash(isValueSearch)) {
         try {
+          setIsLoading(true);
           await searchOrders(client.activeNode, isValueSearch)
             .then((orders) => {
               if (!orders || orders === []) {
-                setIsError('Data undefined!');
+                setErrorInput('Data undefined!');
               }
               orders.data.map((elements) => {
                 elements.status.splice(0, elements.status.length - 1);
                 setIsDataOrders(orders.data);
+                setErrorInput('');
+                setIsErrorRequest(false);
               });
-            });
-          setIsError('');
-          setClassInput('search');
+            }); 
           navigate(isValueSearch);
         } catch (e) {
           console.log(e);
-          setIsError(`The data you entered is incorrect! ${e.message}`);
-          setIsDataOrders('');
+          setErrorInput(`The data you entered is incorrect! ${e.message}`);
           if (e.response.status >= 500) {
-            setIsError('Unexpected error, please try again later...');
+            setErrorInput('Unexpected error, please try again later...');
           }
+          setIsErrorRequest(true);
+        } finally {
+          setIsLoading(false);
         }
       } else {
-        setIsError('Not a HEX string');
-        setClassInput('searchError');
+        setErrorInput('Not a HEX string');
       }
     } else {
-      setIsError('Empty search string!');
-      setClassInput('searchError');
+      setErrorInput('Empty search string!');
     }
   }
 
@@ -63,14 +63,14 @@ export const GetOrders = ({ testHash }) => {
   return (
 
     <>
-      <InputForRequest classInput={classInput} placeholder={'Search orders'}
-      isError={isError} 
+      <InputForRequest placeholder={'Search orders'}
       isValueSearch={isValueSearch} setIsValueSearch={setIsValueSearch} 
       request={onGetOrders}/>
 
       <RequestContent
         data={isDataOrders}
-        columnsTable={columnsBlockchain.orders} />
+        columnsTable={columnsBlockchain.orders} 
+        isLoading={isLoading} />
     </>
 
   )

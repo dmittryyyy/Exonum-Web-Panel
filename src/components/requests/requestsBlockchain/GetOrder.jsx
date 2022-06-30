@@ -14,10 +14,9 @@ export const GetOrder = ({ testHash }) => {
     const navigate = useNavigate();
 
     const [isValueSearch, setIsValueSearch] = useState(orderId ? orderId : '');
-    const [dataJsonFormat, setDataJsonFormat] = useState();
+    const [isDataOrder, setIsDataOrder] = useState();
 
-    const [isError, setIsError] = useState('');
-    const [classInput, setClassInput] = useState('search');
+    const [isLoading, setIsLoading] = useState(false);
 
     const hexadecimal = (byteArray) => {
         return Array.from(byteArray, function (byte) {
@@ -25,35 +24,35 @@ export const GetOrder = ({ testHash }) => {
         }).join('')
     };
 
-    const onGetOrder = async () => {
+    const onGetOrder = async (setErrorInput, setIsErrorRequest) => {
         if (isValueSearch) {
             if (testHash(isValueSearch)) {
                 try {
+                    setIsLoading(true);
                     await searchOrder(client.activeNode, isValueSearch)
                         .then((orders) => {
                             if (!orders || orders === []) {
-                                setIsError('Data undefined!');
+                                setErrorInput('Data undefined!');
                             }
-                            setDataJsonFormat(hexadecimal((orders.data.order_seller_part.items[0].application_data)));
+                            setIsDataOrder(hexadecimal((orders.data.order_seller_part.items[0].application_data)));
+                            setErrorInput('');
+                            navigate(isValueSearch);
                         });
-                    setIsError('');
-                    setClassInput('search');
-                    navigate(isValueSearch);
                 } catch (e) {
                     console.log(e);
-                    setIsError(`Order number uncorrect! ${e.message}`);
-                    setDataJsonFormat('');
+                    setErrorInput(`Order number uncorrect! ${e.message}`);
                     if (e.response.status >= 500) {
-                        setIsError('Unexpected error, please try again later...');
+                        setErrorInput('Unexpected error, please try again later...');
                     }
+                    setIsErrorRequest(true);
+                } finally {
+                    setIsLoading(false);
                 }
             } else {
-                setIsError('Not a HEX string');
-                setClassInput('searchError');
+                setErrorInput('Not a HEX string');
             }
         } else {
-            setIsError('Empty search string!');
-            setClassInput('searchError');
+            setErrorInput('Empty search string!');
         }
     }
 
@@ -66,12 +65,11 @@ export const GetOrder = ({ testHash }) => {
     return (
 
         <>
-            <InputForRequest classInput={classInput} placeholder={'Enter order number'}
-            isError={isError} 
+            <InputForRequest placeholder={'Enter order number'}
             isValueSearch={isValueSearch} setIsValueSearch={setIsValueSearch} 
             request={onGetOrder}/>
 
-            <RequestContent data={dataJsonFormat} />
+            <RequestContent data={isDataOrder} isLoading={isLoading}/>
         </>
 
     )

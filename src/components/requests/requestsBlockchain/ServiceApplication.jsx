@@ -16,38 +16,38 @@ export const ServiceApplication = ({ testHash }) => {
     const [isValueSearch, setIsValueSearch] = useState(service_applicationId ? service_applicationId : '');
     const [isDataSAP, setIsDataSAP] = useState();
 
-    const [isError, setIsError] = useState('');
-    const [classInput, setClassInput] = useState('search');
+    const [isLoading, setIsLoading] = useState(false);
 
-    const onGetService = async () => {
+    const onGetService = async (setErrorInput, setIsErrorRequest) => {
         if (isValueSearch) {
             if (testHash(isValueSearch)) {
                 try {
+                    setIsLoading(true);
                     await searchServApplic(client.activeNode, isValueSearch)
                         .then((service) => {
                             if (!service || service === []) {
-                                setIsError('Data undefined!');
+                                setErrorInput('Data undefined!');
                             }
                             setIsDataSAP([service.application_service_proof.to_application_service.entries[0].value]);
+                            setErrorInput('');
+                            setIsErrorRequest(false);
                         });
-                    setIsError('');
-                    setClassInput('search');
                     navigate(isValueSearch);
                 } catch (e) {
                     console.log(e);
-                    setIsError(`The data you entered is incorrect! ${e.message}`);
-                    setIsDataSAP('');
+                    setErrorInput(`The data you entered is incorrect! ${e.message}`);
                     if (e.response.status >= 500) {
-                        setIsError('Unexpected error, please try again later...');
+                        setErrorInput('Unexpected error, please try again later...');
                     }
+                    setIsErrorRequest(true);
+                } finally {
+                    setIsLoading(false);
                 }
             } else {
-                setIsError('Not a HEX string');
-                setClassInput('searchError');
+                setErrorInput('Not a HEX string');
             }
         } else {
-            setIsError('Empty search string!');
-            setClassInput('searchError');
+            setErrorInput('Empty search string!');
         }
     }
 
@@ -61,13 +61,13 @@ export const ServiceApplication = ({ testHash }) => {
 
         <>
             <InputForRequest 
-            classInput={classInput} placeholder={'Service Application'}
-            isError={isError} 
+            placeholder={'Service Application'}
             isValueSearch={isValueSearch} setIsValueSearch={setIsValueSearch} 
             request={onGetService}/>
 
             <RequestContent
                 data={isDataSAP}
+                isLoading={isLoading}
             />
         </>
 

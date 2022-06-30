@@ -1,37 +1,47 @@
-import React from 'react';
+import { React, useState } from 'react';
+import { ErrorMessage } from '../errorMessage/ErrorMessage';
 
 import './InputForRequest.scss';
 
-export const InputForRequest = ({ classInput, isValueSearch, setIsValueSearch, request, isError, placeholder, type }) => {
+export const InputForRequest = ({ isValueSearch, setIsValueSearch, request, placeholder, type }) => {
+
+  const [errorInput, setErrorInput] = useState();
+  const [isErrorRequest, setisErrorRequest] = useState(false);
 
   const readValueInput = (e) => {
     setIsValueSearch(e.target.value);
+    if (isValueSearch === '' || !e.target.value) {
+      setErrorInput('');
+      setisErrorRequest('');
+    }
   }
 
   const onKeyDown = (e) => {
     if (e.key === 'Enter') {
-      request();
+      request(setErrorInput, setisErrorRequest);
     }
   }
 
   return (
+    <>
+      <div className="searchWrapper">
 
-    <div className="searchWrapper">
+        <div className={errorInput ? 'searchError' : 'search'}>
 
-      <div className={classInput}>
+          {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
 
-        {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
+          <input type={type && type} placeholder={placeholder}
+            onKeyDown={onKeyDown}
+            value={isValueSearch}
+            onChange={readValueInput} />
 
-        <input type={type ? type : ''} placeholder={placeholder}
-          onKeyDown={onKeyDown}
-          value={isValueSearch}
-          onChange={readValueInput} />
+        </div>
+
+        <button className='btnSearch' onClick={() => request(setErrorInput, setisErrorRequest)}>search</button>
 
       </div>
 
-      <button onClick={request}>search</button>
-      <p>{isError}</p>
-
-    </div>
+      <ErrorMessage errorInput={errorInput} isErrorRequest={isErrorRequest}/>
+    </>
   )
 }

@@ -7,8 +7,8 @@ import { App } from './components/app/App';
 import { ClientNode } from './services/client';
 import { ColumnsBlockchain } from './components/columnsTable/ColumnsBlockchain';
 import { ColumnsSapExplorer } from './components/columnsTable/ColumnsSapExplorer';
-import './index.scss';
 
+import './index.scss';
 
 export const ThemeContext = createContext(null);
 

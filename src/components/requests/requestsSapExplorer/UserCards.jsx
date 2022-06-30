@@ -18,36 +18,40 @@ export const UserCards = observer(() => {
     const [isValueSearch, setIsValueSearch] = useState(user_card ? user_card : '');
     const [isDataUserCards, setIsDataUserCards] = useState();
 
-    const [classInput, setClassInput] = useState('search');
-    const [isError, setIsError] = useState('');
-
     const [dataRelatedReq, setDataRelatedReq] = useState();
+    const [isErrorRelQuer, setIsisErrorRelQuer] = useState();
 
-    const onUsersCards = async () => {
+    const [isLoading, setIsLoading] = useState(false);
+
+    const onUsersCards = async (setErrorInput, setIsErrorRequest) => {
         if (isValueSearch) {
             try {
+                setIsLoading(true);
                 await getUserCards(client.activeAPI + `/${'external/api/v1'}`, isValueSearch)
                     .then(resp => {
                         if (!resp || resp === []) {
-                            setIsError('Data undefined!');
+                            setErrorInput('Data undefined!');
                         } else {
                             setIsDataUserCards(resp);
-                            setIsError('');
-                            setClassInput('search');
+                            setErrorInput('');
+                            setIsisErrorRelQuer('');
+                            setIsErrorRequest(false);
+                            navigate(isValueSearch);
                         }
-                    });
-                navigate(isValueSearch);
+                    });   
             } catch (e) {
                 console.log(e);
-                setIsError(`The data you entered is incorrect! ${e.message}`);
+                setErrorInput(`The data you entered is incorrect! ${e.message}`);
                 setIsDataUserCards('');
                 if (e.response.status >= 500) {
-                    setIsError('Unexpected error, please try again later...');
+                    setErrorInput('Unexpected error, please try again later...');
                 }
+                setIsErrorRequest(true);
+            } finally {
+                setIsLoading(false);
             }
         } else {
-            setIsError('Empty search string!')
-            setClassInput('searchError');
+            setErrorInput('Empty search string!')
         }
     }
 
@@ -63,7 +67,7 @@ export const UserCards = observer(() => {
             setDataRelatedReq(array);
         } catch (e) {
             console.log(e);
-            setIsError('Run the main query first!');
+            setIsisErrorRelQuer('Run the main query first!');
         }
     }
 
@@ -78,16 +82,15 @@ export const UserCards = observer(() => {
         <>
             <NavBarForRelatedQueries
                 onChainQueriesUserCards={<button className='list-queries-item'
-                    onClick={onChainQueries}>Chain queries</button>} />
+                    onClick={onChainQueries}>Chain queries</button>} isErrorRelQuer={isErrorRelQuer}/>
 
-            <InputForRequest classInput={classInput} placeholder={'Enter user id'}
-                isError={isError}
+            <InputForRequest placeholder={'Enter user id'}
                 isValueSearch={isValueSearch} setIsValueSearch={setIsValueSearch}
                 request={onUsersCards} />
 
             <RequestContent
                 data={isDataUserCards}
-                columnsTable={columnsSapExplorer.userCards} />
+                columnsTable={columnsSapExplorer.userCards} isLoading={isLoading}/>
 
             <RequestContent
                 title={'Data related queries'}

@@ -5,6 +5,7 @@ import { ThemeContext } from '../../../index';
 import { getVendingMachines, getItemsLoaded, getShopItems } from '../../../services/SapExplorer';
 import { RequestContent } from '../../../components/requestContent/RequestContent';
 import { NavBarForRelatedQueries } from '../../navBar/NavBarForRelatedQueries';
+import { ErrorMessage } from '../../errorMessage/ErrorMessage';
 
 export const ShowVendingMachines = () => {
 
@@ -18,6 +19,8 @@ export const ShowVendingMachines = () => {
     const [dataVendingmachine, setDataVendingMachine] = useState();
     const [isLoadedAndPrice, setIsLoadedAndPrice] = useState();
     const [isRequestsForAllMachines, setRequestsForAllMachines] = useState();
+
+    const [isLoading, setIsLoading] = useState(false);
 
     const [isError, setIsError] = useState('');
 
@@ -95,6 +98,7 @@ export const ShowVendingMachines = () => {
 
     const onShowVendingMachines = async () => {
         try {
+            setIsLoading(true);
             await getVendingMachines(client.activeAPI + `/${'api'}`).then(resp => {
                 if (!resp || resp === []) {
                     setIsError('Data undefined!')
@@ -110,6 +114,8 @@ export const ShowVendingMachines = () => {
             if (e.response.status >= 500) {
                 setIsError('Unexpected error, please try again later...');
             }
+        } finally {
+            setIsLoading(false);
         }
     }
 
@@ -202,13 +208,11 @@ export const ShowVendingMachines = () => {
                     onClick={onRequestsForAllMachines}>Requests for all machines</button>}
             />
 
-            <div className="searchWrapper">
-                <p>{isError}</p>
-            </div>
+            <ErrorMessage errorInput={isError}/>
 
             <RequestContent
                 data={dataVendingmachine}
-                columnsTable={columnsVendingMachines} />
+                columnsTable={columnsVendingMachines} isLoading={isLoading}/>
 
             <Routes>
                 <Route path='item-loaded/' element={<RequestContent data={isLoadedAndPrice}

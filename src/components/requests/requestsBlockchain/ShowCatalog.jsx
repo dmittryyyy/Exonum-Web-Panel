@@ -11,8 +11,11 @@ export const ShowCatalog = () => {
   const [isDataCatalog, setIsDataCatalog] = useState();
   const [isError, setIsError] = useState('');
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const onShowCatalog = async () => {
     try {
+      setIsLoading(true);
       await getCatalog(client.activeNode)
         .then(data => {
           if (!data || data === []) {
@@ -28,6 +31,8 @@ export const ShowCatalog = () => {
       if (e.response.status >= 500) {
         setIsError('Unexpected error, please try again later...');
       }
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -46,7 +51,8 @@ export const ShowCatalog = () => {
 
       <RequestContent
         data={isDataCatalog}
-        columnsTable={columnsBlockchain.catalog} />
+        columnsTable={columnsBlockchain.catalog} 
+        isLoading={isLoading} />
     </>
 
   )

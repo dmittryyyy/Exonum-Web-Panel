@@ -21,36 +21,39 @@ export const UserSapInfo = () => {
     const [isDataSapInfo, setIsDataSapInfo] = useState('');
     const [isDataRelatedReq, setDataRelatedReq] = useState();
     const [isDataBlockchain, setIsDataBlockchain] = useState();
+    const [isErrorRelQuer, setIsisErrorRelQuer] = useState();
 
-    const [classInput, setClassInput] = useState('search');
-    const [isError, setIsError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
-    const onUserSapInfo = async () => {
+    const onUserSapInfo = async (setErrorInput, setIsErrorRequest) => {
         if (isValueSearch) {
             try {
+                setIsLoading(true);
                 await getUserSapInfo(client.activeAPI + `/${'external/api/v1'}`, isValueSearch)
                     .then(resp => {
                         if (!resp || resp === []) {
-                            setIsError('Data undefined!');
+                            setErrorInput('Data undefined!');
                         } else {
                             setIsDataSapInfo(resp);
                             setIsRelatedReq(resp.blockchainId);
-                            setIsError('');
+                            setErrorInput('');
+                            setIsErrorRequest(false);
+                            navigate(isValueSearch);
                         }
-
-                    });
-                navigate(isValueSearch);
+                    });          
             } catch (e) {
                 console.log(e);
-                setIsError(`The data you entered is incorrect! ${e.message}`);
+                setErrorInput(`The data you entered is incorrect! ${e.message}`);
                 setIsDataSapInfo('');
                 if (e.response.status >= 500) {
-                    setIsError('Unexpected error, please try again later...');
+                    setErrorInput('Unexpected error, please try again later...');
                 }
+                setIsErrorRequest(true);
+            } finally {
+                setIsLoading(false);
             }
         } else {
-            setIsError('Empty search string!')
-            setClassInput('searchError');
+            setErrorInput('Empty search string!')
         }
     }
 
@@ -82,7 +85,7 @@ export const UserSapInfo = () => {
             setDataRelatedReq(array);
         } catch (e) {
             console.log(e);
-            setIsError('Run the main query first!');
+            setIsisErrorRelQuer('Run the main query first!');
         }
     }
 
@@ -92,13 +95,13 @@ export const UserSapInfo = () => {
             await getUserSapInfo(client.activeAPI + `/${'external/api/v1'}`, isValueSearch)
                 .then(resp => {
                     if (!resp || resp === []) {
-                        setIsError('Data undefined!');
+                        setIsisErrorRelQuer('Data undefined!');
                     }
                     idBlockchian = resp.blockchainId;
                 });
         } catch (e) {
             console.log(e);
-            setIsError('Run the main query first!');
+            setIsisErrorRelQuer('Run the main query first!');
         }
         if (idBlockchian) {
             try {
@@ -107,7 +110,7 @@ export const UserSapInfo = () => {
                 })
             } catch (e) {
                 console.log(e);
-                setIsError(e.message);
+                setIsisErrorRelQuer(e.message);
             }
         }
     }
@@ -127,14 +130,14 @@ export const UserSapInfo = () => {
             <NavBarForRelatedQueries
                 onChainQueriesUserInfo={<button className='list-queries-item' onClick={onChainQueries}>Chain queries</button>}
                 onBlockchainProfile={<button className='list-queries-item' onClick={onBlockchainProfile}>Blockchain profile</button>}
+                isErrorRelQuer={isErrorRelQuer}
             />
 
-            <InputForRequest classInput={classInput} placeholder={'Enter user id'}
-                isError={isError}
+            <InputForRequest placeholder={'Enter user id'}
                 isValueSearch={isValueSearch} setIsValueSearch={setIsValueSearch}
                 request={onUserSapInfo} />
 
-            <RequestContent data={isDataSapInfo} />
+            <RequestContent data={isDataSapInfo} isLoading={isLoading}/>
 
             <Routes>
                 <Route path='' element={<RequestContent data={isDataRelatedReq} title={'Data related queries'}/>}>
