@@ -119,14 +119,14 @@ export const ShowVendingMachines = () => {
         }
     }
 
-    const onLoadedAndPrice = async (e) => {
+    const onLoadedAndPrice = async (e, idMachine) => {
         let id;
         let data;
-        if (isIdMachine) {
-            id = isIdMachine;
+        if (idMachine) {
+            id = idMachine;
         } else {
             let value = e.target.innerHTML;
-            dataVendingmachine.forEach((item) => {
+            dataVendingmachine.map((item) => {
                 if (item.description === value) {
                     id = item.id;
                 } else if (item.id === value) {
@@ -143,7 +143,7 @@ export const ShowVendingMachines = () => {
 
         const shopItems = await getShopItems(client.activeAPI + `/${'external/api/v1'}`, '100');
 
-        shopItems.forEach((shopItem) => {
+        shopItems.map((shopItem) => {
             for (let i = 0; i < data.length; i++) {
                 if (data[i].name === shopItem.name) {
                     data[i].price = shopItem.price;
@@ -170,7 +170,7 @@ export const ShowVendingMachines = () => {
 
         const shopItems = await getShopItems(client.activeAPI + `/${'external/api/v1'}`, '100');
 
-        shopItems.forEach((shopItem) => {
+        shopItems.map((shopItem) => {
             for (let i = 0; i < data.length; i++) {
                 for (let j = 0; j < data[i].length; j++) {
                     if (data[i][j].name === shopItem.name) {
@@ -180,8 +180,8 @@ export const ShowVendingMachines = () => {
                 }
             }
         })
-        data.forEach(item => {
-            item.forEach(item => {
+        data.map(item => {
+            item.map(item => {
                 fullData.push(item);
             })
         })
@@ -194,7 +194,7 @@ export const ShowVendingMachines = () => {
             onShowVendingMachines();
         }
         if (isIdMachine) {
-            onLoadedAndPrice();
+            onLoadedAndPrice(null, isIdMachine);
         }
         if (window.location.href.indexOf('allMachines') >= 0) {
             onRequestsForAllMachines();

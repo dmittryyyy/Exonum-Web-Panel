@@ -377,8 +377,82 @@ export class ColumnsSapExplorer {
                 sortable: true,
                 wrap: true
             },
+        ];
+        this.columnsBlockchainProfile = [
+            {
+                name: 'user_id',
+                selector: (row) => row.data.user.user_id,
+                sortable: true,
+                wrap: true
+            },
+            {
+                name: 'customer_id',
+                selector: (row) => row.data.user.customer_id,
+                sortable: true,
+                wrap: true
+            },
+            {
+                name: 'nick_name',
+                selector: (row) => row.data.user.nick_name,
+                sortable: true,
+                wrap: true
+            },
+            {
+                name: 'name',
+                selector: (row) => row.data.user.identifier.name,
+                sortable: true,
+                wrap: true
+            },
+            {
+                name: 'identifier_token',
+                selector: (row) => row.data.user.identifier.identifier_token,
+                sortable: true,
+                wrap: true
+            },
+            {
+                name: 'history_hash',
+                selector: (row) => row.data.user.history_hash,
+                sortable: true,
+                wrap: true
+            },
+            {
+                name: 'device_key_id',
+                selector: (row) => row.data.device_key_list[0].device_key_id,
+                sortable: true,
+                wrap: true
+            },
+            {
+                name: 'device_key_description',
+                selector: (row) => row.data.device_key_list[0].device_key_description,
+                sortable: true,
+                wrap: true
+            },
+            {
+                name: 'role',
+                selector: (row) => row.data.device_key_list[0].role,
+                sortable: true,
+                wrap: true
+            },
+            {
+                name: 'application_service_id',
+                selector: (row) => row.data.device_key_list[0].application_service_id,
+                sortable: true,
+                wrap: true
+            },
+            {
+                name: 'device_id',
+                selector: (row) => row.data.device_key_list[0].device[0].device_id,
+                sortable: true,
+                wrap: true
+            },
+            {
+                name: 'status',
+                selector: (row) => row.data.device_key_list[0].device[0].status,
+                sortable: true,
+                wrap: true
+            },
         ]
-    }
+}
 
     get benefitsRules() {
         return this.columnsBenefitsRules;
@@ -414,5 +488,9 @@ export class ColumnsSapExplorer {
 
     get userCardsRelQuer() {
         return this.columnsUserCardsRelQuer;
+    }
+
+    get blockchainProfile() {
+        return this.columnsBlockchainProfile;
     }
 }

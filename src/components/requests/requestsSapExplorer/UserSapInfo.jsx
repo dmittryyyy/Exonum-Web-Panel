@@ -9,7 +9,7 @@ import { InputForRequest } from '../../inputForRequest/InputForRequest';
 
 export const UserSapInfo = () => {
 
-    const { client } = useContext(ThemeContext);
+    const { client, columnsSapExplorer } = useContext(ThemeContext);
 
     let { user_infoId } = useParams();
     let { relatedReq } = useParams();
@@ -40,11 +40,10 @@ export const UserSapInfo = () => {
                             setIsErrorRequest(false);
                             navigate(isValueSearch);
                         }
-                    });          
+                    });
             } catch (e) {
                 console.log(e);
                 setErrorInput(`The data you entered is incorrect! ${e.message}`);
-                setIsDataSapInfo('');
                 if (e.response.status >= 500) {
                     setErrorInput('Unexpected error, please try again later...');
                 }
@@ -76,7 +75,7 @@ export const UserSapInfo = () => {
                 });
             await getBenefitRules(client.activeAPI + '/api/', id)
                 .then(resp => {
-                    array.push([resp]);
+                    array.push(resp);
                 });
             await getUsersBenefits(client.activeAPI + `/${'external/api/v1'}`, isValueSearch)
                 .then(resp => {
@@ -106,7 +105,7 @@ export const UserSapInfo = () => {
         if (idBlockchian) {
             try {
                 await getBlockchainProfile(idBlockchian).then(data => {
-                    setIsDataBlockchain([data]);
+                    setIsDataBlockchain([data.data]);
                 })
             } catch (e) {
                 console.log(e);
@@ -137,15 +136,15 @@ export const UserSapInfo = () => {
                 isValueSearch={isValueSearch} setIsValueSearch={setIsValueSearch}
                 request={onUserSapInfo} />
 
-            <RequestContent data={isDataSapInfo} isLoading={isLoading}/>
+            <RequestContent data={isDataSapInfo} isLoading={isLoading} />
 
             <Routes>
-                <Route path='' element={<RequestContent data={isDataRelatedReq} title={'Data related queries'}/>}>
+                <Route path='' element={<RequestContent data={isDataRelatedReq} title={'Data related queries'} />}>
                     <Route path=':user_infoId/:relatedReq' element={<RequestContent data={isDataRelatedReq} />} />
                 </Route>
             </Routes>
 
-            <RequestContent data={isDataBlockchain} title={'Blockchain profile'}/>
+            <RequestContent data={isDataBlockchain} columnsTable={columnsSapExplorer.blockchainProfile} title={'Blockchain profile'} />
         </>
     )
 };

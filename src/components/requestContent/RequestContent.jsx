@@ -1,14 +1,12 @@
 import { React, useState } from 'react';
 import { Accordion } from 'react-bootstrap';
 import DataTable from 'react-data-table-component';
-import CustomLoader from 'react-data-table-component';
 import { observer } from 'mobx-react-lite';
 
 import './RequestContent.scss';
 
 export const RequestContent = observer(({ data, columnsTable, title, isLoading }) => {
 
-  const [isValueSearch, setIsValueSearch] = useState('');
   const [isShowData, setIsShowData] = useState(true);
 
   const ExpandedComponent = (data) => {
@@ -49,20 +47,7 @@ export const RequestContent = observer(({ data, columnsTable, title, isLoading }
                 expandableRowsComponent={ExpandedComponent}
                 pagination
                 fixedHeader
-                progressComponent={<CustomLoader />}
                 highlightOnHover
-                subHeaderComponent={
-                  <div className='tableHeader'>
-                    <div className='search'>
-                      {isValueSearch && <span className='clearInput' onClick={() => setIsValueSearch('')}>X</span>}
-                      <input type='text'
-                        placeholder='Search here'
-                        className='form-control'
-                        value={isValueSearch}
-                        onChange={(e) => setIsValueSearch(e.target.value)}
-                      />
-                    </div>
-                  </div>}
                 subHeader />
             </Accordion.Body>
           </Accordion.Item> : ''}

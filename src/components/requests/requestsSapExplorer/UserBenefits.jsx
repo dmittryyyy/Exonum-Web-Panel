@@ -70,7 +70,7 @@ export const UserBenefits = () => {
         if (idBlockchian) {
             try {
                 await getBlockchainProfile(idBlockchian).then(data => {
-                    setIsDataBlockchain([data]);
+                    setIsDataBlockchain([data.data]);
                 })
             } catch (e) {
                 console.log(e);
@@ -102,7 +102,7 @@ export const UserBenefits = () => {
                 isLoading={isLoading} />
 
             
-            <RequestContent data={isDataBlockchain} title={'Blockchain profile'}/>
+            <RequestContent data={isDataBlockchain} columnsTable={columnsSapExplorer.blockchainProfile} title={'Blockchain profile'}/>
         </>
     )
 }
