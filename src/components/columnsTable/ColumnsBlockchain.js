@@ -211,64 +211,70 @@ export class ColumnsBlockchain {
                 wrap: true,
             },
         ];
-        this.columnsTransaction = [
-            {
-                name: 'type',
-                selector: (row) => row.type,
-                sortable: true,
-                wrap: true,
-            },
-            {
-                name: 'device_key_id',
-                selector: (row) => row.content.debug.device_key_id,
-                sortable: true,
-                wrap: true,
-            },
-            {
-                name: 'wearout',
-                selector: (row) => row.content.debug.wearout,
-                sortable: true,
-                wrap: true,
-                compact: true,
-            },
-            {
-                name: 'time',
-                selector: (row) => row.content.debug.time,
-                sortable: true,
-                wrap: true,
-                compact: true,
-            },
-            {
-                name: 'info',
-                selector: (row) => JSON.stringify(row.content.debug.info[0], null, 2),
-                sortable: true,
-                wrap: true,
-            },
-            {
-                name: 'message',
-                selector: (row) => row.content.message,
-                sortable: true,
-                wrap: true,
-            },
-            {
-                name: 'height',
-                selector: (row) => JSON.stringify(row.location.block_height),
-                sortable: true,
-                wrap: true,
-            },
-            {
-                name: 'position',
-                selector: (row) => JSON.stringify(row.location.position_in_block),
-                sortable: true,
-                wrap: true,
-            },
-            {
-                name: 'status',
-                selector: (row) => JSON.stringify(row.status),
-                sortable: true,
-                wrap: true,
-            },
-        ];
+        // this.columnsTransaction = [
+        //     {
+        //         name: 'type',
+        //         selector: (row) => row.type,
+        //         sortable: true,
+        //         wrap: true,
+        //     },
+        //     {
+        //         name: 'device_key_id',
+        //         selector: (row) => row.content.debug.device_key_id || row.content.debug.device_id,
+        //         sortable: true,
+        //         wrap: true,
+        //     },
+        //     {
+        //         name: 'adminId',
+        //         selector: (row) => row.content.debug.administrator_id,
+        //         sortable: true,
+        //         wrap: true,
+        //     },
+        //     {
+        //         name: 'wearout',
+        //         selector: (row) => row.content.debug.wearout,
+        //         sortable: true,
+        //         wrap: true,
+        //         compact: true,
+        //     },
+        //     {
+        //         name: 'time',
+        //         selector: (row) => row.content.debug.time,
+        //         sortable: true,
+        //         wrap: true,
+        //         compact: true,
+        //     },
+        //     {
+        //         name: 'info',
+        //         selector: (row) => JSON.stringify(row.content.debug.info[0], null, 2),
+        //         sortable: true,
+        //         wrap: true,
+        //     },
+        //     {
+        //         name: 'message',
+        //         selector: (row) => row.content.message,
+        //         sortable: true,
+        //         wrap: true,
+        //     },
+        //     {
+        //         name: 'height',
+        //         selector: (row) => JSON.stringify(row.location.block_height),
+        //         sortable: true,
+        //         wrap: true,
+        //     },
+        //     {
+        //         name: 'position',
+        //         selector: (row) => JSON.stringify(row.location.position_in_block),
+        //         sortable: true,
+        //         wrap: true,
+        //     },
+        //     {
+        //         name: 'status',
+        //         selector: (row) => JSON.stringify(row.status),
+        //         sortable: true,
+        //         wrap: true,
+        //     },
+        // ];
         this.columnsUserWallet = [
             {
                 name: 'payment_account_id',
