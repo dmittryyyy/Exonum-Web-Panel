@@ -102,7 +102,7 @@ export const UserBenefits = () => {
                 isLoading={isLoading} />
 
             
-            <RequestContent data={isDataBlockchain} columnsTable={columnsSapExplorer.blockchainProfile} title={'Blockchain profile'}/>
+            <RequestContent data={isDataBlockchain} title={'Blockchain profile'}/>
         </>
     )
 }

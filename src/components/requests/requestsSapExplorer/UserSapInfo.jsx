@@ -144,7 +144,7 @@ export const UserSapInfo = () => {
                 </Route>
             </Routes>
 
-            <RequestContent data={isDataBlockchain} columnsTable={columnsSapExplorer.blockchainProfile} title={'Blockchain profile'} />
+            <RequestContent data={isDataBlockchain} title={'Blockchain profile'} />
         </>
     )
 };

@@ -128,7 +128,7 @@ export const Events = () => {
                 data={isDataEvents}
                 columnsTable={columnsSapExplorer.events} isLoading={isLoading}/>
 
-            <RequestContent data={isDataBlockchain} columnsTable={columnsSapExplorer.blockchainProfile} title={isDataBlockchain ? 'Blockchain profile' : ''} />
+            <RequestContent data={isDataBlockchain} title={isDataBlockchain ? 'Blockchain profile' : ''} />
         </>
     )
 }
